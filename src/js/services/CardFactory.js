@@ -3,6 +3,224 @@ mainApp.factory('CardFactory', [
 		'use strict';
 
 		return {
+			boardSpaces: [
+				{
+					cost: {
+						indian: 1
+					},
+					benefit: {
+						meat: 1,
+						fur: 1
+					}
+				},{
+					cost: {
+						indian: 1
+					},
+					benefit: {
+						supplies: 1,
+						wood: 1
+					}
+				},{
+					cost: {
+						indian: 1
+					},
+					benefit: {
+						fur: 2
+					}
+				},{
+					cost: {
+						indian: 1
+					},
+					benefit: {
+						wood: 2
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 2
+					},
+					benefit: {
+						canoe: 1
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 1,
+						meat: 1,
+						fur: 1
+					},
+					benefit: {
+						horse: 1
+					}
+				},{
+					cost: {
+						indian: 1,
+						supplies: 1,
+						meat: 1,
+						fur: 1
+					},
+					benefit: {
+						horse: 1
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 1,
+						supplies: 1,
+						fur: 1
+					},
+					benefit: {
+						horse: 1
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 1,
+						meat: 1,
+						supplies: 1
+					},
+					benefit: {
+						horse: 1
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 3
+					},
+					benefit: {
+						indian: 1,
+						boat: "indian"
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 3
+					},
+					benefit: {
+						indian: 1,
+						boat: "big indian"
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 3
+					},
+					benefit: {
+						basic: 2,
+						boat: "supplies"
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 3
+					},
+					benefit: {
+						basic: 2,
+						boat: "big supplies"
+					}
+				},{
+					cost: {
+						indian: 1
+					},
+					benefit: {
+						trash: 3,
+						journal: 'reset'
+					}
+				},{
+					cost: {
+						indian: 1,
+						meat: 1
+					},
+					benefit: {
+						ability: 'any'
+					}
+				}
+			],
+			startingCards: [
+				{
+					id: 'P11',
+					name: 'Meriweather Lewis',
+					symbol: 'fur',
+					strength: 1,
+					power: [{
+						cost: {
+							canoe: 1
+						},
+						benefit: {
+							water: 4
+						}
+					}, {
+						cost: {
+							meat: 1
+						},
+						benefit: {
+							water: 2
+						}
+					}, {
+						cost: {
+							horse: 1
+						}, 
+						benefit: {
+							mountain: 2
+						}
+					}]
+				}, {
+					id: 'P12',
+					name: 'Pierre Cruzatte',
+					symbol: 'wood',
+					strength: 2,
+					power: {
+						cost: {},
+						benefit: {
+							indian: 2
+						}
+					}
+				}, {
+					id: 'P13',
+					name: 'Seamor',
+					symbol: 'meat',
+					strength: 1,
+					power: {
+						cost: {},
+						benefit: {
+							meat: 2
+						}
+					}
+				}, {
+					id: 'P14',
+					name: 'Hugh McNeal',
+					symbol: 'wood',
+					strength: 1,
+					power: {
+						cost: {},
+						benefit: {
+							wood: 2
+						}
+					}
+				}, {
+					id: 'P15',
+					name: 'Alexander H. Willard',
+					symbol: 'supplies',
+					strength: 1,
+					power: {
+						cost: {},
+						benefit: {
+							supplies: 2
+						}
+					}
+				}, {
+					id: 'P16',
+					name: 'Richard Windsor',
+					symbol: 'fur',
+					strength: 1,
+					power: {
+						cost: {},
+						benefit: {
+							fur: 2
+						}
+					}
+				}
+			],
 			journalCards: [
 				{
 					id: 'F11',
@@ -259,91 +477,6 @@ mainApp.factory('CardFactory', [
 						},
 						benefit: {
 							canoe: 2
-						}
-					}
-				}
-			],
-			startingCards: [
-				{
-					id: 'P11',
-					name: 'Meriweather Lewis',
-					symbol: 'fur',
-					strength: 1,
-					power: [{
-						cost: {
-							canoe: 1
-						},
-						benefit: {
-							water: 4
-						}
-					}, {
-						cost: {
-							meat: 1
-						},
-						benefit: {
-							water: 2
-						}
-					}, {
-						cost: {
-							horse: 1
-						}, 
-						benefit: {
-							mountain: 2
-						}
-					}]
-				}, {
-					id: 'P12',
-					name: 'Pierre Cruzatte',
-					symbol: 'wood',
-					strength: 2,
-					power: {
-						cost: {},
-						benefit: {
-							indians: 2
-						}
-					}
-				}, {
-					id: 'P13',
-					name: 'Seamor',
-					symbol: 'meat',
-					strength: 1,
-					power: {
-						cost: {},
-						benefit: {
-							meat: 2
-						}
-					}
-				}, {
-					id: 'P14',
-					name: 'Hugh McNeal',
-					symbol: 'wood',
-					strength: 1,
-					power: {
-						cost: {},
-						benefit: {
-							wood: 2
-						}
-					}
-				}, {
-					id: 'P15',
-					name: 'Alexander H. Willard',
-					symbol: 'supplies',
-					strength: 1,
-					power: {
-						cost: {},
-						benefit: {
-							supplies: 2
-						}
-					}
-				}, {
-					id: 'P16',
-					name: 'Richard Windsor',
-					symbol: 'fur',
-					strength: 1,
-					power: {
-						cost: {},
-						benefit: {
-							fur: 2
 						}
 					}
 				}
