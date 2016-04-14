@@ -3,6 +3,43 @@ mainApp.factory('CardFactory', [
 		'use strict';
 
 		return {
+			map: [
+				{
+					water: 5
+				},
+				{
+					special: 'start',
+					water: 1
+				},
+				{
+					water: 17
+				},
+				{
+					either: 1
+				},
+				{
+					mountain: 7
+				},
+				{
+					either: 1
+				},
+				{
+					water: 5
+				},
+				{
+					mountain: 3
+				},
+				{
+					water: 4
+				},
+				{
+					special: 'finish',
+					water: 1
+				},
+				{
+					water: 10
+				}
+			],
 			boardSpaces: [
 				{
 					cost: {
