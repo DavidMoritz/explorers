@@ -9,7 +9,7 @@ html(ng-app='mainApp')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		meta(name='apple-mobile-web-app-capable' content='yes')
 		meta(name='apple-touch-fullscreen' content='yes')
-		title Splendid Gems
+		title Explorers
 		link(rel='shortcut icon', href='favicon.ico')
 		link(rel='stylesheet', href='inc/main.css')
 		script(src='inc/angular.js')
@@ -17,9 +17,9 @@ html(ng-app='mainApp')
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
 			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor')
 			header.hide
-				h1 Splendid Gems
+				h1 Explorers
 			.jumbotron
-				h2.text-center Welcome to Splendid Gems!
+				h2.text-center Welcome to Explorers!
 				h4 Active Player: {{currentPlayer.name}}
 				.notices
 			.pre-game

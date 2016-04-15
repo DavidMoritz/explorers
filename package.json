@@ -1,15 +1,15 @@
 {
-  "name": "splendid-gems",
+  "name": "explorers",
   "version": "0.0.1",
-  "description": "Some have suggested that this game is similar to the card game 'Splendor' by Space Cowboys.",
+  "description": "Some have suggested that this game is similar to the board game 'Lewis and Clark' by Space Cowboys.",
   "homepage": "http://moritzcompany.com",
   "author": "Moritz Company",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeremymoritz/splendid-gems.git"
+    "url": "https://github.com/davidmoritz/explorers.git"
   },
   "bugs": {
-    "url": "https://github.com/jeremymoritz/splendid-gems/issues"
+    "url": "https://github.com/davidmoritz/explorers/issues"
   },
   "scripts": {
     "install": "bower install"
