@@ -126,7 +126,7 @@ mainApp.factory('CardFactory', [
 					},
 					benefit: {
 						indian: 1,
-						boat: "indian"
+						boat: 'indian'
 					}
 				},{
 					cost: {
@@ -135,16 +135,7 @@ mainApp.factory('CardFactory', [
 					},
 					benefit: {
 						indian: 1,
-						boat: "big indian"
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 3
-					},
-					benefit: {
-						basic: 2,
-						boat: "supplies"
+						boat: 'big indian'
 					}
 				},{
 					cost: {
@@ -153,7 +144,16 @@ mainApp.factory('CardFactory', [
 					},
 					benefit: {
 						basic: 2,
-						boat: "big supplies"
+						boat: 'supplies'
+					}
+				},{
+					cost: {
+						indian: 1,
+						wood: 3
+					},
+					benefit: {
+						basic: 2,
+						boat: 'big supplies'
 					}
 				},{
 					cost: {
@@ -196,7 +196,7 @@ mainApp.factory('CardFactory', [
 					}, {
 						cost: {
 							horse: 1
-						}, 
+						},
 						benefit: {
 							mountain: 2
 						}

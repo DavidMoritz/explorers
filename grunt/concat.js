@@ -13,7 +13,7 @@ module.exports = function exportConcat(grunt) {
 					'lib/jquery/dist/jquery.min.js',
 					'lib/jquery-ui/jquery-ui.min.js',
 					'lib/bootstrap/dist/js/bootstrap.min.js',
-					'lib/lodash/lodash.min.js',
+					'lib/lodash/dist/lodash.min.js',
 					'lib/firebase/firebase.js',
 					'lib/angularfire/dist/angularfire.min.js',
 					'lib/angular-filter/dist/angular-filter.min.js',
