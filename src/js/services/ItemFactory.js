@@ -1,5 +1,5 @@
 mainApp.factory('ItemFactory', [
-	function GemFactory() {
+	function ItemFactory() {
 		'use strict';
 
 		return {

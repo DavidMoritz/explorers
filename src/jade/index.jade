@@ -9,7 +9,7 @@ html(ng-app='mainApp')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		meta(name='apple-mobile-web-app-capable' content='yes')
 		meta(name='apple-touch-fullscreen' content='yes')
-		title Splendid Gems
+		title Explorers
 		link(rel='shortcut icon', href='favicon.ico')
 		link(rel='stylesheet', href='inc/main.css')
 		script(src='inc/angular.js')
@@ -17,9 +17,9 @@ html(ng-app='mainApp')
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
 			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor')
 			header.hide
-				h1 Splendid Gems
+				h1 Explorers
 			.jumbotron
-				h2.text-center Welcome to Splendid Gems!
+				h2.text-center Welcome to Explorers!
 				h4 Active Player: {{currentPlayer.name}}
 				.notices
 			.pre-game
@@ -30,15 +30,21 @@ html(ng-app='mainApp')
 				h4 Active Player: {{currentPlayer.name}}
 				ul
 					li(ng-repeat='player in allPlayers')
-						h5(ng-click='changeCurrentPlayer(player)') Name: {{player.name}}
-				button.btn.btn-success(ng-click='startGame()') Start Game
+						h5 Name: {{player.name}}
+				button.btn.btn-success(ng-click='changeCurrentPlayer()') Change Player
 				button.btn.btn-warning(ng-click='quickStart()') Quick Start
 			.game-started.row
 				+col(null, 3, 4, 3)
 					h4 All Players
 					ul
 						li(ng-repeat='player in allPlayers')
-							h5(ng-click='changeCurrentPlayer(player)') {{player.name}} chips:({{player.chips.length}}) points:({{calculatePoints(player)}})
+							h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}') {{player.name}}
+							h6 Supplies:
+							ul
+								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+							h6 Indians:
+							ul
+								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
 							div(ng-if='player.tiles.length')
 								h6(ng-repeat="(key, value) in player.tiles") Tile: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
 							div(ng-if='player.cards.length')
@@ -57,31 +63,8 @@ html(ng-app='mainApp')
 											li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
 												p {{value}}
 				+col(null, 6, 4, 6)
-					ul.track(ng-repeat='track in activeCards')
-						li.card(ng-repeat='card in track' ng-class='card.gem' ng-click='collectCard(card)')
-							h5.hidden Id: {{card.id}}
-							h4.capitalize {{card.gem}}
-							h5 Points: {{card.points}}
-							h5 Cost:
-							ul.cost
-								li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
-									p {{value}}
-					ul.track.tile-row
-						li.tile.card(ng-repeat='tile in activeTiles' ng-click='collectTile(tile)')
-							h5 Points: {{tile.points}}
-							h5 Cost:
-							ul.cost
-								li(ng-repeat='(gem, value) in tile.cost' ng-class='gem' ng-show='value > 0')
-									p {{value}}
-
+					button.btn(ng-repeat='item in allItems' ng-click='collect(item)' style='border-color:{{item.color}}') {{item.display}}
 				+col(null, 3, 4, 3)
-					button(ng-repeat='gem in allGems' class='gem btn btn-{{gem.btnClass}}' ng-click='addChip(gem.name)' ng-disabled='!gemAvailable(gem.name)') {{gem.display}} #[span ({{howMany(gem.name)}})]
-					h4 Current Selection
-					ul
-						li(ng-repeat='gem in currentSelection track by $index')
-							h5 Gem: #[span.capitalize {{gem}}]
-					button.btn.btn-success(ng-click='collectChips()' ng-disabled='!currentSelection.length') Collect Gems
-					button.btn.btn-info(ng-click='clearSelection()' ng-disabled='!currentSelection.length') Clear Selection
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
 //		| @@javascriptReplaceFiles
