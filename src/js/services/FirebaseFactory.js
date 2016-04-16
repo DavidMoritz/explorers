@@ -9,7 +9,7 @@ mainApp.factory('FirebaseFactory', [
 			// Firebase methods
 			getFB: function getFB(childPath) {
 				if (!FB) {
-					FB = new Firebase('https://splendid-gems.firebaseio.com/');
+					FB = new Firebase('https://explorers-game.firebaseio.com/');
 				}
 
 				return childPath ? FB.child(childPath) : FB;
