@@ -146,7 +146,7 @@ mainApp.controller('MainCtrl', [
 						collect(item);
 					} else if (key === 'indian') {
 						$s.addIndian();
-					} else {
+					} else if (key === 'mountain' || key === 'water') {
 						travel(key);
 					}
 				}
@@ -166,19 +166,19 @@ mainApp.controller('MainCtrl', [
 			console.log(time);
 		};
 
-		$s.playCard = function playCard(card) {
+		$s.playCard = function playCard(card, power) {
 			console.log(card);
 			$s.currentPlayer.deck.playedCards.push(card);
 			$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
 
-			if (card.power.cost) {
-				if (payCost(card.power.cost)) {
-					collect(card.power.benefit);
+			if (power.cost) {
+				if (payCost(power.cost)) {
+					benefit(power.benefit);
 				} else {
 					console.log('you cannot aford that power');
 				}
 			} else {
-				benefit(card.power.benefit);
+				benefit(power.benefit);
 			}
 		};
 

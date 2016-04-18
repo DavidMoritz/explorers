@@ -34,19 +34,6 @@ html(ng-app='mainApp')
 							h5 Name: {{player.name}}
 					button.btn.btn-success(ng-click='changeCurrentPlayer()') Change Player
 					button.btn.btn-warning(ng-click='quickStart()') Quick Start
-				+col(6)
-					ul
-						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' ng-click='playCard(card)')
-							p {{card.name}}
-							p {{card.symbol}}
-							p {{card.strength}}
-					ul
-						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' ng-click='playCard(card)')
-							p {{card.name}}
-							p {{card.symbol}}
-							p {{card.strength}}
-			.game-started.row
-				+col(null, 3, 4, 3)
 					h4 All Players
 					ul
 						li(ng-repeat='player in allPlayers')
@@ -76,9 +63,30 @@ html(ng-app='mainApp')
 										ul.cost
 											li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
 												p {{value}}
-				+col(null, 6, 4, 6)
+				+col(6)
+					ul
+						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id')
+							p {{card.name}}
+							p {{card.symbol}}
+							p {{card.strength}}
+							ul
+								li.power(ng-repeat='power in card.power track by $index' ng-click='playCard(card, power)')
+									p Cost: {{power.cost}}
+									p Benefit: {{power.benefit}}
+					ul
+						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id')
+							p {{card.name}}
+							p {{card.symbol}}
+							p {{card.strength}}
+							ul
+								li.power(ng-repeat='power in card.power track by $index' ng-click='playCard(card, power)')
+									p Cost: {{power.cost}}
+									p Benefit: {{power.benefit}}
 					button.btn.btn-danger(ng-click='camp()') Camp
-					button.btn(ng-repeat='item in allItems' ng-click='purchase(item)' style='border-color:{{item.color}}') {{item.display}}
+			.game-started.row
+				+col(null, 3, 4, 3)
+				+col(null, 6, 4, 6)
+					//- button.btn(ng-repeat='item in allItems' ng-click='purchase(item)' style='border-color:{{item.color}}') {{item.display}}
 					//- button.btn.btn-danger(ng-click='addBoat("indian", "big")') Big Indian
 					//- button.btn.btn-danger(ng-click='addBoat("indian", "small")') Small Indian
 					//- button.btn.btn-danger(ng-click='addBoat("supply", "big")') Big Supply
