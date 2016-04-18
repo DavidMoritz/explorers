@@ -42,7 +42,7 @@ mainApp.factory('FirebaseFactory', [
 					} else {
 						console.log('Authenticated successfully with payload:', authData);
 					}
-				}, {scope: 'user_friends'});
+				}, {});
 
 				return authData;
 			}

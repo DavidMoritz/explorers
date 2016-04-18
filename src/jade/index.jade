@@ -22,17 +22,29 @@ html(ng-app='mainApp')
 				h2.text-center Welcome to Explorers!
 				h4 Active Player: {{currentPlayer.name}}
 				.notices
-			.pre-game
-				input(ng-model='ff.newPlayerName')
-				button.btn.btn-info(ng-click='addNewPlayer()') Add New Player
-				.clearfix
-				button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
-				h4 Active Player: {{currentPlayer.name}}
-				ul
-					li(ng-repeat='player in allPlayers')
-						h5 Name: {{player.name}}
-				button.btn.btn-success(ng-click='changeCurrentPlayer()') Change Player
-				button.btn.btn-warning(ng-click='quickStart()') Quick Start
+			.pre-game.row
+				+col(6)
+					input(ng-model='ff.newPlayerName')
+					button.btn.btn-info(ng-click='addNewPlayer()') Add New Player
+					.clearfix
+					button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
+					h4 Active Player: {{currentPlayer.name}}
+					ul
+						li(ng-repeat='player in allPlayers')
+							h5 Name: {{player.name}}
+					button.btn.btn-success(ng-click='changeCurrentPlayer()') Change Player
+					button.btn.btn-warning(ng-click='quickStart()') Quick Start
+				+col(6)
+					ul
+						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' ng-click='playCard(card)')
+							p {{card.name}}
+							p {{card.symbol}}
+							p {{card.strength}}
+					ul
+						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' ng-click='playCard(card)')
+							p {{card.name}}
+							p {{card.symbol}}
+							p {{card.strength}}
 			.game-started.row
 				+col(null, 3, 4, 3)
 					h4 All Players
@@ -42,6 +54,8 @@ html(ng-app='mainApp')
 							h6 Supplies:
 							ul
 								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+									ul
+										li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
 							h6 Indians:
 							ul
 								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
@@ -63,7 +77,12 @@ html(ng-app='mainApp')
 											li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
 												p {{value}}
 				+col(null, 6, 4, 6)
-					button.btn(ng-repeat='item in allItems' ng-click='collect(item)' style='border-color:{{item.color}}') {{item.display}}
+					button.btn.btn-danger(ng-click='camp()') Camp
+					button.btn(ng-repeat='item in allItems' ng-click='purchase(item)' style='border-color:{{item.color}}') {{item.display}}
+					//- button.btn.btn-danger(ng-click='addBoat("indian", "big")') Big Indian
+					//- button.btn.btn-danger(ng-click='addBoat("indian", "small")') Small Indian
+					//- button.btn.btn-danger(ng-click='addBoat("supply", "big")') Big Supply
+					//- button.btn.btn-danger(ng-click='addBoat("supply", "small")') Small Supply
 				+col(null, 3, 4, 3)
 		script(src='inc/lib.js')
 		script(src='inc/main.js')

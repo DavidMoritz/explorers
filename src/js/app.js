@@ -6,7 +6,6 @@ mainApp.run(function runWithDependencies($rootScope) {
 	$rootScope.mc = mc;
 });
 
-/*
 (function setUpFbConnect(document, script, id) {
 	var firstScript = document.getElementsByTagName(script)[0];
 	var newScript = document.createElement(script);
@@ -18,4 +17,3 @@ mainApp.run(function runWithDependencies($rootScope) {
 	newScript.src = '//connect.facebook.net/en_US/sdk.js';
 	firstScript.parentNode.insertBefore(newScript, firstScript);
 }(document, 'script', 'facebook-jssdk'));
-*/

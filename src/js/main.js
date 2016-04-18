@@ -3,10 +3,11 @@ mainApp.controller('MainCtrl', [
 	'$timeout',
 	'$interval',
 	'ItemFactory',
+	'BoatFactory',
 	'CardFactory',
 	'MethodFactory',
 	'FirebaseFactory',
-	function MainCtrl($s, $timeout, $interval, IF, CF, MF, FF) {
+	function MainCtrl($s, $timeout, $interval, IF, BF, CF, MF, FF) {
 		'use strict';
 
 		function init() {
@@ -24,45 +25,13 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function Corp() {
-			this.supplyBoats = [{
-				cost: function cost() {
-					return 0;
-				},
-				capacity: 2,
-				content: []
-			},{
-				cost: function cost() {
-					return this.content.length ? 1 : 0;
-				},
-				capacity: 3,
-				content: []
-			},{
-				cost: function cost() {
-					return this.content.length;
-				},
-				capacity: 5,
-				content: []
-			}];
-			this.indianBoats = [{
-				cost: function cost() {
-					return 0;
-				},
-				capacity: 1,
-				content: [{
-					indian: 1
-				}]
-			},{
-				cost: function cost() {
-					return this.content.length;
-				},
-				capacity: 20,
-				content: []
-			}];
+			this.supplyBoats = new BF.startSupply();
+			this.indianBoats = new BF.startIndian();
 		}
 
 		function Deck() {
 			_.extend(this, {
-				heldCards: _.extend({}, CF.startingCards),
+				heldCards: new CF.startingCards(),
 				playedCards: [],
 				cost: function cost() {
 					return this.heldCards.length;
@@ -81,6 +50,8 @@ mainApp.controller('MainCtrl', [
 				deck: new Deck(),
 				idx: $s.allPlayers.length + 1
 			});
+
+			$s.addIndian(this);
 		}
 
 		function User() {
@@ -106,8 +77,8 @@ mainApp.controller('MainCtrl', [
 		var allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
 
 		// add later for everyone seeing same cursor movement
-		// var cursorObj = FF.getFBObject('cursor');
-		// cursorObj.$bindTo($s, 'cursor');
+		var cursorObj = FF.getFBObject('cursor');
+		cursorObj.$bindTo($s, 'cursor');
 
 		//	initialize scoped variables
 		_.assign($s, {
@@ -118,19 +89,133 @@ mainApp.controller('MainCtrl', [
 			ff: {
 				newPlayerName: ''
 			},
+			indianSupply: 8,
 			cursor: {
 				left: 0,
 				top: 0
 			}
 		});
 
-		$s.collect = function collect(item, added) {
+		var payCost = function payCost(cost) {
+			var tempCost = Object.create(cost);
+			$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
+				boat.content.map(function mapItems(item) {
+					if (tempCost[item.name] > 0) {
+						tempCost[item.name]--;
+						item.delete = true;
+					}
+				});
+			});
+
+			if (_.every(_.values(tempCost), function cost(cost) {
+				return cost === 0;
+			})) {
+				$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
+					boat.content = boat.content.filter(function filterItems(item) {
+						return !item.delete;
+					});
+				});
+
+				return true;
+			}
+		};
+
+		var collect = function collect(item, added) {
 			$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
 				if (boat.content.length < boat.capacity && !added) {
-					boat.content.push(_.extend({}, item));
+					boat.content.push(Object.create(item));
 					added = true;
 				}
 			});
+
+			if (!added) {
+				console.log('no space for that item');
+			}
+		};
+
+		var travel = function travel(terrain) {
+			console.log('You moved 1 space on ' + terrain + ' terrain');
+		};
+
+		var benefit = function benefit(benefit) {
+			_.mapKeys(benefit, function mapKeys(amount, key) {
+				for (var i = 0; i < amount; i++) {
+					var item = _.find(IF.allItems, {name: key});
+
+					if (item) {
+						collect(item);
+					} else if (key === 'indian') {
+						$s.addIndian();
+					} else {
+						travel(key);
+					}
+				}
+			});
+		};
+
+		$s.camp = function camp() {
+			var time = $s.currentPlayer.deck.heldCards.length;
+			$s.currentPlayer.deck.heldCards = $s.currentPlayer.deck.heldCards.concat($s.currentPlayer.deck.playedCards);
+			$s.currentPlayer.deck.playedCards = [];
+			time = $s.currentPlayer.corp.supplyBoats.reduce(function reduce(time, boat) {
+				return time + boat.cost();
+			}, time);
+			time = $s.currentPlayer.corp.indianBoats.reduce(function reduce(time, boat) {
+				return time + boat.cost();
+			}, time);
+			console.log(time);
+		};
+
+		$s.playCard = function playCard(card) {
+			console.log(card);
+			$s.currentPlayer.deck.playedCards.push(card);
+			$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
+
+			if (card.power.cost) {
+				if (payCost(card.power.cost)) {
+					collect(card.power.benefit);
+				} else {
+					console.log('you cannot aford that power');
+				}
+			} else {
+				benefit(card.power.benefit);
+			}
+		};
+
+		$s.purchase = function purchase(item) {
+			if (item.cost) {
+				if (payCost(item.cost)) {
+					collect(item);
+				} else {
+					console.log('you cannot aford that power');
+				}
+			} 
+		};
+
+		$s.addIndian = function addIndian(player) {
+			var added = $s.indianSupply === 0;
+			player = player || $s.currentPlayer;
+			
+			player.corp.indianBoats.map(function mapBoats(boat) {
+				if (boat.content.length < boat.capacity && !added) {
+					boat.content.push(new IF.indian());
+					added = true;
+					$s.indianSupply--;
+				}
+			});
+		};
+
+		$s.addBoat = function addBoat(type, size) {
+			if (payCost({wood: 3})) {
+				var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
+
+				boatsArr.push(new BF[type + size]());
+				$s.currentPlayer.corp[type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
+
+				if (type === 'indian') {
+					$s.addIndian();
+				}
+			}
 		};
 
 		$s.quickStart = function quickStart() {
@@ -171,12 +256,13 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		// $s.activeGames = FF.getFBArray('activeGames');
-		// $s.activeGames.$loaded(function afterActiveGamesLoaded() {
-		// 	console.log('Firebase is working');
-		// 	$('.notices').text('Firebase is working!');
-		// 	$('body').addClass('facebook-available');
-		// });
+		//$s.activeGames = FF.getFBArray('activeGames');
+		$s.activeGames = FF.getFBObject('activeGames');
+		$s.activeGames.$loaded(function afterActiveGamesLoaded() {
+			console.log('Firebase is working');
+			$('.notices').text('Firebase is working!');
+			$('body').addClass('facebook-available');
+		});
 
 		init();
 	}

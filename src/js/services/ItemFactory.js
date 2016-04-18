@@ -3,6 +3,13 @@ mainApp.factory('ItemFactory', [
 		'use strict';
 
 		return {
+			indian: function indian() {
+				return {
+					name: 'indian',
+					display: 'Indian',
+					color: 'red'
+				};
+			},
 			allItems: [{
 				name: 'wood',
 				display: 'Wood',
@@ -19,20 +26,29 @@ mainApp.factory('ItemFactory', [
 				btnClass: 'danger',
 				color: 'red'
 			}, {
-				name: 'supplies',
-				display: 'Supplies',
+				name: 'equipment',
+				display: 'Equipment',
 				btnClass: 'success',
 				color: 'gray'
 			}, {
 				name: 'canoe',
 				display: 'Canoes',
 				btnClass: 'primary',
-				color: 'blue'
+				color: 'blue',
+				cost: {
+					wood: 2
+				}
 			}, {
 				name: 'horse',
 				display: 'Horses',
 				btnClass: 'default',
-				color: 'white'
+				color: 'white',
+				cost: {
+					wood: 1,
+					fur: 1,
+					meat: 1,
+					equipment: 1
+				}
 			}]
 		};
 	}

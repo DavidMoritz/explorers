@@ -54,7 +54,7 @@ mainApp.factory('CardFactory', [
 						indian: 1
 					},
 					benefit: {
-						supplies: 1,
+						equipment: 1,
 						wood: 1
 					}
 				},{
@@ -92,7 +92,7 @@ mainApp.factory('CardFactory', [
 				},{
 					cost: {
 						indian: 1,
-						supplies: 1,
+						equipment: 1,
 						meat: 1,
 						fur: 1
 					},
@@ -103,7 +103,7 @@ mainApp.factory('CardFactory', [
 					cost: {
 						indian: 1,
 						wood: 1,
-						supplies: 1,
+						equipment: 1,
 						fur: 1
 					},
 					benefit: {
@@ -114,7 +114,7 @@ mainApp.factory('CardFactory', [
 						indian: 1,
 						wood: 1,
 						meat: 1,
-						supplies: 1
+						equipment: 1
 					},
 					benefit: {
 						horse: 1
@@ -144,7 +144,7 @@ mainApp.factory('CardFactory', [
 					},
 					benefit: {
 						basic: 2,
-						boat: 'supplies'
+						boat: 'equipment'
 					}
 				},{
 					cost: {
@@ -153,7 +153,7 @@ mainApp.factory('CardFactory', [
 					},
 					benefit: {
 						basic: 2,
-						boat: 'big supplies'
+						boat: 'big equipment'
 					}
 				},{
 					cost: {
@@ -173,8 +173,8 @@ mainApp.factory('CardFactory', [
 					}
 				}
 			],
-			startingCards: [
-				{
+			startingCards: function startingCards() {
+				return new Array({
 					id: 'P11',
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
@@ -207,7 +207,6 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 2,
 					power: {
-						cost: {},
 						benefit: {
 							indian: 2
 						}
@@ -218,7 +217,6 @@ mainApp.factory('CardFactory', [
 					symbol: 'meat',
 					strength: 1,
 					power: {
-						cost: {},
 						benefit: {
 							meat: 2
 						}
@@ -229,7 +227,6 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 1,
 					power: {
-						cost: {},
 						benefit: {
 							wood: 2
 						}
@@ -237,12 +234,11 @@ mainApp.factory('CardFactory', [
 				}, {
 					id: 'P15',
 					name: 'Alexander H. Willard',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 1,
 					power: {
-						cost: {},
 						benefit: {
-							supplies: 2
+							equipment: 2
 						}
 					}
 				}, {
@@ -251,13 +247,12 @@ mainApp.factory('CardFactory', [
 					symbol: 'fur',
 					strength: 1,
 					power: {
-						cost: {},
 						benefit: {
 							fur: 2
 						}
 					}
-				}
-			],
+				});
+			},
 			journalCards: [
 				{
 					id: 'F11',
@@ -345,7 +340,7 @@ mainApp.factory('CardFactory', [
 					strength: 3,
 					power: {
 						cost: {
-							supplies: 1,
+							equipment: 1,
 							fur: 1,
 							meat: 1,
 							wood: 1
@@ -375,16 +370,16 @@ mainApp.factory('CardFactory', [
 					strength: 3,
 					power: {
 						cost: {
-							supplies: 1
+							equipment: 1
 						},
 						benefit: {
 							horse: 1
 						}
 					}
 				}, {
-					id: 'S11',
+					id: 'E11',
 					name: 'Buffalo Medicine',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 1,
 					power: {
 						cost: {
@@ -395,9 +390,9 @@ mainApp.factory('CardFactory', [
 						}
 					}
 				}, {
-					id: 'S12',
+					id: 'E12',
 					name: 'John Dame',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 1,
 					power: {
 						cost: {
@@ -408,9 +403,9 @@ mainApp.factory('CardFactory', [
 						}
 					}
 				}, {
-					id: 'S13',
+					id: 'E13',
 					name: 'Charles Mackenzie',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 1,
 					power: {
 						cost: {
@@ -422,9 +417,9 @@ mainApp.factory('CardFactory', [
 						}
 					}
 				}, {
-					id: 'S21',
+					id: 'E21',
 					name: 'Pierre Dorian',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 2,
 					power: {
 						cost: {
@@ -435,13 +430,13 @@ mainApp.factory('CardFactory', [
 						}
 					}
 				}, {
-					id: 'S31',
+					id: 'E31',
 					name: 'Comcomly',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 3,
 					power: {
 						cost: {
-							supplies: 1,
+							equipment: 1,
 							fur: 1,
 							wood: 1,
 							meat: 1
@@ -451,13 +446,13 @@ mainApp.factory('CardFactory', [
 						}
 					}
 				}, {
-					id: 'S32',
+					id: 'E32',
 					name: 'Crow At Rest',
-					symbol: 'supplies',
+					symbol: 'equipment',
 					strength: 3,
 					power: {
 						cost: {
-							supplies: 2,
+							equipment: 2,
 							fur: 2
 						},
 						benefit: {
@@ -471,7 +466,7 @@ mainApp.factory('CardFactory', [
 					strength: 1,
 					power: {
 						cost: {
-							supplies: 2
+							equipment: 2
 						},
 						benefit: {
 							water: 3
@@ -484,7 +479,7 @@ mainApp.factory('CardFactory', [
 					strength: 2,
 					power: {
 						cost: {
-							supplies: 2
+							equipment: 2
 						},
 						benefit: {
 							horse: 1
