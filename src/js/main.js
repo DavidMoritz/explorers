@@ -2,12 +2,13 @@ mainApp.controller('MainCtrl', [
 	'$scope',
 	'$timeout',
 	'$interval',
+	'$uibModal',
 	'ItemFactory',
 	'BoatFactory',
 	'CardFactory',
 	'MethodFactory',
 	'FirebaseFactory',
-	function MainCtrl($s, $timeout, $interval, IF, BF, CF, MF, FF) {
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, CF, MF, FF) {
 		'use strict';
 
 		function init() {
@@ -48,7 +49,12 @@ mainApp.controller('MainCtrl', [
 				color: allColors.splice(-1)[0],
 				corp: new Corp(),
 				deck: new Deck(),
-				idx: $s.allPlayers.length + 1
+				idx: $s.allPlayers.length + 1,
+				countIndians: function countIndians() {
+					return this.corp.indianBoats.reduce(function reduceSize(total, boat) {
+						return total + boat.content.length;
+					}, 0);
+				}
 			});
 
 			$s.addIndian(this);
@@ -166,7 +172,26 @@ mainApp.controller('MainCtrl', [
 			console.log(time);
 		};
 
+		$s.open = function openModal() {
+			var instance = $uibM.open({
+				animation: true,
+				templateUrl: 'strengthModal',
+				controller: 'ModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					currentPlayer: function resolve() {
+						return $s.currentPlayer;
+					}
+				}
+			});
+
+			instance.result.then(function result(currentPlayer) {
+				$s.currentPlayer = currentPlayer;
+			});
+		};
+
 		$s.playCard = function playCard(card, power) {
+			$s.open();
 			console.log(card);
 			$s.currentPlayer.deck.playedCards.push(card);
 			$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
@@ -189,13 +214,13 @@ mainApp.controller('MainCtrl', [
 				} else {
 					console.log('you cannot aford that power');
 				}
-			} 
+			}
 		};
 
 		$s.addIndian = function addIndian(player) {
 			var added = $s.indianSupply === 0;
 			player = player || $s.currentPlayer;
-			
+
 			player.corp.indianBoats.map(function mapBoats(boat) {
 				if (boat.content.length < boat.capacity && !added) {
 					boat.content.push(new IF.indian());
@@ -267,3 +292,15 @@ mainApp.controller('MainCtrl', [
 		init();
 	}
 ]);
+
+mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
+	$scope.currentPlayer = currentPlayer;
+
+	$scope.ok = function ok() {
+		$uibModalInstance.close($scope.currentPlayer);
+	};
+
+	$scope.cancel = function cancel() {
+		$uibModalInstance.dismiss('cancel');
+	};
+});

@@ -38,6 +38,7 @@ html(ng-app='mainApp')
 					ul
 						li(ng-repeat='player in allPlayers')
 							h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}') {{player.name}}
+								span.badge {{player.idx}}
 							h6 Supplies:
 							ul
 								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
@@ -65,21 +66,21 @@ html(ng-app='mainApp')
 												p {{value}}
 				+col(6)
 					ul
-						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id')
-							p {{card.name}}
-							p {{card.symbol}}
-							p {{card.strength}}
+						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}')
+							p
+								span.badge {{card.strength}}
+								|  {{card.name}}
 							ul
 								li.power(ng-repeat='power in card.power track by $index' ng-click='playCard(card, power)')
 									p Cost: {{power.cost}}
 									p Benefit: {{power.benefit}}
 					ul
-						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id')
-							p {{card.name}}
-							p {{card.symbol}}
-							p {{card.strength}}
+						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' class='{{card.symbol}}')
+							p
+								span.badge {{card.strength}}
+								| {{card.name}}
 							ul
-								li.power(ng-repeat='power in card.power track by $index' ng-click='playCard(card, power)')
+								li.power(ng-repeat='power in card.power track by $index')
 									p Cost: {{power.cost}}
 									p Benefit: {{power.benefit}}
 					button.btn.btn-danger(ng-click='camp()') Camp
@@ -94,4 +95,15 @@ html(ng-app='mainApp')
 				+col(null, 3, 4, 3)
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
+		script#strengthModal(type='text/ng-template')
+			.modal-header
+				h3 Choose your Strength
+			.modal-body
+				ul
+					li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}')
+					p
+						span.badge {{card.strength}}
+						|  {{card.name}}
+				.btn.btn-danger Add Indian
+					span.badge {{currentPlayer.countIndians()}}
 //		| @@javascriptReplaceFiles
