@@ -99,13 +99,13 @@ html(ng-app='mainApp')
 		script(src='inc/main.js')
 		script#strengthModal(type='text/ng-template')
 			.modal-header
-				h3 Choose your Strength
+				h3 Choose your Strength: {{currentPlayer.playStrength}}
 			.modal-body
 				ul
-					li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}')
-					p
-						span.badge {{card.strength}}
-						|  {{card.name}}
-				.btn.btn-danger Add Indian
-					span.badge {{currentPlayer.countIndians()}}
+					li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card)')
+						p
+							span.badge {{card.strength}}
+							|  {{card.name}}
+				.btn.btn-danger(ng-click='playIndian()') Add Indian
+					span.badge  {{currentPlayer.countIndians()}}
 //		| @@javascriptReplaceFiles

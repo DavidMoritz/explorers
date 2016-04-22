@@ -212,14 +212,16 @@ mainApp.controller('MainCtrl', [
 			$s.currentPlayer.deck.playedCards.push(card);
 			$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
 
-			if (power.cost) {
-				if (payCost(power.cost)) {
-					benefit(power.benefit);
+			if (power) {
+				if (power.cost) {
+					if (payCost(power.cost)) {
+						benefit(power.benefit);
+					} else {
+						console.log('you cannot aford that power');
+					}
 				} else {
-					console.log('you cannot aford that power');
+					benefit(power.benefit);
 				}
-			} else {
-				benefit(power.benefit);
 			}
 		};
 
@@ -244,6 +246,18 @@ mainApp.controller('MainCtrl', [
 					$s.indianSupply--;
 				}
 			});
+		};
+
+		$s.playIndian = function addIndian(removed) {
+			$s.currentPlayer.corp.indianBoats.reverse();
+			$s.currentPlayer.corp.indianBoats.map(function mapBoats(boat) {
+				if (boat.content.length && !removed) {
+					boat.content.splice(-1);
+					removed = true;
+					$s.currentPlayer.playStrength++;
+				}
+			});
+			$s.currentPlayer.corp.indianBoats.reverse();
 		};
 
 		$s.addBoat = function addBoat(type, size) {
@@ -295,6 +309,12 @@ mainApp.controller('MainCtrl', [
 			} else {
 				$s.currentPlayer = $s.allPlayers[0];
 			}
+			$s.currentPlayer.playStrength = 0;
+		};
+
+		$s.addStrength = function addStrength(card) {
+			$s.currentPlayer.playStrength += card.strength;
+			$s.playCard(card);
 		};
 
 		//$s.activeGames = FF.getFBArray('activeGames');
