@@ -6,9 +6,10 @@ mainApp.controller('MainCtrl', [
 	'ItemFactory',
 	'BoatFactory',
 	'CardFactory',
+	'MapFactory',
 	'MethodFactory',
 	'FirebaseFactory',
-	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, CF, MF, FF) {
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, CF, MAP, MF, FF) {
 		'use strict';
 
 		function init() {
@@ -90,7 +91,6 @@ mainApp.controller('MainCtrl', [
 		_.assign($s, {
 			time: moment().format(timeFormat),
 			allPlayers: [],
-			allChips: [],
 			allItems: IF.allItems,
 			ff: {
 				newPlayerName: ''
@@ -99,7 +99,8 @@ mainApp.controller('MainCtrl', [
 			cursor: {
 				left: 0,
 				top: 0
-			}
+			},
+			map: MAP.map
 		});
 
 		var payCost = function payCost(cost) {

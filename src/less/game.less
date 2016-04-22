@@ -35,6 +35,29 @@
 .power {
 	border-color: blue;
 }
+.map {
+	list-style: none;
+	padding: 0;
+}
+.space {
+	height: 1.5em;
+	width: 1em;
+	margin: 0.3em;
+	float: right;
+	&.water {
+		background-color: blue;
+	}
+	&.mountain {
+		background-color: brown;
+	}
+	&.either {
+		background-color: green;
+	}
+	&.start,
+	&.finish {
+		border: silver dotted 3px;
+	}
+}
 .container,
 .btn,
 input {
