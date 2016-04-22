@@ -50,6 +50,7 @@ mainApp.controller('MainCtrl', [
 				color: allColors.splice(-1)[0],
 				corp: new Corp(),
 				deck: new Deck(),
+				space: findStartSpace(),
 				idx: $s.allPlayers.length + 1,
 				countIndians: function countIndians() {
 					return this.corp.indianBoats.reduce(function reduceSize(total, boat) {
@@ -62,6 +63,12 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function User() {
+		}
+
+		function findStartSpace() {
+			var start = _.find(MAP.map, {special: 'start'});
+
+			return _.indexOf(MAP.map, start);
 		}
 
 		function createNewUser() {
@@ -141,7 +148,15 @@ mainApp.controller('MainCtrl', [
 		};
 
 		var travel = function travel(terrain) {
-			console.log('You moved 1 space on ' + terrain + ' terrain');
+			var space = $s.currentPlayer.space;
+			var nextSpace = MAP.map[space + 1];
+
+			if (nextSpace.terrain == terrain || nextSpace.terrain == 'mixed') {
+				console.log('You moved 1 space on to ' + nextSpace.terrain + ' terrain');
+				$s.currentPlayer.space++;
+			} else {
+				console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
+			}
 		};
 
 		var benefit = function benefit(benefit) {

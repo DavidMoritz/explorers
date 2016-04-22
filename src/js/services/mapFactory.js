@@ -5,155 +5,155 @@ mainApp.factory('MapFactory', [
 		return {
 			map: [
 				{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'start'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'either'
+					terrain: 'mixed'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'either'
+					terrain: 'mixed'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'mountain'
+					terrain: 'mountain'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water'
+					terrain: 'water'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				},{
-					type: 'water',
+					terrain: 'water',
 					special: 'finish'
 				}
 			],
 			configureMap: [
 				{
-					type: 'water',
+					terrain: 'water',
 					spaces: 5
 				},
 				{
 					special: 'start',
-					type: 'water',
+					terrain: 'water',
 					spaces: 1
 				},
 				{
-					type: 'water',
+					terrain: 'water',
 					spaces: 17
 				},
 				{
-					type: 'either',
+					terrain: 'mixed',
 					spaces: 1
 				},
 				{
-					type: 'mountain',
+					terrain: 'mountain',
 					spaces: 7
 				},
 				{
-					type: 'either',
+					terrain: 'mixed',
 					spaces: 1
 				},
 				{
-					type: 'water',
+					terrain: 'water',
 					spaces: 5
 				},
 				{
-					type: 'mountain',
+					terrain: 'mountain',
 					spaces: 3
 				},
 				{
-					type: 'water',
+					terrain: 'water',
 					spaces: 4
 				},
 				{
 					special: 'finish',
-					type: 'water',
+					terrain: 'water',
 					spaces: 11
 				}
 			]

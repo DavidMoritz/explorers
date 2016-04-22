@@ -23,7 +23,7 @@ html(ng-app='mainApp')
 				h4 Active Player: {{currentPlayer.name}}
 				.notices
 			ul.map
-				li.space(ng-repeat='space in map track by $index' class='{{space.type}} {{space.special}}')
+				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 			.pre-game.row
 				+col(6)
 					input(ng-model='ff.newPlayerName')
