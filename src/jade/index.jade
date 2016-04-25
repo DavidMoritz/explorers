@@ -73,7 +73,7 @@ html(ng-app='mainApp')
 								span.badge {{card.strength}}
 								|  {{card.name}}
 							ul
-								li.power(ng-repeat='power in card.power track by $index' ng-click='playCard(card, power)')
+								li.power(ng-repeat='power in card.power track by $index' ng-click='currentPlayer.playCard(card, power)')
 									p Cost: {{power.cost}}
 									p Benefit: {{power.benefit}}
 					ul
@@ -102,7 +102,7 @@ html(ng-app='mainApp')
 				h3 Choose your Strength: {{currentPlayer.playStrength}}
 			.modal-body
 				ul
-					li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card)')
+					li.held-card.pointer(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card)')
 						p
 							span.badge {{card.strength}}
 							|  {{card.name}}

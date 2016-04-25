@@ -52,10 +52,30 @@ mainApp.controller('MainCtrl', [
 				deck: new Deck(),
 				space: findStartSpace(),
 				idx: $s.allPlayers.length + 1,
+
 				countIndians: function countIndians() {
 					return this.corp.indianBoats.reduce(function reduceSize(total, boat) {
 						return total + boat.content.length;
 					}, 0);
+				},
+
+				playCard: function playCard(card, power) {
+					$s.open();
+					console.log(card);
+					$s.currentPlayer.deck.playedCards.push(card);
+					$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
+
+					if (power) {
+						if (power.cost) {
+							if (payCost(power.cost)) {
+								benefit(power.benefit);
+							} else {
+								console.log('you cannot aford that power');
+							}
+						} else {
+							benefit(power.benefit);
+						}
+					}
 				}
 			});
 
@@ -159,6 +179,17 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
+		var checkForScouts = function checkForScouts(direction) {
+			var dupes = $s.allPlayers.filter(function filter(player) {
+				return (player.name != $s.currentPlayer.name) && (player.space == $s.currentPlayer.space);
+			});
+
+			if (dupes.length) {
+				$s.currentPlayer.space += direction;
+				checkForScouts(direction);
+			}
+		};
+
 		var benefit = function benefit(benefit) {
 			_.mapKeys(benefit, function mapKeys(amount, key) {
 				for (var i = 0; i < amount; i++) {
@@ -173,6 +204,7 @@ mainApp.controller('MainCtrl', [
 					}
 				}
 			});
+			checkForScouts(1);
 		};
 
 		$s.camp = function camp() {
@@ -185,7 +217,11 @@ mainApp.controller('MainCtrl', [
 			time = $s.currentPlayer.corp.indianBoats.reduce(function reduce(time, boat) {
 				return time + boat.cost();
 			}, time);
-			console.log(time);
+			
+			if (time > 0) {
+				$s.currentPlayer -= time;
+				checkForScouts(-1);
+			}
 		};
 
 		$s.open = function openModal() {
@@ -204,25 +240,6 @@ mainApp.controller('MainCtrl', [
 			instance.result.then(function result(currentPlayer) {
 				$s.currentPlayer = currentPlayer;
 			});
-		};
-
-		$s.playCard = function playCard(card, power) {
-			$s.open();
-			console.log(card);
-			$s.currentPlayer.deck.playedCards.push(card);
-			$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
-
-			if (power) {
-				if (power.cost) {
-					if (payCost(power.cost)) {
-						benefit(power.benefit);
-					} else {
-						console.log('you cannot aford that power');
-					}
-				} else {
-					benefit(power.benefit);
-				}
-			}
 		};
 
 		$s.purchase = function purchase(item) {
@@ -246,18 +263,6 @@ mainApp.controller('MainCtrl', [
 					$s.indianSupply--;
 				}
 			});
-		};
-
-		$s.playIndian = function addIndian(removed) {
-			$s.currentPlayer.corp.indianBoats.reverse();
-			$s.currentPlayer.corp.indianBoats.map(function mapBoats(boat) {
-				if (boat.content.length && !removed) {
-					boat.content.splice(-1);
-					removed = true;
-					$s.currentPlayer.playStrength++;
-				}
-			});
-			$s.currentPlayer.corp.indianBoats.reverse();
 		};
 
 		$s.addBoat = function addBoat(type, size) {
@@ -312,11 +317,6 @@ mainApp.controller('MainCtrl', [
 			$s.currentPlayer.playStrength = 0;
 		};
 
-		$s.addStrength = function addStrength(card) {
-			$s.currentPlayer.playStrength += card.strength;
-			$s.playCard(card);
-		};
-
 		//$s.activeGames = FF.getFBArray('activeGames');
 		$s.activeGames = FF.getFBObject('activeGames');
 		$s.activeGames.$loaded(function afterActiveGamesLoaded() {
@@ -331,6 +331,23 @@ mainApp.controller('MainCtrl', [
 
 mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
 	$scope.currentPlayer = currentPlayer;
+
+	$scope.addStrength = function addStrength(card) {
+		$scope.currentPlayer.playStrength += card.strength;
+		$scope.currentPlayer.playCard(card);
+	};
+
+	$scope.playIndian = function addIndian(removed) {
+		$scope.currentPlayer.corp.indianBoats.reverse();
+		$scope.currentPlayer.corp.indianBoats.map(function mapBoats(boat) {
+			if (boat.content.length && !removed) {
+				boat.content.splice(-1);
+				removed = true;
+				$scope.currentPlayer.playStrength++;
+			}
+		});
+		$scope.currentPlayer.corp.indianBoats.reverse();
+	};
 
 	$scope.ok = function ok() {
 		$uibModalInstance.close($scope.currentPlayer);
