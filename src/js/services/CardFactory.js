@@ -142,6 +142,7 @@ mainApp.factory('CardFactory', [
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
 					strength: 1,
+					played: false,
 					power: [{
 						cost: {
 							canoe: 1
@@ -169,6 +170,7 @@ mainApp.factory('CardFactory', [
 					name: 'Pierre Cruzatte',
 					symbol: 'wood',
 					strength: 2,
+					played: false,
 					power: [{
 						benefit: {
 							indian: 2
@@ -179,6 +181,7 @@ mainApp.factory('CardFactory', [
 					name: 'Seamor',
 					symbol: 'meat',
 					strength: 1,
+					played: false,
 					power: [{
 						benefit: {
 							meat: 2
@@ -189,6 +192,7 @@ mainApp.factory('CardFactory', [
 					name: 'Hugh McNeal',
 					symbol: 'wood',
 					strength: 1,
+					played: false,
 					power: [{
 						benefit: {
 							wood: 2
@@ -199,6 +203,7 @@ mainApp.factory('CardFactory', [
 					name: 'Alexander H. Willard',
 					symbol: 'equipment',
 					strength: 1,
+					played: false,
 					power: [{
 						benefit: {
 							equipment: 2
@@ -209,6 +214,7 @@ mainApp.factory('CardFactory', [
 					name: 'Richard Windsor',
 					symbol: 'fur',
 					strength: 1,
+					played: false,
 					power: [{
 						benefit: {
 							fur: 2

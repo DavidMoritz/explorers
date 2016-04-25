@@ -33,10 +33,24 @@ mainApp.controller('MainCtrl', [
 
 		function Deck() {
 			_.extend(this, {
-				heldCards: new CF.startingCards(),
-				playedCards: [],
+				cards: new CF.startingCards(),
 				cost: function cost() {
 					return this.heldCards.length;
+				},
+				get heldCards() {
+					return this.cards.filter(function heldCards(card) {
+						return !card.played;
+					});
+				},
+				get playedCards() {
+					return this.cards.filter(function playedCards(card) {
+						return card.played;
+					});
+				},
+				play: function play(card) {
+					var idx = _.findIndex(this.cards, card);
+
+					this.cards[idx].played = true;
 				}
 			});
 		}
@@ -60,21 +74,17 @@ mainApp.controller('MainCtrl', [
 				},
 
 				playCard: function playCard(card, power) {
+					$s.currentPlayer.deck.play(card);
 					$s.open();
-					console.log(card);
-					$s.currentPlayer.deck.playedCards.push(card);
-					$s.currentPlayer.deck.heldCards = _.reject($s.currentPlayer.deck.heldCards, card);
 
-					if (power) {
-						if (power.cost) {
-							if (payCost(power.cost)) {
-								benefit(power.benefit);
-							} else {
-								console.log('you cannot aford that power');
-							}
-						} else {
+					if (power.cost) {
+						if (payCost(power.cost)) {
 							benefit(power.benefit);
+						} else {
+							console.log('you cannot aford that power');
 						}
+					} else {
+						benefit(power.benefit);
 					}
 				}
 			});
@@ -208,16 +218,17 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.camp = function camp() {
-			var time = $s.currentPlayer.deck.heldCards.length;
-			$s.currentPlayer.deck.heldCards = $s.currentPlayer.deck.heldCards.concat($s.currentPlayer.deck.playedCards);
-			$s.currentPlayer.deck.playedCards = [];
+			var time = $s.currentPlayer.deck.cost();
+			$s.currentPlayer.deck.cards.map(function camp(card) {
+				card.played = false;
+			});
 			time = $s.currentPlayer.corp.supplyBoats.reduce(function reduce(time, boat) {
 				return time + boat.cost();
 			}, time);
 			time = $s.currentPlayer.corp.indianBoats.reduce(function reduce(time, boat) {
 				return time + boat.cost();
 			}, time);
-			
+
 			if (time > 0) {
 				$s.currentPlayer -= time;
 				checkForScouts(-1);
@@ -328,32 +339,3 @@ mainApp.controller('MainCtrl', [
 		init();
 	}
 ]);
-
-mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
-	$scope.currentPlayer = currentPlayer;
-
-	$scope.addStrength = function addStrength(card) {
-		$scope.currentPlayer.playStrength += card.strength;
-		$scope.currentPlayer.playCard(card);
-	};
-
-	$scope.playIndian = function addIndian(removed) {
-		$scope.currentPlayer.corp.indianBoats.reverse();
-		$scope.currentPlayer.corp.indianBoats.map(function mapBoats(boat) {
-			if (boat.content.length && !removed) {
-				boat.content.splice(-1);
-				removed = true;
-				$scope.currentPlayer.playStrength++;
-			}
-		});
-		$scope.currentPlayer.corp.indianBoats.reverse();
-	};
-
-	$scope.ok = function ok() {
-		$uibModalInstance.close($scope.currentPlayer);
-	};
-
-	$scope.cancel = function cancel() {
-		$uibModalInstance.dismiss('cancel');
-	};
-});

@@ -71,7 +71,7 @@
     "with",
     "return"
   ],
-  "disallowAnonymousFunctions": true,
+  "disallowAnonymousFunctions": false,
   "disallowEmptyBlocks": true,
   "disallowSpacesInsideObjectBrackets": "all",
   "disallowSpacesInsideArrayBrackets": "all",
