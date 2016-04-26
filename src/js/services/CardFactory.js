@@ -143,7 +143,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'fur',
 					strength: 1,
 					played: false,
-					power: [{
+					ability: [{
 						cost: {
 							canoe: 1
 						},
@@ -171,7 +171,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 2,
 					played: false,
-					power: [{
+					ability: [{
 						benefit: {
 							indian: 2
 						}
@@ -182,7 +182,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'meat',
 					strength: 1,
 					played: false,
-					power: [{
+					ability: [{
 						benefit: {
 							meat: 2
 						}
@@ -193,7 +193,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 1,
 					played: false,
-					power: [{
+					ability: [{
 						benefit: {
 							wood: 2
 						}
@@ -204,7 +204,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'equipment',
 					strength: 1,
 					played: false,
-					power: [{
+					ability: [{
 						benefit: {
 							equipment: 2
 						}
@@ -215,7 +215,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'fur',
 					strength: 1,
 					played: false,
-					power: [{
+					ability: [{
 						benefit: {
 							fur: 2
 						}
@@ -228,7 +228,7 @@ mainApp.factory('CardFactory', [
 					name: 'Joseph Barter',
 					symbol: 'fur',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							canoe: 1
 						},
@@ -241,7 +241,7 @@ mainApp.factory('CardFactory', [
 					name: 'Ebenezer Tuttle',
 					symbol: 'fur',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							wood: 1
 						},
@@ -254,7 +254,7 @@ mainApp.factory('CardFactory', [
 					name: 'Rene Jassaume',
 					symbol: 'fur',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							fur: 3
 						},
@@ -267,7 +267,7 @@ mainApp.factory('CardFactory', [
 					name: 'Moses B. Reed',
 					symbol: 'fur',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							wood: 2
 						},
@@ -280,7 +280,7 @@ mainApp.factory('CardFactory', [
 					name: 'P. Antoine Tabeau',
 					symbol: 'fur',
 					strength: 2,
-					power: [{
+					ability: [{
 						cost: {
 							wood: 1,
 							meat: 1
@@ -294,7 +294,7 @@ mainApp.factory('CardFactory', [
 					name: 'Hawks Feather',
 					symbol: 'fur',
 					strength: 2,
-					power: [{
+					ability: [{
 						cost: {
 							meat: 1
 						},
@@ -307,7 +307,7 @@ mainApp.factory('CardFactory', [
 					name: 'Coboway',
 					symbol: 'fur',
 					strength: 3,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 1,
 							fur: 1,
@@ -323,7 +323,7 @@ mainApp.factory('CardFactory', [
 					name: 'J. Baptiste',
 					symbol: 'meat',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							canoe: 1,
 							meat: 1
@@ -337,7 +337,7 @@ mainApp.factory('CardFactory', [
 					name: 'Broken Arm',
 					symbol: 'meat',
 					strength: 3,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 1
 						},
@@ -350,7 +350,7 @@ mainApp.factory('CardFactory', [
 					name: 'Buffalo Medicine',
 					symbol: 'equipment',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							meat: 1
 						},
@@ -363,7 +363,7 @@ mainApp.factory('CardFactory', [
 					name: 'John Dame',
 					symbol: 'equipment',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							wood: 2
 						},
@@ -376,7 +376,7 @@ mainApp.factory('CardFactory', [
 					name: 'Charles Mackenzie',
 					symbol: 'equipment',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							horse: 1,
 							fur: 1
@@ -390,7 +390,7 @@ mainApp.factory('CardFactory', [
 					name: 'Pierre Dorian',
 					symbol: 'equipment',
 					strength: 2,
-					power: [{
+					ability: [{
 						cost: {
 							fur: 3
 						},
@@ -403,7 +403,7 @@ mainApp.factory('CardFactory', [
 					name: 'Comcomly',
 					symbol: 'equipment',
 					strength: 3,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 1,
 							fur: 1,
@@ -419,7 +419,7 @@ mainApp.factory('CardFactory', [
 					name: 'Crow At Rest',
 					symbol: 'equipment',
 					strength: 3,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 2,
 							fur: 2
@@ -433,7 +433,7 @@ mainApp.factory('CardFactory', [
 					name: 'John Robertson',
 					symbol: 'wood',
 					strength: 1,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 2
 						},
@@ -446,7 +446,7 @@ mainApp.factory('CardFactory', [
 					name: 'Three Eagles',
 					symbol: 'wood',
 					strength: 2,
-					power: [{
+					ability: [{
 						cost: {
 							equipment: 2
 						},
@@ -459,7 +459,7 @@ mainApp.factory('CardFactory', [
 					name: 'Man Crow',
 					symbol: 'wood',
 					strength: 2,
-					power: [{
+					ability: [{
 						cost: {
 							wood: 3
 						},
@@ -472,7 +472,7 @@ mainApp.factory('CardFactory', [
 					name: 'Twisted Hair',
 					symbol: 'wood',
 					strength: 3,
-					power: [{
+					ability: [{
 						cost: {
 							canoe: 1
 						},

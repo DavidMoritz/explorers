@@ -73,19 +73,19 @@ html(ng-app='mainApp')
 								span.badge {{card.strength}}
 								|  {{card.name}}
 							ul
-								li.power(ng-repeat='power in card.power track by $index' ng-click='currentPlayer.playCard(card, power)')
-									p Cost: {{power.cost}}
-									p Benefit: {{power.benefit}}
+								li.ability(ng-repeat='ability in card.ability track by $index' ng-click='currentPlayer.playCard(card, ability)')
+									p Cost: {{ability.cost}}
+									p Benefit: {{ability.benefit}}
 					ul
 						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' class='{{card.symbol}}')
 							p
 								span.badge {{card.strength}}
 								| {{card.name}}
 							ul
-								li.power(ng-repeat='power in card.power track by $index')
-									p Cost: {{power.cost}}
-									p Benefit: {{power.benefit}}
-					button.btn.btn-danger(ng-click='camp()') Camp
+								li.ability(ng-repeat='ability in card.ability track by $index')
+									p Cost: {{ability.cost}}
+									p Benefit: {{ability.benefit}}
+					button.btn.btn-danger(ng-click='currentPlayer.camp()') Camp
 			.game-started.row
 				+col(null, 3, 4, 3)
 				+col(null, 6, 4, 6)

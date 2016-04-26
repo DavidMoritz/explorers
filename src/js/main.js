@@ -22,6 +22,13 @@ mainApp.controller('MainCtrl', [
 
 				return this.indianBoats.reduce((time, boat) => time + boat.cost(), time);
 			}
+			noPay() {
+				this.supplyBoats.map(boat => {
+					boat.content.map(item => {
+						item.delete = false;
+					});
+				});
+			}
 		}
 
 		class Deck {
@@ -36,6 +43,9 @@ mainApp.controller('MainCtrl', [
 			}
 			get playedCards() {
 				return this.cards.filter(card => card.played);
+			}
+			reset() {
+				this.cards.map(card => card.played = false);
 			}
 			play(card) {
 				var idx = _.findIndex(this.cards, card);
@@ -60,21 +70,54 @@ mainApp.controller('MainCtrl', [
 			get cost() {
 				return this.deck.cost + this.corp.cost;
 			}
+			camp() {
+				this.deck.reset();
+
+				if (this.space <= this.cost) {
+					this.space = 0;
+				} else {
+					this.space -= this.cost;
+					checkForScouts(-1);
+				}
+			}
+			goBack(time) {
+			}
 			countIndians() {
 				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
 			}
-			playCard(card, power) {
-				$s.currentPlayer.deck.play(card);
-				$s.open();
+			playCard(card, ability) {
+				this.deck.play(card);
+				openModal();
 
-				if (power.cost) {
-					if (payCost(power.cost)) {
-						benefit(power.benefit);
+				if (ability.cost) {
+					if (this.payCost(ability.cost)) {
+						benefit(ability.benefit);
 					} else {
-						console.log('you cannot aford that power');
+						console.log('you cannot aford that ability');
 					}
 				} else {
-					benefit(power.benefit);
+					benefit(ability.benefit);
+				}
+			}
+			payCost(cost) {
+				var tempCost = Object.create(cost);
+				this.corp.supplyBoats.map(boat => {
+					boat.content.map(item => {
+						if (tempCost[item.name] > 0) {
+							tempCost[item.name]--;
+							item.delete = true;
+						}
+					});
+				});
+
+				if (_.every(_.values(tempCost), cost => cost === 0)) {
+					this.corp.supplyBoats.map(boat => {
+						boat.content = boat.content.filter(item => !item.delete);
+					});
+
+					return true;
+				} else {
+					this.corp.noPay();
 				}
 			}
 		}
@@ -117,26 +160,6 @@ mainApp.controller('MainCtrl', [
 				picture: $s.authData.facebook.cachedUserProfile.picture.data.url,
 				timezone: $s.authData.facebook.cachedUserProfile.timezone
 			});
-		}
-
-		function payCost(cost) {
-			var tempCost = Object.create(cost);
-			$s.currentPlayer.corp.supplyBoats.map(boat => {
-				boat.content.map(item => {
-					if (tempCost[item.name] > 0) {
-						tempCost[item.name]--;
-						item.delete = true;
-					}
-				});
-			});
-
-			if (_.every(_.values(tempCost), cost => cost === 0)) {
-				$s.currentPlayer.corp.supplyBoats.map(boat => {
-					boat.content = boat.content.filter(item => !item.delete);
-				});
-
-				return true;
-			}
 		}
 
 		function collect(item, added) {
@@ -192,6 +215,22 @@ mainApp.controller('MainCtrl', [
 			checkForScouts(1);
 		}
 
+		function openModal() {
+			var instance = $uibM.open({
+				animation: true,
+				templateUrl: 'strengthModal',
+				controller: 'ModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					currentPlayer: () => $s.currentPlayer
+				}
+			});
+
+			instance.result.then(currentPlayer => {
+				$s.currentPlayer = currentPlayer;
+			});
+		}
+
 		const timeFormat = 'YYYY-MM-DD HH:mm:ss';
 		const allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
 
@@ -215,38 +254,12 @@ mainApp.controller('MainCtrl', [
 			map: MAP.map
 		});
 
-		$s.camp = () => {
-			var time = $s.currentPlayer.cost;
-			$s.currentPlayer.deck.cards.map(card => card.played = false);
-
-			if (time > 0) {
-				$s.currentPlayer -= time;
-				checkForScouts(-1);
-			}
-		};
-
-		$s.open = () => {
-			var instance = $uibM.open({
-				animation: true,
-				templateUrl: 'strengthModal',
-				controller: 'ModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					currentPlayer: () => $s.currentPlayer
-				}
-			});
-
-			instance.result.then(function result(currentPlayer) {
-				$s.currentPlayer = currentPlayer;
-			});
-		};
-
 		$s.purchase = item => {
 			if (item.cost) {
-				if (payCost(item.cost)) {
+				if ($s.currentPlayer.payCost(item.cost)) {
 					collect(item);
 				} else {
-					console.log('you cannot aford that power');
+					console.log('you cannot aford that ability');
 				}
 			}
 		};
@@ -265,7 +278,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.addBoat = (type, size) => {
-			if (payCost({wood: 3})) {
+			if ($s.currentPlayer.payCost({wood: 3})) {
 				var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
 
 				boatsArr.push(new BF[type + size]());
