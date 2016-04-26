@@ -6,5 +6,6 @@
   //"maxstatements": 12,
   //"maxparams": 3,
   "maxdepth": 3,
-  "maxcomplexity": 14
+  "maxcomplexity": 14,
+  "esversion": 6
 }

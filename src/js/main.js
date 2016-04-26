@@ -12,6 +12,77 @@ mainApp.controller('MainCtrl', [
 	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, CF, MAP, MF, FF) {
 		'use strict';
 
+		class Corp {
+			constructor() {
+				this.supplyBoats = new BF.startSupply();
+				this.indianBoats = new BF.startIndian();
+			}
+			get cost() {
+				var time = this.supplyBoats.reduce((time, boat) => time + boat.cost(), 0);
+
+				return this.indianBoats.reduce((time, boat) => time + boat.cost(), time);
+			}
+		}
+
+		class Deck {
+			constructor() {
+				this.cards = new CF.startingCards();
+			}
+			get cost() {
+				return this.heldCards.length;
+			}
+			get heldCards() {
+				return this.cards.filter(card => !card.played);
+			}
+			get playedCards() {
+				return this.cards.filter(card => card.played);
+			}
+			play(card) {
+				var idx = _.findIndex(this.cards, card);
+
+				this.cards[idx].played = true;
+			}
+		}
+
+		class Player {
+			/*
+			 * Player has a name, a color, a deck, and a corp
+			 */
+			constructor(name, color) {
+				this.name = name;
+				this.color = color || allColors.splice(-1)[0];
+				this.corp = new Corp();
+				this.deck = new Deck();
+				this.space = findStartSpace();
+				this.idx = $s.allPlayers.length + 1;
+				$s.addIndian(this);
+			}
+			get cost() {
+				return this.deck.cost + this.corp.cost;
+			}
+			countIndians() {
+				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
+			}
+			playCard(card, power) {
+				$s.currentPlayer.deck.play(card);
+				$s.open();
+
+				if (power.cost) {
+					if (payCost(power.cost)) {
+						benefit(power.benefit);
+					} else {
+						console.log('you cannot aford that power');
+					}
+				} else {
+					benefit(power.benefit);
+				}
+			}
+		}
+
+		class User {
+			constructor() {}
+		}
+
 		function init() {
 			//	init stuff
 			window.$s = $s;
@@ -24,75 +95,6 @@ mainApp.controller('MainCtrl', [
 				}
 			}, false);
 			*/
-		}
-
-		function Corp() {
-			this.supplyBoats = new BF.startSupply();
-			this.indianBoats = new BF.startIndian();
-		}
-
-		function Deck() {
-			_.extend(this, {
-				cards: new CF.startingCards(),
-				cost: function cost() {
-					return this.heldCards.length;
-				},
-				get heldCards() {
-					return this.cards.filter(function heldCards(card) {
-						return !card.played;
-					});
-				},
-				get playedCards() {
-					return this.cards.filter(function playedCards(card) {
-						return card.played;
-					});
-				},
-				play: function play(card) {
-					var idx = _.findIndex(this.cards, card);
-
-					this.cards[idx].played = true;
-				}
-			});
-		}
-
-		function Player(name, color) {
-			/*
-			 * Player has a name, a color, a deck, and a corp
-			 */
-			_.extend(this, {
-				name: name,
-				color: allColors.splice(-1)[0],
-				corp: new Corp(),
-				deck: new Deck(),
-				space: findStartSpace(),
-				idx: $s.allPlayers.length + 1,
-
-				countIndians: function countIndians() {
-					return this.corp.indianBoats.reduce(function reduceSize(total, boat) {
-						return total + boat.content.length;
-					}, 0);
-				},
-
-				playCard: function playCard(card, power) {
-					$s.currentPlayer.deck.play(card);
-					$s.open();
-
-					if (power.cost) {
-						if (payCost(power.cost)) {
-							benefit(power.benefit);
-						} else {
-							console.log('you cannot aford that power');
-						}
-					} else {
-						benefit(power.benefit);
-					}
-				}
-			});
-
-			$s.addIndian(this);
-		}
-
-		function User() {
 		}
 
 		function findStartSpace() {
@@ -117,11 +119,84 @@ mainApp.controller('MainCtrl', [
 			});
 		}
 
-		var timeFormat = 'YYYY-MM-DD HH:mm:ss';
-		var allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
+		function payCost(cost) {
+			var tempCost = Object.create(cost);
+			$s.currentPlayer.corp.supplyBoats.map(boat => {
+				boat.content.map(item => {
+					if (tempCost[item.name] > 0) {
+						tempCost[item.name]--;
+						item.delete = true;
+					}
+				});
+			});
+
+			if (_.every(_.values(tempCost), cost => cost === 0)) {
+				$s.currentPlayer.corp.supplyBoats.map(boat => {
+					boat.content = boat.content.filter(item => !item.delete);
+				});
+
+				return true;
+			}
+		}
+
+		function collect(item, added) {
+			$s.currentPlayer.corp.supplyBoats.map(boat => {
+				if (boat.content.length < boat.capacity && !added) {
+					boat.content.push(Object.create(item));
+					added = true;
+				}
+			});
+
+			if (!added) {
+				console.log('no space for that item');
+			}
+		}
+
+		function travel(terrain) {
+			var space = $s.currentPlayer.space;
+			var nextSpace = MAP.map[space + 1];
+
+			if (nextSpace.terrain == terrain || nextSpace.terrain == 'mixed') {
+				console.log('You moved 1 space on to ' + nextSpace.terrain + ' terrain');
+				$s.currentPlayer.space++;
+			} else {
+				console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
+			}
+		}
+
+		function checkForScouts(direction) {
+			var dupes = $s.allPlayers.filter(
+				player => (player.name != $s.currentPlayer.name) && (player.space == $s.currentPlayer.space)
+			);
+
+			if (dupes.length) {
+				$s.currentPlayer.space += direction;
+				checkForScouts(direction);
+			}
+		}
+
+		function benefit(benefit) {
+			_.mapKeys(benefit, (amount, key) => {
+				for (let i = 0; i < amount; i++) {
+					var item = _.find(IF.allItems, {name: key});
+
+					if (item) {
+						collect(item);
+					} else if (key === 'indian') {
+						$s.addIndian();
+					} else if (key === 'mountain' || key === 'water') {
+						travel(key);
+					}
+				}
+			});
+			checkForScouts(1);
+		}
+
+		const timeFormat = 'YYYY-MM-DD HH:mm:ss';
+		const allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
 
 		// add later for everyone seeing same cursor movement
-		var cursorObj = FF.getFBObject('cursor');
+		const cursorObj = FF.getFBObject('cursor');
 		cursorObj.$bindTo($s, 'cursor');
 
 		//	initialize scoped variables
@@ -140,94 +215,9 @@ mainApp.controller('MainCtrl', [
 			map: MAP.map
 		});
 
-		var payCost = function payCost(cost) {
-			var tempCost = Object.create(cost);
-			$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
-				boat.content.map(function mapItems(item) {
-					if (tempCost[item.name] > 0) {
-						tempCost[item.name]--;
-						item.delete = true;
-					}
-				});
-			});
-
-			if (_.every(_.values(tempCost), function cost(cost) {
-				return cost === 0;
-			})) {
-				$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
-					boat.content = boat.content.filter(function filterItems(item) {
-						return !item.delete;
-					});
-				});
-
-				return true;
-			}
-		};
-
-		var collect = function collect(item, added) {
-			$s.currentPlayer.corp.supplyBoats.map(function mapBoats(boat) {
-				if (boat.content.length < boat.capacity && !added) {
-					boat.content.push(Object.create(item));
-					added = true;
-				}
-			});
-
-			if (!added) {
-				console.log('no space for that item');
-			}
-		};
-
-		var travel = function travel(terrain) {
-			var space = $s.currentPlayer.space;
-			var nextSpace = MAP.map[space + 1];
-
-			if (nextSpace.terrain == terrain || nextSpace.terrain == 'mixed') {
-				console.log('You moved 1 space on to ' + nextSpace.terrain + ' terrain');
-				$s.currentPlayer.space++;
-			} else {
-				console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
-			}
-		};
-
-		var checkForScouts = function checkForScouts(direction) {
-			var dupes = $s.allPlayers.filter(function filter(player) {
-				return (player.name != $s.currentPlayer.name) && (player.space == $s.currentPlayer.space);
-			});
-
-			if (dupes.length) {
-				$s.currentPlayer.space += direction;
-				checkForScouts(direction);
-			}
-		};
-
-		var benefit = function benefit(benefit) {
-			_.mapKeys(benefit, function mapKeys(amount, key) {
-				for (var i = 0; i < amount; i++) {
-					var item = _.find(IF.allItems, {name: key});
-
-					if (item) {
-						collect(item);
-					} else if (key === 'indian') {
-						$s.addIndian();
-					} else if (key === 'mountain' || key === 'water') {
-						travel(key);
-					}
-				}
-			});
-			checkForScouts(1);
-		};
-
-		$s.camp = function camp() {
-			var time = $s.currentPlayer.deck.cost();
-			$s.currentPlayer.deck.cards.map(function camp(card) {
-				card.played = false;
-			});
-			time = $s.currentPlayer.corp.supplyBoats.reduce(function reduce(time, boat) {
-				return time + boat.cost();
-			}, time);
-			time = $s.currentPlayer.corp.indianBoats.reduce(function reduce(time, boat) {
-				return time + boat.cost();
-			}, time);
+		$s.camp = () => {
+			var time = $s.currentPlayer.cost;
+			$s.currentPlayer.deck.cards.map(card => card.played = false);
 
 			if (time > 0) {
 				$s.currentPlayer -= time;
@@ -235,16 +225,14 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.open = function openModal() {
+		$s.open = () => {
 			var instance = $uibM.open({
 				animation: true,
 				templateUrl: 'strengthModal',
 				controller: 'ModalInstanceCtrl',
 				size: 'lg',
 				resolve: {
-					currentPlayer: function resolve() {
-						return $s.currentPlayer;
-					}
+					currentPlayer: () => $s.currentPlayer
 				}
 			});
 
@@ -253,7 +241,7 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
-		$s.purchase = function purchase(item) {
+		$s.purchase = item => {
 			if (item.cost) {
 				if (payCost(item.cost)) {
 					collect(item);
@@ -263,11 +251,11 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.addIndian = function addIndian(player) {
+		$s.addIndian = player => {
 			var added = $s.indianSupply === 0;
 			player = player || $s.currentPlayer;
 
-			player.corp.indianBoats.map(function mapBoats(boat) {
+			player.corp.indianBoats.map(boat => {
 				if (boat.content.length < boat.capacity && !added) {
 					boat.content.push(new IF.indian());
 					added = true;
@@ -276,7 +264,7 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
-		$s.addBoat = function addBoat(type, size) {
+		$s.addBoat = (type, size) => {
 			if (payCost({wood: 3})) {
 				var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
 
@@ -289,7 +277,7 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.quickStart = function quickStart() {
+		$s.quickStart = () => {
 			$s.allPlayers.push(new Player('David'));
 			$s.allPlayers.push(new Player('Mike'));
 			$s.allPlayers.push(new Player('Phil'));
@@ -298,7 +286,7 @@ mainApp.controller('MainCtrl', [
 			$s.changeCurrentPlayer();
 		};
 
-		$s.fbLogin = function facebookLogin() {
+		$s.fbLogin = () => {
 			$s.authData = FF.facebookLogin();
 			$s.currentUser = FF.getFBObject('users/' + authData.uId);
 
@@ -307,18 +295,18 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.addNewPlayer = function addNewPlayer() {
+		$s.addNewPlayer = () => {
 			$s.currentPlayer = new Player($s.ff.newPlayerName);
 			$s.allPlayers.push($s.currentPlayer);
 			$s.ff.newPlayerName = '';
 		};
 
-		$s.moveCursor = function moveCursor(e) {
+		$s.moveCursor = e => {
 			$s.cursor.left = (e.pageX + 2) + 'px';
 			$s.cursor.top = (e.pageY + 2) + 'px';
 		};
 
-		$s.changeCurrentPlayer = function changeCurrentPlayer() {
+		$s.changeCurrentPlayer = () => {
 			if ($s.currentPlayer) {
 				var currentIdx = $s.currentPlayer.idx;
 				$s.currentPlayer = currentIdx == $s.allPlayers.length ? $s.allPlayers[0] : $s.allPlayers[currentIdx];
@@ -330,7 +318,7 @@ mainApp.controller('MainCtrl', [
 
 		//$s.activeGames = FF.getFBArray('activeGames');
 		$s.activeGames = FF.getFBObject('activeGames');
-		$s.activeGames.$loaded(function afterActiveGamesLoaded() {
+		$s.activeGames.$loaded(() => {
 			console.log('Firebase is working');
 			$('.notices').text('Firebase is working!');
 			$('body').addClass('facebook-available');

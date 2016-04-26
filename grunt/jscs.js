@@ -2,7 +2,8 @@ module.exports = function(grunt) {
 	grunt.config.set('jscs', {
 		src: 'src/**/*.js',
 		options: {
-			config: '.jscsrc'
+			config: '.jscsrc',
+			esnext: true
 		}
 	});
 
