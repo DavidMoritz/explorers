@@ -100,12 +100,20 @@ html(ng-app='mainApp')
 		script#strengthModal(type='text/ng-template')
 			.modal-header
 				h3 Choose your Strength: {{currentPlayer.playStrength}}
-			.modal-body
-				ul
+			.modal-body.row
+				+col(null, 8)
+					ul
 					li.held-card.pointer(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card)')
 						p
 							span.badge {{card.strength}}
 							|  {{card.name}}
-				.btn.btn-danger(ng-click='playIndian()') Add Indian
-					span.badge  {{currentPlayer.countIndians()}}
+					.btn.btn-danger(ng-click='playIndian()') Add Indian
+						span.badge  {{currentPlayer.countIndians()}}
+				+col(null, 4)
+					li.held-card
+						h3 {{currentPlayer.activeCard.name}}
+						ul
+							li.ability(ng-repeat='ability in currentPlayer.activeCard.ability track by $index' ng-click='currentPlayer.useAbility(ability)')
+								p Cost: {{ability.cost}}
+								p Benefit: {{ability.benefit}}
 //		| @@javascriptReplaceFiles

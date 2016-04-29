@@ -34,6 +34,10 @@ mainApp.controller('MainCtrl', [
 		class Deck {
 			constructor() {
 				this.cards = new CF.startingCards();
+				this.activeCardId = '';
+			}
+			get activeCard() {
+				return _.find(this.cards, {id: this.activeCardId});
 			}
 			get cost() {
 				return this.heldCards.length;
@@ -70,6 +74,9 @@ mainApp.controller('MainCtrl', [
 			get cost() {
 				return this.deck.cost + this.corp.cost;
 			}
+			get strengthAvailable() {
+				return this.playStrength > this.deck.activeCard.plays;
+			}
 			camp() {
 				this.deck.reset();
 
@@ -85,19 +92,23 @@ mainApp.controller('MainCtrl', [
 			countIndians() {
 				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
 			}
-			playCard(card, ability) {
-				this.deck.play(card);
-				openModal();
-
-				if (ability.cost) {
-					if (this.payCost(ability.cost)) {
-						benefit(ability.benefit);
+			useAbility(ability) {
+				if (this.strengthAvailable) {
+					if (ability.cost) {
+						if (this.payCost(ability.cost)) {
+							benefit(ability.benefit);
+						} else {
+							console.log('you cannot aford that ability');
+						}
 					} else {
-						console.log('you cannot aford that ability');
+						benefit(ability.benefit);
 					}
-				} else {
-					benefit(ability.benefit);
 				}
+			}
+			playCard(card) {
+				this.deck.play(card);
+				this.deck.activeCardId = card.id;
+				openModal();
 			}
 			payCost(cost) {
 				var tempCost = Object.create(cost);
@@ -199,6 +210,7 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function benefit(benefit) {
+			$s.currentPlayer.activeCard.plays++;
 			_.mapKeys(benefit, (amount, key) => {
 				for (let i = 0; i < amount; i++) {
 					var item = _.find(IF.allItems, {name: key});
