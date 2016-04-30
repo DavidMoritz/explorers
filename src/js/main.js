@@ -69,6 +69,8 @@ mainApp.controller('MainCtrl', [
 				this.deck = new Deck();
 				this.space = findStartSpace();
 				this.idx = $s.allPlayers.length + 1;
+				this.notCamped = true;
+				this.takenMainAction = false;
 				$s.addIndian(this);
 			}
 			get cost() {
@@ -77,7 +79,17 @@ mainApp.controller('MainCtrl', [
 			get strengthAvailable() {
 				return this.playStrength > this.deck.activeCard.plays;
 			}
+			get indianCount() {
+				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
+			}
+			endTurn() {
+				this.playStrength = 0;
+				this.deck.activeCardId = '';
+				this.notCamped = true;
+				this.takenMainAction = false;
+			}
 			camp() {
+				this.notCamped = false;
 				this.deck.reset();
 
 				if (this.space <= this.cost) {
@@ -88,9 +100,6 @@ mainApp.controller('MainCtrl', [
 				}
 			}
 			goBack(time) {
-			}
-			countIndians() {
-				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
 			}
 			useAbility(ability) {
 				if (this.strengthAvailable) {
@@ -106,6 +115,11 @@ mainApp.controller('MainCtrl', [
 				}
 			}
 			playCard(card) {
+				if (this.takenMainAction) {
+					return;
+				}
+				this.takenMainAction = true;
+				this.playStrength = 0;
 				this.deck.play(card);
 				this.deck.activeCardId = card.id;
 				openModal();
@@ -210,7 +224,7 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function benefit(benefit) {
-			$s.currentPlayer.activeCard.plays++;
+			$s.currentPlayer.deck.activeCard.plays++;
 			_.mapKeys(benefit, (amount, key) => {
 				for (let i = 0; i < amount; i++) {
 					var item = _.find(IF.allItems, {name: key});
@@ -333,12 +347,12 @@ mainApp.controller('MainCtrl', [
 
 		$s.changeCurrentPlayer = () => {
 			if ($s.currentPlayer) {
+				$s.currentPlayer.endTurn();
 				var currentIdx = $s.currentPlayer.idx;
 				$s.currentPlayer = currentIdx == $s.allPlayers.length ? $s.allPlayers[0] : $s.allPlayers[currentIdx];
 			} else {
 				$s.currentPlayer = $s.allPlayers[0];
 			}
-			$s.currentPlayer.playStrength = 0;
 		};
 
 		//$s.activeGames = FF.getFBArray('activeGames');

@@ -143,6 +143,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'fur',
 					strength: 1,
 					played: false,
+					plays: 0,
 					ability: [{
 						cost: {
 							canoe: 1
@@ -171,6 +172,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 2,
 					played: false,
+					plays: 0,
 					ability: [{
 						benefit: {
 							indian: 2
@@ -182,6 +184,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'meat',
 					strength: 1,
 					played: false,
+					plays: 0,
 					ability: [{
 						benefit: {
 							meat: 2
@@ -193,6 +196,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'wood',
 					strength: 1,
 					played: false,
+					plays: 0,
 					ability: [{
 						benefit: {
 							wood: 2
@@ -204,6 +208,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'equipment',
 					strength: 1,
 					played: false,
+					plays: 0,
 					ability: [{
 						benefit: {
 							equipment: 2
@@ -215,6 +220,7 @@ mainApp.factory('CardFactory', [
 					symbol: 'fur',
 					strength: 1,
 					played: false,
+					plays: 0,
 					ability: [{
 						benefit: {
 							fur: 2

@@ -26,54 +26,56 @@ html(ng-app='mainApp')
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 			.pre-game.row
 				+col(6)
-					input(ng-model='ff.newPlayerName')
-					button.btn.btn-info(ng-click='addNewPlayer()') Add New Player
-					.clearfix
-					button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
-					h4 Active Player: {{currentPlayer.name}}
-					ul
-						li(ng-repeat='player in allPlayers')
-							h5 Name: {{player.name}}
-					button.btn.btn-success(ng-click='changeCurrentPlayer()') Change Player
-					button.btn.btn-warning(ng-click='quickStart()') Quick Start
-					h4 All Players
-					ul
-						li(ng-repeat='player in allPlayers')
-							h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}') {{player.name}}
-								span.badge {{player.idx}}
-							h6 Supplies:
-							ul
-								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-									ul
-										li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
-							h6 Indians:
-							ul
-								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-							div(ng-if='player.tiles.length')
-								h6(ng-repeat="(key, value) in player.tiles") Tile: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-							div(ng-if='player.cards.length')
-								h6(ng-repeat="(key, value) in player.cards | groupBy: 'gem'") Card: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-							div(ng-if='player.chips.length')
-								h6(ng-repeat="(key, value) in player.chips | groupBy: 'gem'") Gem: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-							div(ng-if='player.reserve.length')
-								button.btn.btn-info(ng-click='toggleReserve(player)') {{player.showReserve ? 'Hide' : 'Show'}} Reserve
-								ul.track.player(ng-show='player.showReserve')
-									li.card(ng-repeat='card in player.reserve' ng-class='card.gem' ng-click='collectReserveCard(player, card)')
-										h5.hidden Id: {{card.id}}
-										h4.capitalize {{card.gem}}
-										h5 Points: {{card.points}}
-										h5 Cost:
-										ul.cost
-											li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
-												p {{value}}
+					div(ng-hide='currentPlayer')
+						input(ng-model='ff.newPlayerName')
+						button.btn.btn-info(ng-click='addNewPlayer()') Add New Player
+						.clearfix
+						button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
+						ul
+							li(ng-repeat='player in allPlayers')
+								h5 Name: {{player.name}}
+						button.btn.btn-warning(ng-click='quickStart()') Quick Start
+					div(ng-show='currentPlayer')
+						button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
+						button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
+						h4 All Players
+						ul
+							li(ng-repeat='player in allPlayers')
+								h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}') {{player.name}}
+									span.badge {{player.idx}}
+								h6 Supplies:
+								ul
+									li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+										ul
+											li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
+								h6 Indians:
+								ul
+									li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+								div(ng-if='player.tiles.length')
+									h6(ng-repeat="(key, value) in player.tiles") Tile: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+								div(ng-if='player.cards.length')
+									h6(ng-repeat="(key, value) in player.cards | groupBy: 'gem'") Card: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+								div(ng-if='player.chips.length')
+									h6(ng-repeat="(key, value) in player.chips | groupBy: 'gem'") Gem: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+								div(ng-if='player.reserve.length')
+									button.btn.btn-info(ng-click='toggleReserve(player)') {{player.showReserve ? 'Hide' : 'Show'}} Reserve
+									ul.track.player(ng-show='player.showReserve')
+										li.card(ng-repeat='card in player.reserve' ng-class='card.gem' ng-click='collectReserveCard(player, card)')
+											h5.hidden Id: {{card.id}}
+											h4.capitalize {{card.gem}}
+											h5 Points: {{card.points}}
+											h5 Cost:
+											ul.cost
+												li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
+													p {{value}}
 				+col(6)
 					ul
-						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}')
+						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='currentPlayer.playCard(card)')
 							p
 								span.badge {{card.strength}}
 								|  {{card.name}}
 							ul
-								li.ability(ng-repeat='ability in card.ability track by $index' ng-click='currentPlayer.playCard(card, ability)')
+								li.ability(ng-repeat='ability in card.ability track by $index')
 									p Cost: {{ability.cost}}
 									p Benefit: {{ability.benefit}}
 					ul
@@ -85,7 +87,6 @@ html(ng-app='mainApp')
 								li.ability(ng-repeat='ability in card.ability track by $index')
 									p Cost: {{ability.cost}}
 									p Benefit: {{ability.benefit}}
-					button.btn.btn-danger(ng-click='currentPlayer.camp()') Camp
 			.game-started.row
 				+col(null, 3, 4, 3)
 				+col(null, 6, 4, 6)
@@ -99,21 +100,21 @@ html(ng-app='mainApp')
 		script(src='inc/main.js')
 		script#strengthModal(type='text/ng-template')
 			.modal-header
-				h3 Choose your Strength: {{currentPlayer.playStrength}}
+				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 			.modal-body.row
-				+col(null, 8)
+				+col(null, 8, 8)
 					ul
 					li.held-card.pointer(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card)')
 						p
 							span.badge {{card.strength}}
 							|  {{card.name}}
 					.btn.btn-danger(ng-click='playIndian()') Add Indian
-						span.badge  {{currentPlayer.countIndians()}}
-				+col(null, 4)
-					li.held-card
-						h3 {{currentPlayer.activeCard.name}}
+						span.badge  {{currentPlayer.indianCount}}
+				+col(null, 4, 4)
+					li.held-card(class='{{currentPlayer.deck.activeCard.symbol}}')
+						h3 {{currentPlayer.deck.activeCard.name}}
 						ul
-							li.ability(ng-repeat='ability in currentPlayer.activeCard.ability track by $index' ng-click='currentPlayer.useAbility(ability)')
+							li.ability.pointer(ng-repeat='ability in currentPlayer.deck.activeCard.ability track by $index' ng-click='currentPlayer.useAbility(ability)')
 								p Cost: {{ability.cost}}
 								p Benefit: {{ability.benefit}}
 //		| @@javascriptReplaceFiles
