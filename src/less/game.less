@@ -28,6 +28,51 @@
 		background-color: #c86;
 	}
 }
+.sprite {
+	background-image: url(../img/sprite_alpha.png);
+	display: inline-block;
+	height: 27px;
+	width: 27px;
+	&.white {
+		background-image: url(../img/sprite_white.png); 
+	}
+	&.wood {
+		background-position: 0 0;
+		&.symbol {
+			background-position: 0 -30px;
+		}
+	}
+	&.fur {
+		background-position: -30px 0;
+		&.symbol {
+			background-position: -30px -30px;
+		}
+	}
+	&.meat {
+		background-position: -60px 0;
+		&.symbol {
+			background-position: -60px -30px;
+		}
+	}
+	&.equipment {
+		background-position: -90px 0;
+		&.symbol {
+			background-position: -90px -30px;
+		}
+	}
+	&.canoe {
+		background-position: -120px 0;
+		&.symbol {
+			background-position: -120px -30px;
+		}
+	}
+	&.horse {
+		background-position: -150px 0;
+		&.symbol {
+			background-position: -150px -30px;
+		}
+	}
+}
 .played-card {
 	border: red dashed 4px;
 
@@ -38,6 +83,10 @@
 .map {
 	list-style: none;
 	padding: 0;
+}
+ul.players {
+	list-style: none;
+	padding: none;
 }
 .space {
 	height: 1.5em;

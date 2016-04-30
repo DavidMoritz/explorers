@@ -19,8 +19,10 @@ html(ng-app='mainApp')
 			header.hide
 				h1 Explorers
 			.jumbotron
-				h2.text-center Welcome to Explorers!
+				h2.text-center Welcome to Explorers! 
 				h4 Active Player: {{currentPlayer.name}}
+				i.sprite(ng-repeat='item in allItems' class='{{item.name}}')
+				i.sprite.symbol(ng-repeat='item in allItems' class='{{item.name}}')
 				.notices
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
@@ -39,15 +41,18 @@ html(ng-app='mainApp')
 						button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
 						button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
 						h4 All Players
-						ul
+						ul.players
 							li(ng-repeat='player in allPlayers')
-								h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}') {{player.name}}
+								h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}')
 									span.badge {{player.idx}}
+									| {{player.name}}
+									i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
 								h6 Supplies:
 								ul
 									li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
 										ul
 											li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
+												i.sprite(class='{{item.name}}')
 								h6 Indians:
 								ul
 									li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
@@ -69,21 +74,25 @@ html(ng-app='mainApp')
 												li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
 													p {{value}}
 				+col(6)
+					h3 {{currentPlayer.name}} Cards in Hand
 					ul
 						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='currentPlayer.playCard(card)')
 							p
 								span.badge {{card.strength}}
 								|  {{card.name}}
+								i.sprite.symbol(class='{{card.symbol}}')
 							ul
 								li.ability(ng-repeat='ability in card.ability track by $index')
 									p Cost: {{ability.cost}}
 									p Benefit: {{ability.benefit}}
+					h3 {{currentPlayer.name}} Cards in Play
 					ul
 						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' class='{{card.symbol}}')
 							p
 								span.badge {{card.strength}}
 								| {{card.name}}
-							ul
+								i.sprite.symbol(class='{{card.symbol}}')
+							//- ul
 								li.ability(ng-repeat='ability in card.ability track by $index')
 									p Cost: {{ability.cost}}
 									p Benefit: {{ability.benefit}}
@@ -108,11 +117,14 @@ html(ng-app='mainApp')
 						p
 							span.badge {{card.strength}}
 							|  {{card.name}}
+							i.sprite.symbol(class='{{card.symbol}}')
 					.btn.btn-danger(ng-click='playIndian()') Add Indian
 						span.badge  {{currentPlayer.indianCount}}
 				+col(null, 4, 4)
 					li.held-card(class='{{currentPlayer.deck.activeCard.symbol}}')
-						h3 {{currentPlayer.deck.activeCard.name}}
+						h3
+							i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
+							| {{currentPlayer.deck.activeCard.name}}
 						ul
 							li.ability.pointer(ng-repeat='ability in currentPlayer.deck.activeCard.ability track by $index' ng-click='currentPlayer.useAbility(ability)')
 								p Cost: {{ability.cost}}
