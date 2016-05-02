@@ -76,7 +76,7 @@ html(ng-app='mainApp')
 				+col(6)
 					h3 {{currentPlayer.name}} Cards in Hand
 					ul
-						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='currentPlayer.playCard(card)')
+						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='callPlayCard(card)')
 							p
 								span.badge {{card.strength}}
 								|  {{card.name}}

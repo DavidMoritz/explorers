@@ -5,151 +5,12 @@ mainApp.controller('MainCtrl', [
 	'$uibModal',
 	'ItemFactory',
 	'BoatFactory',
-	'CardFactory',
+	'ClassFactory',
 	'MapFactory',
 	'MethodFactory',
 	'FirebaseFactory',
-	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, CF, MAP, MF, FF) {
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF) {
 		'use strict';
-
-		class Corp {
-			constructor() {
-				this.supplyBoats = new BF.startSupply();
-				this.indianBoats = new BF.startIndian();
-			}
-			get cost() {
-				var time = this.supplyBoats.reduce((time, boat) => time + boat.cost(), 0);
-
-				return this.indianBoats.reduce((time, boat) => time + boat.cost(), time);
-			}
-			noPay() {
-				this.supplyBoats.map(boat => {
-					boat.content.map(item => {
-						item.delete = false;
-					});
-				});
-			}
-		}
-
-		class Deck {
-			constructor() {
-				this.cards = new CF.startingCards();
-				this.activeCardId = '';
-			}
-			get activeCard() {
-				return _.find(this.cards, {id: this.activeCardId});
-			}
-			get cost() {
-				return this.heldCards.length;
-			}
-			get heldCards() {
-				return this.cards.filter(card => !card.played);
-			}
-			get playedCards() {
-				return this.cards.filter(card => card.played);
-			}
-			reset() {
-				this.cards.map(card => card.played = false);
-			}
-			play(card) {
-				var idx = _.findIndex(this.cards, card);
-
-				this.cards[idx].played = true;
-			}
-		}
-
-		class Player {
-			/*
-			 * Player has a name, a color, a deck, and a corp
-			 */
-			constructor(name, color) {
-				this.name = name;
-				this.color = color || allColors.splice(-1)[0];
-				this.corp = new Corp();
-				this.deck = new Deck();
-				this.space = findStartSpace();
-				this.idx = $s.allPlayers.length + 1;
-				this.notCamped = true;
-				this.takenMainAction = false;
-				$s.addIndian(this);
-			}
-			get cost() {
-				return this.deck.cost + this.corp.cost;
-			}
-			get strengthAvailable() {
-				return this.playStrength > this.deck.activeCard.plays;
-			}
-			get indianCount() {
-				return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
-			}
-			endTurn() {
-				this.playStrength = 0;
-				this.deck.activeCardId = '';
-				this.notCamped = true;
-				this.takenMainAction = false;
-			}
-			camp() {
-				this.notCamped = false;
-				this.deck.reset();
-
-				if (this.space <= this.cost) {
-					this.space = 0;
-				} else {
-					this.space -= this.cost;
-					checkForScouts(-1);
-				}
-			}
-			goBack(time) {
-			}
-			useAbility(ability) {
-				if (this.strengthAvailable) {
-					if (ability.cost) {
-						if (this.payCost(ability.cost)) {
-							benefit(ability.benefit);
-						} else {
-							console.log('you cannot aford that ability');
-						}
-					} else {
-						benefit(ability.benefit);
-					}
-				}
-			}
-			playCard(card) {
-				if (this.takenMainAction) {
-					return;
-				}
-				this.takenMainAction = true;
-				this.playStrength = 0;
-				this.deck.play(card);
-				this.deck.activeCardId = card.id;
-				openModal();
-			}
-			payCost(cost) {
-				var tempCost = Object.create(cost);
-				this.corp.supplyBoats.map(boat => {
-					boat.content.map(item => {
-						if (tempCost[item.name] > 0) {
-							tempCost[item.name]--;
-							item.delete = true;
-						}
-					});
-				});
-
-				if (_.every(_.values(tempCost), cost => cost === 0)) {
-					this.corp.supplyBoats.map(boat => {
-						boat.content = boat.content.filter(item => !item.delete);
-					});
-
-					return true;
-				} else {
-					this.corp.noPay();
-				}
-			}
-		}
-
-		class User {
-			constructor() {}
-		}
 
 		function init() {
 			//	init stuff
@@ -163,12 +24,6 @@ mainApp.controller('MainCtrl', [
 				}
 			}, false);
 			*/
-		}
-
-		function findStartSpace() {
-			var start = _.find(MAP.map, {special: 'start'});
-
-			return _.indexOf(MAP.map, start);
 		}
 
 		function createNewUser() {
@@ -185,60 +40,6 @@ mainApp.controller('MainCtrl', [
 				picture: $s.authData.facebook.cachedUserProfile.picture.data.url,
 				timezone: $s.authData.facebook.cachedUserProfile.timezone
 			});
-		}
-
-		function collect(item, added) {
-			$s.currentPlayer.corp.supplyBoats.map(boat => {
-				if (boat.content.length < boat.capacity && !added) {
-					boat.content.push(Object.create(item));
-					added = true;
-				}
-			});
-
-			if (!added) {
-				console.log('no space for that item');
-			}
-		}
-
-		function travel(terrain) {
-			var space = $s.currentPlayer.space;
-			var nextSpace = MAP.map[space + 1];
-
-			if (nextSpace.terrain == terrain || nextSpace.terrain == 'mixed') {
-				console.log('You moved 1 space on to ' + nextSpace.terrain + ' terrain');
-				$s.currentPlayer.space++;
-			} else {
-				console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
-			}
-		}
-
-		function checkForScouts(direction) {
-			var dupes = $s.allPlayers.filter(
-				player => (player.name != $s.currentPlayer.name) && (player.space == $s.currentPlayer.space)
-			);
-
-			if (dupes.length) {
-				$s.currentPlayer.space += direction;
-				checkForScouts(direction);
-			}
-		}
-
-		function benefit(benefit) {
-			$s.currentPlayer.deck.activeCard.plays++;
-			_.mapKeys(benefit, (amount, key) => {
-				for (let i = 0; i < amount; i++) {
-					var item = _.find(IF.allItems, {name: key});
-
-					if (item) {
-						collect(item);
-					} else if (key === 'indian') {
-						$s.addIndian();
-					} else if (key === 'mountain' || key === 'water') {
-						travel(key);
-					}
-				}
-			});
-			checkForScouts(1);
 		}
 
 		function openModal() {
@@ -258,7 +59,6 @@ mainApp.controller('MainCtrl', [
 		}
 
 		const timeFormat = 'YYYY-MM-DD HH:mm:ss';
-		const allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
 
 		// add later for everyone seeing same cursor movement
 		const cursorObj = FF.getFBObject('cursor');
@@ -280,27 +80,18 @@ mainApp.controller('MainCtrl', [
 			map: MAP.map
 		});
 
-		$s.purchase = item => {
-			if (item.cost) {
-				if ($s.currentPlayer.payCost(item.cost)) {
-					collect(item);
-				} else {
-					console.log('you cannot aford that ability');
-				}
+		$s.callPlayCard = card => {
+			if ($s.currentPlayer.playCard(card)) {
+				openModal();
 			}
 		};
 
-		$s.addIndian = player => {
-			var added = $s.indianSupply === 0;
-			player = player || $s.currentPlayer;
-
-			player.corp.indianBoats.map(boat => {
-				if (boat.content.length < boat.capacity && !added) {
-					boat.content.push(new IF.indian());
-					added = true;
-					$s.indianSupply--;
-				}
-			});
+		$s.addIndianFromSupply = player => {
+			if ($s.indianSupply === 0) {
+				return;
+			}
+			$s.currentPlayer.addIndian();
+			$s.indianSupply--;
 		};
 
 		$s.addBoat = (type, size) => {
@@ -311,17 +102,17 @@ mainApp.controller('MainCtrl', [
 				$s.currentPlayer.corp[type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
 
 				if (type === 'indian') {
-					$s.addIndian();
+					$s.addIndianFromSupply();
 				}
 			}
 		};
 
 		$s.quickStart = () => {
-			$s.allPlayers.push(new Player('David'));
-			$s.allPlayers.push(new Player('Mike'));
-			$s.allPlayers.push(new Player('Phil'));
-			$s.allPlayers.push(new Player('Susie'));
-			$s.allPlayers.push(new Player('Megan'));
+			$s.allPlayers.push(new Class.Player('David', $s.allPlayers.length + 1));
+			$s.allPlayers.push(new Class.Player('Mike', $s.allPlayers.length + 1));
+			$s.allPlayers.push(new Class.Player('Phil', $s.allPlayers.length + 1));
+			$s.allPlayers.push(new Class.Player('Susie', $s.allPlayers.length + 1));
+			$s.allPlayers.push(new Class.Player('Megan', $s.allPlayers.length + 1));
 			$s.changeCurrentPlayer();
 		};
 
@@ -335,7 +126,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.addNewPlayer = () => {
-			$s.currentPlayer = new Player($s.ff.newPlayerName);
+			$s.currentPlayer = new Class.Player($s.ff.newPlayerName, $s.allPlayers.length + 1);
 			$s.allPlayers.push($s.currentPlayer);
 			$s.ff.newPlayerName = '';
 		};
