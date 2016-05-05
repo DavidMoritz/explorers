@@ -1,0 +1,9 @@
+Notes:
+
+How to store information between sockets.
+
+We could store decisions made (sort of like a stream)
+
+Stream.
+
+FBArray contains each event.

@@ -146,14 +146,13 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		//$s.activeGames = FF.getFBArray('activeGames');
-		$s.activeGames = FF.getFBObject('activeGames');
-		$s.activeGames.$loaded(() => {
+		const activeGames = FF.getFBObject('activeGames');
+		activeGames.$bindTo($s, 'activeGames');
+		activeGames.$loaded(() => {
 			console.log('Firebase is working');
 			$('.notices').text('Firebase is working!');
 			$('body').addClass('facebook-available');
+			init();
 		});
-
-		init();
 	}
 ]);
