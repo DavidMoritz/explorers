@@ -19,13 +19,13 @@ html(ng-app='mainApp')
 			header.hide
 				h1 Explorers
 			.jumbotron
-				h2.text-center Welcome to Explorers! 
+				h2.text-center Welcome to Explorers!
 				h4 Active Player: {{currentPlayer.name}}
 				i.sprite(ng-repeat='item in allItems' class='{{item.name}}')
 				i.sprite.symbol(ng-repeat='item in allItems' class='{{item.name}}')
 				.notices
 				ul
-					li(ng-repeat='event in activeGames.firstGame.events track by $index') {{event}}
+					li(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 			.pre-game.row

@@ -14,9 +14,10 @@ Beginner Learning Pre-game:
 * No indians
 * No extra boats
 * Each card action must be supplimented by another card
-* You may not camp until you've played all six of your cards
+* You camp at the end of the turn you've played your last card
 * Selling goods for canoes or horses can happen anytime
 * After 4 camps (12 turns) whoever is in the lead wins
+* Wood is for canoes, Meat is for water travel, Equip and Fur is for horses (along with one of the other)
 
 Beginner game:
 * When you play a "collection" action, you may take as many of that resource as you want

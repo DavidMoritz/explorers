@@ -23,7 +23,7 @@ mainApp.factory('BoatFactory', [
 					cost: function cost() {
 						return 0;
 					},
-					capacity: 2,
+					capacity: 3,
 					content: []
 				},{
 					cost: function cost() {
