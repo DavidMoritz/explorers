@@ -15,7 +15,7 @@ html(ng-app='mainApp')
 		script(src='inc/angular.js')
 	body(ng-cloak, ng-controller='MainCtrl')
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
-			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor')
+			img#cursor.img.img-responsive(src='img/hand.png' ng-style='activeGame.cursor')
 			header.hide
 				h1 Explorers
 			.jumbotron
@@ -24,6 +24,8 @@ html(ng-app='mainApp')
 				i.sprite(ng-repeat='item in allItems' class='{{item.name}}')
 				i.sprite.symbol(ng-repeat='item in allItems' class='{{item.name}}')
 				.notices
+				ul
+					li(ng-repeat='event in activeGames.firstGame.events track by $index') {{event}}
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 			.pre-game.row

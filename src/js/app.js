@@ -14,6 +14,6 @@ mainApp.run(function runWithDependencies($rootScope) {
 		return;
 	}
 	newScript.id = id;
-	newScript.src = '//connect.facebook.net/en_US/sdk.js';
+	newScript.src = 'https://connect.facebook.net/en_US/sdk.js';
 	firstScript.parentNode.insertBefore(newScript, firstScript);
 }(document, 'script', 'facebook-jssdk'));

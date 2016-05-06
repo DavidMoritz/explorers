@@ -34,17 +34,15 @@ mainApp.factory('FirebaseFactory', [
 				return false;
 			},
 
-			facebookLogin: function facebookLogin() {
+			facebookLogin: function facebookLogin(err, success) {
 				var ref = this.getFB();
 				ref.authWithOAuthPopup('facebook', function facebookOAuth(error, authData) {
 					if (error) {
-						console.log('Login Failed!', error);
+						err(error);
 					} else {
-						console.log('Authenticated successfully with payload:', authData);
+						success(authData);
 					}
-				}, {});
-
-				return authData;
+				}, {scope: 'user_friends'});
 			}
 		};
 	}

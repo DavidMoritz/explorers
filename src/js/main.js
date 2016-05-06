@@ -26,19 +26,23 @@ mainApp.controller('MainCtrl', [
 			*/
 		}
 
-		function createNewUser() {
-			var currentTime = moment().format(timeFormat);
+		function createNewUser(authData) {
+			var allUsers = FF.getFBObject('users');
 
-			_.extend($s.currentUser, {
-				createdDate: currentTime,
-				name: $s.authData.facebook.displayName,
-				rating: 1200,
-				uid: $s.authData.uid,
-				gender: $s.authData.facebook.cachedUserProfile.gender,
-				firstName: $s.authData.facebook.cachedUserProfile.first_name,
-				lastName: $s.authData.facebook.cachedUserProfile.last_name,
-				picture: $s.authData.facebook.cachedUserProfile.picture.data.url,
-				timezone: $s.authData.facebook.cachedUserProfile.timezone
+			allUsers.$loaded(() => {
+				allUsers[authData.uid] = {
+					createdDate: moment().format(timeFormat),
+					name: authData.facebook.displayName,
+					rating: 1200,
+					uid: authData.uid,
+					gender: authData.facebook.cachedUserProfile.gender,
+					firstName: authData.facebook.cachedUserProfile.first_name,
+					lastName: authData.facebook.cachedUserProfile.last_name,
+					picture: authData.facebook.cachedUserProfile.picture.data.url,
+					timezone: authData.facebook.cachedUserProfile.timezone
+				};
+				allUsers.$save();
+				$s.currentUser = allUsers[authData.uid];
 			});
 		}
 
@@ -58,6 +62,14 @@ mainApp.controller('MainCtrl', [
 			});
 		}
 
+		function getRandom() {
+			return Math.random().toString(36).substring(2, 10);
+		}
+
+		function notify(message) {
+			$('.notices').text(message);
+		}
+
 		const timeFormat = 'YYYY-MM-DD HH:mm:ss';
 
 		// add later for everyone seeing same cursor movement
@@ -70,7 +82,8 @@ mainApp.controller('MainCtrl', [
 			allPlayers: [],
 			allItems: IF.allItems,
 			ff: {
-				newPlayerName: ''
+				newPlayerName: '',
+				gameName: 'newGame'
 			},
 			indianSupply: 8,
 			cursor: {
@@ -117,12 +130,19 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.fbLogin = () => {
-			$s.authData = FF.facebookLogin();
-			$s.currentUser = FF.getFBObject('users/' + authData.uId);
-
-			if (!$s.currentUser.uid) {
-				createNewUser();
-			}
+			FF.facebookLogin(err => {
+				console.log('There was an error', err);
+				// ** TEMPORARY FOR DEV ***
+				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
+			}, authData => {
+				console.log('Authenticated successfully with payload:', authData);
+				$s.currentUser = FF.getFBObject('users/' + authData.uid);
+				$s.currentUser.$loaded(user => {
+					if (!user.uid) {
+						createNewUser(authData);
+					}
+				});
+			});
 		};
 
 		$s.addNewPlayer = () => {
@@ -132,8 +152,10 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.moveCursor = e => {
-			$s.cursor.left = (e.pageX + 2) + 'px';
-			$s.cursor.top = (e.pageY + 2) + 'px';
+			if ($s.activeGame && $s.activeGame.cursor) {
+				$s.activeGame.cursor.left = (e.pageX + 2) + 'px';
+				$s.activeGame.cursor.top = (e.pageY + 2) + 'px';
+			}
 		};
 
 		$s.changeCurrentPlayer = () => {
@@ -146,9 +168,43 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		const activeGames = FF.getFBObject('activeGames');
-		activeGames.$bindTo($s, 'activeGames');
-		activeGames.$loaded(() => {
+		$s.createNewGame = () => {
+			var rand = getRandom();
+			allGames.$ref().update({[rand]: {
+				id: rand,
+				name: $s.ff.gameName,
+				timestamp: new Date().getTime(),
+				eventsArray: [],
+				playerIdArray: [$s.currentUser.uid],
+				hostId: $s.currentUser.uid,
+				active: true,
+				public: true,
+				cursor: {
+					left: '0px',
+					top: '0px'
+				}
+			}}, () => {
+				var activeGame = FF.getFBObject('allGames/' + rand);
+				activeGame.$bindTo($s, 'activeGame');
+			});
+		};
+
+		$s.joinActiveGame = game => {
+			if ($s.activeGame) {
+				return;
+			}
+
+			var activeGame = FF.getFBObject('allGames/' + game.id);
+			activeGame.$bindTo($s, 'activeGame');
+
+			activeGame.$loaded(() => {
+				$s.activeGame.playerIdArray.push($s.currentUser.uid);
+			});
+		};
+
+		window.allGames = FF.getFBObject('allGames');
+		allGames.$bindTo($s, 'allGames');
+		allGames.$loaded(() => {
 			console.log('Firebase is working');
 			$('.notices').text('Firebase is working!');
 			$('body').addClass('facebook-available');
