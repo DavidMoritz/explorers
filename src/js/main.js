@@ -72,13 +72,26 @@ mainApp.controller('MainCtrl', [
 			ff: {
 				gameName: 'newGame'
 			},
-			map: MAP.map
+			map: MAP.map,
+			get nonActive() {
+				if (this.allGames) {
+					return this.allGames.filter(game => !game.active);
+				}
+
+				return [];
+			},
+			get test() {
+				console.log(this);
+				
+				return this.allGames;
+			}
 		});
 
 		$s.fbLogin = () => {
 			FF.facebookLogin(err => {
 				console.log('There was an error', err);
 				// ** TEMPORARY FOR DEV ***
+				console.log('Dev login: David Moritz');
 				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
 			}, authData => {
 				console.log('Authenticated successfully with payload:', authData);

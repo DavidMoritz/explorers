@@ -26,19 +26,14 @@ html(ng-app='mainApp')
 				.notices
 				ul
 					li(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+				ul
+					li(ng-repeat='game in nonActive track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 			.pre-game.row
 				+col(6)
-					div(ng-hide='currentPlayer')
-						input(ng-model='ff.newPlayerName')
-						button.btn.btn-info(ng-click='addNewPlayer()') Add New Player
-						.clearfix
+					div(ng-hide='currentUser')
 						button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
-						ul
-							li(ng-repeat='player in allPlayers')
-								h5 Name: {{player.name}}
-						button.btn.btn-warning(ng-click='quickStart()') Quick Start
 					div(ng-show='currentPlayer')
 						button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
 						button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
