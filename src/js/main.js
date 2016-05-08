@@ -9,7 +9,8 @@ mainApp.controller('MainCtrl', [
 	'MapFactory',
 	'MethodFactory',
 	'FirebaseFactory',
-	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF) {
+	'EventFactory',
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF, EF) {
 		'use strict';
 
 		function init() {
@@ -46,7 +47,28 @@ mainApp.controller('MainCtrl', [
 			});
 		}
 
-		function openModal() {
+		function updateGame() {
+			for ($s; $s.eventTracker < $s.activeGame.events.length; $s.eventTracker++) {
+				var event = $s.activeGame.events[$s.eventTracker];
+
+				if (typeof $s.EF[event.name] === 'function') {
+					$s.EF[event.name](event);
+				}
+			}
+		}
+
+		//	initialize scoped variables
+		_.assign($s, {
+			allItems: IF.allItems,
+			EF: EF,
+			ff: {
+				gameName: 'newGame'
+			},
+			map: MAP.map,
+			eventTracker: 0
+		});
+
+		$s.openModal = () => {
 			var instance = $uibM.open({
 				animation: true,
 				templateUrl: 'strengthModal',
@@ -60,32 +82,7 @@ mainApp.controller('MainCtrl', [
 			instance.result.then(currentPlayer => {
 				$s.currentPlayer = currentPlayer;
 			});
-		}
-
-		function notify(message) {
-			$('.notices').text(message);
-		}
-
-		//	initialize scoped variables
-		_.assign($s, {
-			allItems: IF.allItems,
-			ff: {
-				gameName: 'newGame'
-			},
-			map: MAP.map,
-			get nonActive() {
-				if (this.allGames) {
-					return this.allGames.filter(game => !game.active);
-				}
-
-				return [];
-			},
-			get test() {
-				console.log(this);
-				
-				return this.allGames;
-			}
-		});
+		};
 
 		$s.fbLogin = () => {
 			FF.facebookLogin(err => {
@@ -110,8 +107,10 @@ mainApp.controller('MainCtrl', [
 				id: rand,
 				name: $s.ff.gameName,
 				timestamp: new Date().getTime(),
-				eventsArray: [],
-				playerIdArray: [$s.currentUser.uid],
+				events: [{
+					name: 'gameCreated'
+				}],
+				playerIds: [$s.currentUser.uid],
 				hostId: $s.currentUser.uid,
 				active: true,
 				public: true,
@@ -130,11 +129,13 @@ mainApp.controller('MainCtrl', [
 				return;
 			}
 
-			var activeGame = FF.getFBObject('allGames/' + game.id);
+			var activeGame = FF.getFBObject(`allGames/${game.id}`);
 			activeGame.$bindTo($s, 'activeGame');
 
 			activeGame.$loaded(() => {
-				$s.activeGame.playerIdArray.push($s.currentUser.uid);
+				$s.activeGame.playerIds.push($s.currentUser.uid);
+				$s.eventTracker = 0;
+				$s.$watch('activeGame.events', updateGame);
 			});
 		};
 
@@ -146,57 +147,14 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.callPlayCard = card => {
+			$s.activeGame.events.push({
+				name: 'playCard',
+				card: card.id
+			});
+
 			if ($s.currentPlayer.playCard(card)) {
 				openModal();
 			}
-		};
-
-		$s.addIndianFromSupply = player => {
-			if ($s.indianSupply === 0) {
-				return;
-			}
-			$s.currentPlayer.addIndian();
-			$s.indianSupply--;
-		};
-
-		$s.addBoat = (type, size) => {
-			if ($s.currentPlayer.payCost({wood: 3})) {
-				var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
-
-				boatsArr.push(new BF[type + size]());
-				$s.currentPlayer.corp[type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
-
-				if (type === 'indian') {
-					$s.addIndianFromSupply();
-				}
-			}
-		};
-
-		$s.changeCurrentPlayer = () => {
-			if ($s.currentPlayer) {
-				$s.currentPlayer.endTurn();
-				var currentIdx = $s.currentPlayer.idx;
-				$s.currentPlayer = currentIdx == $s.allPlayers.length ? $s.allPlayers[0] : $s.allPlayers[currentIdx];
-			} else {
-				$s.currentPlayer = $s.allPlayers[0];
-			}
-		};
-
-		$s.quickStart = () => {
-			// No need
-			// $s.allPlayers.push(new Class.Player('David', $s.allPlayers.length + 1));
-			// $s.allPlayers.push(new Class.Player('Mike', $s.allPlayers.length + 1));
-			// $s.allPlayers.push(new Class.Player('Phil', $s.allPlayers.length + 1));
-			// $s.allPlayers.push(new Class.Player('Susie', $s.allPlayers.length + 1));
-			// $s.allPlayers.push(new Class.Player('Megan', $s.allPlayers.length + 1));
-			// $s.changeCurrentPlayer();
-		};
-
-		$s.addNewPlayer = () => {
-			// Doesn't make sense
-			// $s.currentPlayer = new Class.Player($s.ff.newPlayerName, $s.allPlayers.length + 1);
-			// $s.allPlayers.push($s.currentPlayer);
-			// $s.ff.newPlayerName = '';
 		};
 
 		window.allGames = FF.getFBObject('allGames');
