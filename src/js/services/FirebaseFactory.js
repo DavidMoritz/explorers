@@ -4,10 +4,9 @@ mainApp.factory('FirebaseFactory', [
 	function FirebaseFactory($fbArray, $fbObject) {
 		'use strict';
 		var FB = null;
-
-		return {
+		var FF = {
 			// Firebase methods
-			getFB: function getFB(childPath) {
+			getFB: childPath => {
 				if (!FB) {
 					FB = new Firebase('https://explorers-game.firebaseio.com/');
 				}
@@ -15,28 +14,22 @@ mainApp.factory('FirebaseFactory', [
 				return childPath ? FB.child(childPath) : FB;
 			},
 
-			getFBArray: function getFBArray(childPath) {
-				return $fbArray(this.getFB(childPath));
-			},
+			getFBArray: childPath => $fbArray(FF.getFB(childPath)),
 
-			getFBObject: function getFBObject(childPath) {
-				return $fbObject(this.getFB(childPath));
-			},
+			getFBObject: childPath => $fbObject(FF.getFB(childPath)),
 
-			getAuth: function getFBAuth(childPath) {
-				return $firebaseAuth(this.getFB(childPath));
-			},
+			getAuth: childPath => $firebaseAuth(FF.getFB(childPath)),
 
-			setFB: function setFB(childPath, value) {
-				var ref = this.getFB(childPath);
+			setFB: (childPath, value) => {
+				var ref = FF.getFB(childPath);
 				ref.set(value);
 
 				return false;
 			},
 
-			facebookLogin: function facebookLogin(err, success) {
-				var ref = this.getFB();
-				ref.authWithOAuthPopup('facebook', function facebookOAuth(error, authData) {
+			facebookLogin: (err, success) => {
+				var ref = FF.getFB();
+				ref.authWithOAuthPopup('facebook', (error, authData) => {
 					if (error) {
 						err(error);
 					} else {
@@ -45,5 +38,7 @@ mainApp.factory('FirebaseFactory', [
 				}, {scope: 'user_friends'});
 			}
 		};
+
+		return FF;
 	}
 ]);

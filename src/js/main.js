@@ -7,11 +7,10 @@ mainApp.controller('MainCtrl', [
 	'BoatFactory',
 	'ClassFactory',
 	'MapFactory',
-	'MethodFactory',
 	'FirebaseFactory',
 	'EventFactory',
 	'CardFactory',
-	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF, EF, CF) {
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MF, FF, EF, CF) {
 		'use strict';
 
 		function init() {
@@ -26,16 +25,29 @@ mainApp.controller('MainCtrl', [
 				}
 			}, false);
 			*/
+			listenToChat();
 		}
 
-		function shuffleDeck() {
-			$s.journal = CF.journalCards.sort(function(a, b) {   
-				var g = parseInt($s.activeGame.id, 36);
-				var h = parseInt(a.id, 36);
-				var i = parseInt(b.id, 36);
-
-				return (g % h) - (g % i);
+		function listenToChat(stop) {
+			window.latestChat = FF.getFBObject('message');
+			window.stopChat = latestChat.$watch(() => {
+				$s.chatList.push(_.clone(latestChat));
 			});
+		}
+
+		function shuffleJournal() {
+			var shuffledDeck = CF.journalCards.sort((a, b) => {   
+				var gameNumber = parseInt($s.activeGame.id, 36);
+				var firstCardNum = parseInt(a.id, 36);
+				var secondCardNum = parseInt(b.id, 36);
+
+				return (gameNumber % firstCardNum) - (gameNumber % secondCardNum);
+			});
+
+			var startJournal = shuffleDeck.splice(0,5);
+			startJournal.sort((a, b) => a.strength - b.strength);
+
+			$s.journal = startJournal.concat(shuffledDeck);
 		}
 
 		function createNewUser(authData) {
@@ -68,6 +80,11 @@ mainApp.controller('MainCtrl', [
 			}
 		}
 
+		function leaveGame() {
+			$s.activeGame = null;
+			listenToChat();
+		}
+
 		//	initialize scoped variables
 		_.assign($s, {
 			allItems: IF.allItems,
@@ -75,9 +92,20 @@ mainApp.controller('MainCtrl', [
 			ff: {
 				gameName: 'newGame'
 			},
-			map: MAP.map,
-			eventTracker: 0
+			map: MF.map,
+			eventTracker: 0,
+			chatList: []
 		});
+
+		$s.submitChat = () => {
+			if (!$s.ff.chat.length) {
+				return;
+			}
+			latestChat.user = $s.currentUser.firstName;
+			latestChat.text = $s.ff.chat;
+			latestChat.$save();
+			$s.ff.chat = '';
+		};
 
 		$s.openModal = () => {
 			var instance = $uibM.open({
@@ -101,6 +129,7 @@ mainApp.controller('MainCtrl', [
 				// ** TEMPORARY FOR DEV ***
 				console.log('Dev login: David Moritz');
 				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
+				$s.chatList = [];
 			}, authData => {
 				console.log('Authenticated successfully with payload:', authData);
 				$s.currentUser = FF.getFBObject('users/' + authData.uid);
@@ -109,6 +138,7 @@ mainApp.controller('MainCtrl', [
 						createNewUser(authData);
 					}
 				});
+				$s.chatList = [];
 			});
 		};
 
@@ -148,6 +178,7 @@ mainApp.controller('MainCtrl', [
 				$s.eventTracker = 0;
 				$s.$watch('activeGame.events', updateGame);
 			});
+			stopChat();
 		};
 
 		$s.moveCursor = e => {

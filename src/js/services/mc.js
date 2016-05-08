@@ -3,15 +3,11 @@
 **/
 
 var mc = {
-	pluralize: function pluralize(str) {
-		return str.replace(/y$/, 'ie') + 's';
-	},
+	pluralize: str => str.replace(/y$/, 'ie') + 's',
 
-	camelToTitle: function camelToTitle(str) {	//	convert camelCaseString to Title Case String
-		return _.capitalize(str.replace(/([A-Z])/g, ' $1')).trim();
-	},
+	camelToTitle: str => _.capitalize(str.replace(/([A-Z])/g, ' $1')).trim(),
 
-	randomDigits: function randomDigits(min, max) {
+	randomDigits: (min, max) => {
 		min = min === undefined ? 1 : min;
 		max = max || 999;
 
@@ -20,11 +16,9 @@ var mc = {
 
 	alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
 
-	isAngularObjectEqual: function isAngularObjectEqual(object1, object2) {
-		return _.isEqual(_.omit(object1, '$$hashKey'), _.omit(object2, '$$hashKey'));
-	},
+	isAngularObjectEqual: (object1, object2) => _.isEqual(_.omit(object1, '$$hashKey'), _.omit(object2, '$$hashKey')),
 
-	expandArray: function expandArray(array, times) {	//	turns [1,2,3] into [1,2,3,1,2,3,1,2,3];
+	expandArray: (array, times) => {	//	turns [1,2,3] into [1,2,3,1,2,3,1,2,3];
 		times = times || 3;	//	default number of times to expand it by
 
 		var expandedArray = [];
@@ -36,7 +30,7 @@ var mc = {
 		return expandedArray;
 	},
 
-	calculateAge: function calculateAge(dateOfBirth) {
+	calculateAge: (dateOfBirth) => {
 		var age;
 
 		if (dateOfBirth) {

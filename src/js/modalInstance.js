@@ -1,7 +1,7 @@
 mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
 	$scope.currentPlayer = currentPlayer;
 
-	$scope.addStrength = function addStrength(card) {
+	$scope.addStrength = card => {
 		if ($scope.currentPlayer.playStrength < 3) {
 			$scope.currentPlayer.playStrength += card.strength;
 			$scope.currentPlayer.deck.play(card);
@@ -14,10 +14,10 @@ mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInst
 		}
 	};
 
-	$scope.playIndian = function addIndian(removed) {
+	$scope.playIndian = removed => {
 		if ($scope.currentPlayer.playStrength < 3) {
 			$scope.currentPlayer.corp.indianBoats.reverse();
-			$scope.currentPlayer.corp.indianBoats.map(function mapBoats(boat) {
+			$scope.currentPlayer.corp.indianBoats.map(boat => {
 				if (boat.content.length && !removed) {
 					boat.content.splice(-1);
 					removed = true;
@@ -30,11 +30,11 @@ mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInst
 		}
 	};
 
-	$scope.ok = function ok() {
+	$scope.ok = () => {
 		$uibModalInstance.close($scope.currentPlayer);
 	};
 
-	$scope.cancel = function cancel() {
+	$scope.cancel = () => {
 		$uibModalInstance.dismiss('cancel');
 	};
 });

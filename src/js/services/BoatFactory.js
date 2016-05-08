@@ -3,74 +3,56 @@ mainApp.factory('BoatFactory', [
 		'use strict';
 
 		return {
-			startIndian: function startIndian() {
-				return new Array({
-					cost: function cost() {
-						return 0;
-					},
+			startIndian: () => new Array(
+				{
+					cost: () => 0,
 					capacity: 1,
 					content: []
 				},{
-					cost: function cost() {
-						return this.content.length;
-					},
+					cost: () => this.content.length,
 					capacity: 20,
 					content: []
-				});
-			},
-			startSupply: function startSupply() {
-				return new Array({
-					cost: function cost() {
-						return 0;
-					},
+				}
+			),
+			startSupply: () => new Array(
+				{
+					cost: () => 0,
 					capacity: 3,
 					content: []
 				},{
-					cost: function cost() {
-						return this.content.length ? 1 : 0;
-					},
+					cost: () => this.content.length ? 1 : 0,
 					capacity: 3,
 					content: []
 				},{
-					cost: function cost() {
-						return this.content.length;
-					},
+					cost: () => this.content.length,
 					capacity: 5,
 					content: []
-				});
-			},
-			indiansmall: function smallIndian() {
+				}
+			),
+			indiansmall: () => {
 				return {
-					cost: function cost() {
-						return 0;
-					},
+					cost: () => 0,
 					capacity: 1,
 					content: []
 				};
 			},
-			indianbig: function bigIndian() {
+			indianbig: () => {
 				return {
-					cost: function cost() {
-						return this.content.length ? 1 : 0;
-					},
+					cost: () => this.content.length ? 1 : 0,
 					capacity: 3,
 					content: []
 				};
 			},
-			supplysmall: function smallSupply() {
+			supplysmall: () => {
 				return {
-					cost: function cost() {
-						return 0;
-					},
+					cost: () => 0,
 					capacity: 2,
 					content: []
 				};
 			},
-			supplybig: function bigSupply() {
+			supplybig: () => {
 				return {
-					cost: function cost() {
-						return this.content.length ? 1 : 0;
-					},
+					cost: () => this.content.length ? 1 : 0,
 					capacity: 5,
 					content: []
 				};

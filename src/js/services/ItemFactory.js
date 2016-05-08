@@ -3,7 +3,7 @@ mainApp.factory('ItemFactory', [
 		'use strict';
 
 		return {
-			indian: function indian() {
+			indian: () => {
 				return {
 					name: 'indian',
 					display: 'Indian',

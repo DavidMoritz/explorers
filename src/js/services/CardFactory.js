@@ -136,8 +136,8 @@ mainApp.factory('CardFactory', [
 					}
 				}
 			],
-			startingCards: function startingCards() {
-				return new Array({
+			startingCards: () => new Array(
+				{
 					id: 'P11',
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
@@ -226,8 +226,8 @@ mainApp.factory('CardFactory', [
 							fur: 2
 						}
 					}]
-				});
-			},
+				}
+			),
 			journalCards: [
 				{
 					id: 'F11',

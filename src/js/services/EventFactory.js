@@ -11,17 +11,17 @@ mainApp.factory('EventFactory', [
 		}
 
 		return {
-			playCard: function playCard(e) {
+			playCard: e => {
 				console.log(`Event ${$s.eventTracker}:`, $s);
 			},
-			addIndianFromSupply: function addIndianFromSupply(player) {
+			addIndianFromSupply: player => {
 				if ($s.indianSupply === 0) {
 					return;
 				}
 				$s.currentPlayer.addIndian();
 				$s.indianSupply--;
 			},
-			addBoat: function addBoat(type, size) {
+			addBoat: (type, size) => {
 				if ($s.currentPlayer.payCost({wood: 3})) {
 					var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
 
@@ -33,7 +33,7 @@ mainApp.factory('EventFactory', [
 					}
 				}
 			},
-			changeCurrentPlayer: function changeCurrentPlayer() {
+			changeCurrentPlayer: () => {
 				if ($s.currentPlayer) {
 					$s.currentPlayer.endTurn();
 					var currentIdx = $s.currentPlayer.idx;

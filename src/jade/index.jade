@@ -15,61 +15,68 @@ html(ng-app='mainApp')
 		script(src='inc/angular.js')
 	body(ng-cloak, ng-controller='MainCtrl')
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
-			img#cursor.img.img-responsive(src='img/hand.png' ng-style='activeGame.cursor')
+			img#cursor.img.img-responsive(src='img/hand.png' ng-style='activeGame.cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
 			.jumbotron
 				h2.text-center Welcome to Explorers!
-				h4 Active Player: {{currentPlayer.name}}
-				i.sprite(ng-repeat='item in allItems' class='{{item.name}}')
-				i.sprite.symbol(ng-repeat='item in allItems' class='{{item.name}}')
+				div(ng-hide='currentUser')
+					button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
+				h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
 				.notices
-				ul
-					li(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
-				ul
-					li(ng-repeat='game in nonActive track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
-			.pre-game.row
+			.pre-game.row(ng-show='currentUser.uid && !activeGame')
 				+col(6)
-					div(ng-hide='currentUser')
-						button.btn.btn-primary.facebook-login(ng-click='fbLogin()') Login with Facebook
-					div(ng-show='currentPlayer')
-						button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
-						button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
-						h4 All Players
-						ul.players
-							li(ng-repeat='player in allPlayers')
-								h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}')
-									span.badge {{player.idx}}
-									| {{player.name}}
-									i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
-								h6 Supplies:
-								ul
-									li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-										ul
-											li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
-												i.sprite(class='{{item.name}}')
-								h6 Indians:
-								ul
-									li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-								div(ng-if='player.tiles.length')
-									h6(ng-repeat="(key, value) in player.tiles") Tile: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-								div(ng-if='player.cards.length')
-									h6(ng-repeat="(key, value) in player.cards | groupBy: 'gem'") Card: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-								div(ng-if='player.chips.length')
-									h6(ng-repeat="(key, value) in player.chips | groupBy: 'gem'") Gem: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
-								div(ng-if='player.reserve.length')
-									button.btn.btn-info(ng-click='toggleReserve(player)') {{player.showReserve ? 'Hide' : 'Show'}} Reserve
-									ul.track.player(ng-show='player.showReserve')
-										li.card(ng-repeat='card in player.reserve' ng-class='card.gem' ng-click='collectReserveCard(player, card)')
-											h5.hidden Id: {{card.id}}
-											h4.capitalize {{card.gem}}
-											h5 Points: {{card.points}}
-											h5 Cost:
-											ul.cost
-												li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
-													p {{value}}
+					h3 Choose a game:
+					ul
+						li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+					h3 Or create a new one:
+					.btn.btn-success(ng-click='createNewGame()') Create new game
+				+col(6)
+					h3 Message List:
+					ul
+						li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
+					form(name='chatWindow' ng-submit='submitChat()')
+						input(ng-model='ff.chat' placeholder='respond to chat')
+						button(ng-hide='true' type='submit')
+			.game-started.row(ng-show='activeGame')
+				+col(6)
+					button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
+					button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
+					h4 All Players
+					ul.players
+						li(ng-repeat='player in allPlayers')
+							h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}')
+								span.badge {{player.idx}}
+								| {{player.name}}
+								i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
+							h6 Supplies:
+							ul
+								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+									ul
+										li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
+											i.sprite(class='{{item.name}}')
+							h6 Indians:
+							ul
+								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+							div(ng-if='player.tiles.length')
+								h6(ng-repeat="(key, value) in player.tiles") Tile: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+							div(ng-if='player.cards.length')
+								h6(ng-repeat="(key, value) in player.cards | groupBy: 'gem'") Card: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+							div(ng-if='player.chips.length')
+								h6(ng-repeat="(key, value) in player.chips | groupBy: 'gem'") Gem: #[span.capitalize {{key}}] {{value.length > 1 ? "(" + value.length + ")" : ""}}
+							div(ng-if='player.reserve.length')
+								button.btn.btn-info(ng-click='toggleReserve(player)') {{player.showReserve ? 'Hide' : 'Show'}} Reserve
+								ul.track.player(ng-show='player.showReserve')
+									li.card(ng-repeat='card in player.reserve' ng-class='card.gem' ng-click='collectReserveCard(player, card)')
+										h5.hidden Id: {{card.id}}
+										h4.capitalize {{card.gem}}
+										h5 Points: {{card.points}}
+										h5 Cost:
+										ul.cost
+											li(ng-repeat='(gem, value) in card.cost' ng-class='gem' ng-show='value > 0')
+												p {{value}}
 				+col(6)
 					h3 {{currentPlayer.name}} Cards in Hand
 					ul
@@ -93,15 +100,6 @@ html(ng-app='mainApp')
 								li.ability(ng-repeat='ability in card.ability track by $index')
 									p Cost: {{ability.cost}}
 									p Benefit: {{ability.benefit}}
-			.game-started.row
-				+col(null, 3, 4, 3)
-				+col(null, 6, 4, 6)
-					//- button.btn(ng-repeat='item in allItems' ng-click='purchase(item)' style='border-color:{{item.color}}') {{item.display}}
-					//- button.btn.btn-danger(ng-click='addBoat("indian", "big")') Big Indian
-					//- button.btn.btn-danger(ng-click='addBoat("indian", "small")') Small Indian
-					//- button.btn.btn-danger(ng-click='addBoat("supply", "big")') Big Supply
-					//- button.btn.btn-danger(ng-click='addBoat("supply", "small")') Small Supply
-				+col(null, 3, 4, 3)
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
 		script#strengthModal(type='text/ng-template')
