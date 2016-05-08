@@ -10,7 +10,8 @@ mainApp.controller('MainCtrl', [
 	'MethodFactory',
 	'FirebaseFactory',
 	'EventFactory',
-	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF, EF) {
+	'CardFactory',
+	function MainCtrl($s, $timeout, $interval, $uibM, IF, BF, Class, MAP, MF, FF, EF, CF) {
 		'use strict';
 
 		function init() {
@@ -25,6 +26,16 @@ mainApp.controller('MainCtrl', [
 				}
 			}, false);
 			*/
+		}
+
+		function shuffleDeck() {
+			$s.journal = CF.journalCards.sort(function(a, b) {   
+				var g = parseInt($s.activeGame.id, 36);
+				var h = parseInt(a.id, 36);
+				var i = parseInt(b.id, 36);
+
+				return (g % h) - (g % i);
+			});
 		}
 
 		function createNewUser(authData) {
