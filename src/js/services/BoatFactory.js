@@ -9,7 +9,9 @@ mainApp.factory('BoatFactory', [
 					capacity: 1,
 					content: []
 				},{
-					cost: () => this.content.length,
+					cost: function cost() {
+						return this.content.length;
+					},
 					capacity: 20,
 					content: []
 				}
@@ -20,43 +22,43 @@ mainApp.factory('BoatFactory', [
 					capacity: 3,
 					content: []
 				},{
-					cost: () => this.content.length ? 1 : 0,
+					cost: function cost() {
+						return this.content.length ? 1 : 0;
+					},
 					capacity: 3,
 					content: []
 				},{
-					cost: () => this.content.length,
+					cost: function cost() {
+						return this.content.length;
+					},
 					capacity: 5,
 					content: []
 				}
 			),
-			indiansmall: () => {
-				return {
-					cost: () => 0,
-					capacity: 1,
-					content: []
-				};
-			},
-			indianbig: () => {
-				return {
-					cost: () => this.content.length ? 1 : 0,
-					capacity: 3,
-					content: []
-				};
-			},
-			supplysmall: () => {
-				return {
-					cost: () => 0,
-					capacity: 2,
-					content: []
-				};
-			},
-			supplybig: () => {
-				return {
-					cost: () => this.content.length ? 1 : 0,
-					capacity: 5,
-					content: []
-				};
-			}
+			indiansmall: () => _.clone({
+				cost: () => 0,
+				capacity: 1,
+				content: []
+			}),
+			indianbig: () => _.clone({
+				cost: function cost() {
+					return this.content.length ? 1 : 0;
+				},
+				capacity: 3,
+				content: []
+			}),
+			supplysmall: () => _.clone({
+				cost: () => 0,
+				capacity: 2,
+				content: []
+			}),
+			supplybig: () => _.clone({
+				cost: function cost() {
+					return this.content.length ? 1 : 0;
+				},
+				capacity: 5,
+				content: []
+			})
 		};
 	}
 ]);

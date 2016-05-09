@@ -1,5 +1,9 @@
 mainApp.factory('EventFactory', [
-	function EventFactory() {
+	'BoatFactory',
+	'CardFactory',
+	'FirebaseFactory',
+	'ClassFactory',
+	function EventFactory(BF, CF, FF, Class) {
 		'use strict';
 		/**
 		 * Note: $s needs to be defined. This can be done by setting this entire
@@ -10,8 +14,23 @@ mainApp.factory('EventFactory', [
 			$('.notices').text(message);
 		}
 
-		return {
+		var EF = {
+			startGame: () => {
+				var users = FF.getFBObject('users');
+				users.$loaded(() => {
+					$s.activeGame.playerIds.map(id => {
+						var user = users[id];
+						$s.allPlayers.push(new Class.Player(user.firstName, $s.allPlayers.length + 1));
+					});
+					EF.changeCurrentPlayer();
+				});
+			},
 			playCard: e => {
+				var card = _.find(CF.journalCards, {id: e.card});
+
+				if ($s.currentPlayer.playCard(card)) {
+					$s.openModal();
+				}
 				console.log(`Event ${$s.eventTracker}:`, $s);
 			},
 			addIndianFromSupply: player => {
@@ -25,7 +44,7 @@ mainApp.factory('EventFactory', [
 				if ($s.currentPlayer.payCost({wood: 3})) {
 					var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
 
-					boatsArr.push(new BF[type + size]());
+					boatsArr.push(BF[type + size]());
 					$s.currentPlayer.corp[type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
 
 					if (type === 'indian') {
@@ -43,5 +62,7 @@ mainApp.factory('EventFactory', [
 				}
 			}
 		};
+
+		return EF;
 	}
 ]);

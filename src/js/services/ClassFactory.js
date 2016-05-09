@@ -16,8 +16,8 @@ mainApp.factory('ClassFactory', [
 		const ClassFactory = {
 			Corp: class Corp {
 				constructor() {
-					this.supplyBoats = new BF.startSupply();
-					this.indianBoats = new BF.startIndian();
+					this.supplyBoats = BF.startSupply();
+					this.indianBoats = BF.startIndian();
 				}
 				get cost() {
 					var time = this.supplyBoats.reduce((time, boat) => time + boat.cost(), 0);
@@ -35,7 +35,7 @@ mainApp.factory('ClassFactory', [
 
 			Deck: class Deck {
 				constructor() {
-					this.cards = new CF.startingCards();
+					this.cards = CF.startingCards();
 					this.activeCardId = '';
 				}
 				get activeCard() {
@@ -134,7 +134,7 @@ mainApp.factory('ClassFactory', [
 				addIndian(added) {
 					this.corp.indianBoats.map(boat => {
 						if (boat.content.length < boat.capacity && !added) {
-							boat.content.push(new IF.indian());
+							boat.content.push(IF.indian());
 							added = true;
 						}
 					});

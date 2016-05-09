@@ -88,6 +88,7 @@ mainApp.controller('MainCtrl', [
 		//	initialize scoped variables
 		_.assign($s, {
 			allItems: IF.allItems,
+			allPlayers: [],
 			EF: EF,
 			ff: {
 				gameName: 'newGame'
@@ -105,6 +106,12 @@ mainApp.controller('MainCtrl', [
 			latestChat.text = $s.ff.chat;
 			latestChat.$save();
 			$s.ff.chat = '';
+		};
+
+		$s.startGame = () => {
+			$s.activeGame.events.push({
+				name: 'startGame'
+			});
 		};
 
 		$s.openModal = () => {
@@ -183,8 +190,8 @@ mainApp.controller('MainCtrl', [
 
 		$s.moveCursor = e => {
 			if ($s.activeGame && $s.activeGame.cursor) {
-				$s.activeGame.cursor.left = (e.pageX + 2) + 'px';
-				$s.activeGame.cursor.top = (e.pageY + 2) + 'px';
+				$s.activeGame.cursor.left = e.pageX + 'px';
+				$s.activeGame.cursor.top = e.pageY + 'px';
 			}
 		};
 
@@ -193,10 +200,6 @@ mainApp.controller('MainCtrl', [
 				name: 'playCard',
 				card: card.id
 			});
-
-			if ($s.currentPlayer.playCard(card)) {
-				openModal();
-			}
 		};
 
 		window.allGames = FF.getFBObject('allGames');

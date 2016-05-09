@@ -3,13 +3,11 @@ mainApp.factory('ItemFactory', [
 		'use strict';
 
 		return {
-			indian: () => {
-				return {
-					name: 'indian',
-					display: 'Indian',
-					color: 'red'
-				};
-			},
+			indian: () => _.clone({
+				name: 'indian',
+				display: 'Indian',
+				color: 'red'
+			}),
 			allItems: [{
 				name: 'wood',
 				display: 'Wood',
