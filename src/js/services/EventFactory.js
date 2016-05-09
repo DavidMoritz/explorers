@@ -33,6 +33,9 @@ mainApp.factory('EventFactory', [
 				}
 				console.log(`Event ${$s.eventTracker}:`, $s);
 			},
+			camp: () => {
+				$s.currentPlayer.camp();
+			},
 			addIndianFromSupply: player => {
 				if ($s.indianSupply === 0) {
 					return;

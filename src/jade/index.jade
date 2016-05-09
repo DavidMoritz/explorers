@@ -45,15 +45,15 @@ html(ng-app='mainApp')
 					h3 Players:
 					ul
 						li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
-					button.btn.btn-success(ng-click='startGame()') Start the game
+					button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
 			.game-started.row(ng-show='currentPlayer')
 				+col(6)
-					button.btn.btn-success(ng-click='changeCurrentPlayer()' ng-disabled='!currentPlayer.takenMainAction') End Turn
-					button.btn.btn-warning(ng-click='currentPlayer.camp()' ng-disabled='!currentPlayer.notCamped') Camp
+					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!currentPlayer.takenMainAction') End Turn
+					button.btn.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
 					h4 All Players
 					ul.players
 						li(ng-repeat='player in allPlayers')
-							h5(ng-click='changeCurrentPlayer(player)' style='background-color:{{player.color}}')
+							h5(style='background-color:{{player.color}}')
 								span.badge {{player.idx}}
 								| {{player.name}}
 								i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')

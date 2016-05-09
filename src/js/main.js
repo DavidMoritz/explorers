@@ -28,7 +28,7 @@ mainApp.controller('MainCtrl', [
 			listenToChat();
 		}
 
-		function listenToChat(stop) {
+		function listenToChat() {
 			window.latestChat = FF.getFBObject('message');
 			window.stopChat = latestChat.$watch(() => {
 				$s.chatList.push(_.clone(latestChat));
@@ -36,7 +36,7 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function shuffleJournal() {
-			var shuffledDeck = CF.journalCards.sort((a, b) => {   
+			var shuffledDeck = CF.journalCards.sort((a, b) => {
 				var gameNumber = parseInt($s.activeGame.id, 36);
 				var firstCardNum = parseInt(a.id, 36);
 				var secondCardNum = parseInt(b.id, 36);
@@ -108,12 +108,6 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.startGame = () => {
-			$s.activeGame.events.push({
-				name: 'startGame'
-			});
-		};
-
 		$s.openModal = () => {
 			var instance = $uibM.open({
 				animation: true,
@@ -158,7 +152,6 @@ mainApp.controller('MainCtrl', [
 				events: [{
 					name: 'gameCreated'
 				}],
-				playerIds: [$s.currentUser.uid],
 				hostId: $s.currentUser.uid,
 				active: true,
 				public: true,
@@ -167,8 +160,7 @@ mainApp.controller('MainCtrl', [
 					top: '0px'
 				}
 			}}, () => {
-				var activeGame = FF.getFBObject('allGames/' + rand);
-				activeGame.$bindTo($s, 'activeGame');
+				$s.joinActiveGame({id: rand});
 			});
 		};
 
@@ -181,6 +173,9 @@ mainApp.controller('MainCtrl', [
 			activeGame.$bindTo($s, 'activeGame');
 
 			activeGame.$loaded(() => {
+				if (!$s.activeGame.playerIds) {
+					$s.activeGame.playerIds = [];
+				}
 				$s.activeGame.playerIds.push($s.currentUser.uid);
 				$s.eventTracker = 0;
 				$s.$watch('activeGame.events', updateGame);
@@ -190,13 +185,20 @@ mainApp.controller('MainCtrl', [
 
 		$s.moveCursor = e => {
 			if ($s.activeGame && $s.activeGame.cursor) {
-				$s.activeGame.cursor.left = e.pageX + 'px';
-				$s.activeGame.cursor.top = e.pageY + 'px';
+				$s.activeGame.cursor.left = (e.pageX + 2) + 'px';
+				$s.activeGame.cursor.top = (e.pageY + 2) + 'px';
 			}
 		};
 
+		$s.addEvent = event => {
+			if (typeof event == 'string') {
+				event = {name: event};
+			}
+			$s.activeGame.events.push(event);
+		};
+
 		$s.callPlayCard = card => {
-			$s.activeGame.events.push({
+			$s.addEvent({
 				name: 'playCard',
 				card: card.id
 			});
