@@ -28,6 +28,27 @@ mainApp.controller('MainCtrl', [
 			listenToChat();
 		}
 
+		function updateGame() {
+			if ($s.eventTracker < $s.activeGame.events.length) {
+				$s.activeGame.events.reduce(nextEvent => {
+					return nextEvent.then(() => {
+						return runEvent(++$s.eventTracker);
+					}, () => $s);
+				}, runEvent($s.eventTracker));
+			}
+		}
+
+		function runEvent(idx) {
+			if (idx === $s.activeGame.events.length) {
+				// return meaningless function to avoid error
+				return {then: () => 0};
+			}
+			var event = $s.activeGame.events[idx];
+			var eventFunction = EF[event.name];
+
+			return new Promise(eventFunction.bind(event));
+		}
+
 		function listenToChat() {
 			window.latestChat = FF.getFBObject('message');
 			window.stopChat = latestChat.$watch(() => {
@@ -70,16 +91,6 @@ mainApp.controller('MainCtrl', [
 			});
 		}
 
-		function updateGame() {
-			for ($s; $s.eventTracker < $s.activeGame.events.length; $s.eventTracker++) {
-				var event = $s.activeGame.events[$s.eventTracker];
-
-				if (typeof $s.EF[event.name] === 'function') {
-					$s.EF[event.name](event);
-				}
-			}
-		}
-
 		function leaveGame() {
 			$s.activeGame = null;
 			listenToChat();
@@ -89,7 +100,6 @@ mainApp.controller('MainCtrl', [
 		_.assign($s, {
 			allItems: IF.allItems,
 			allPlayers: [],
-			EF: EF,
 			ff: {
 				gameName: 'newGame'
 			},
@@ -98,49 +108,12 @@ mainApp.controller('MainCtrl', [
 			chatList: []
 		});
 
-		$s.submitChat = () => {
-			if (!$s.ff.chat.length) {
-				return;
+		$s.addEvent = event => {
+			if (typeof event == 'string') {
+				event = {name: event};
 			}
-			latestChat.user = $s.currentUser.firstName;
-			latestChat.text = $s.ff.chat;
-			latestChat.$save();
-			$s.ff.chat = '';
-		};
-
-		$s.openModal = () => {
-			var instance = $uibM.open({
-				animation: true,
-				templateUrl: 'strengthModal',
-				controller: 'ModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					currentPlayer: () => $s.currentPlayer
-				}
-			});
-
-			instance.result.then(currentPlayer => {
-				$s.currentPlayer = currentPlayer;
-			});
-		};
-
-		$s.fbLogin = () => {
-			FF.facebookLogin(err => {
-				console.log('There was an error', err);
-				// ** TEMPORARY FOR DEV ***
-				console.log('Dev login: David Moritz');
-				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
-				$s.chatList = [];
-			}, authData => {
-				console.log('Authenticated successfully with payload:', authData);
-				$s.currentUser = FF.getFBObject('users/' + authData.uid);
-				$s.currentUser.$loaded(user => {
-					if (!user.uid) {
-						createNewUser(authData);
-					}
-				});
-				$s.chatList = [];
-			});
+			event.timestamp = new Date().getTime();
+			$s.activeGame.events.push(event);
 		};
 
 		$s.createNewGame = () => {
@@ -176,7 +149,10 @@ mainApp.controller('MainCtrl', [
 				if (!$s.activeGame.playerIds) {
 					$s.activeGame.playerIds = [];
 				}
-				$s.activeGame.playerIds.push($s.currentUser.uid);
+
+				if ($s.activeGame.playerIds.indexOf($s.currentUser.uid) === -1) {
+					$s.activeGame.playerIds.push($s.currentUser.uid);
+				}
 				$s.eventTracker = 0;
 				$s.$watch('activeGame.events', updateGame);
 			});
@@ -190,20 +166,55 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.addEvent = event => {
-			if (typeof event == 'string') {
-				event = {name: event};
+		$s.submitChat = () => {
+			if (!$s.ff.chat.length) {
+				return;
 			}
-			$s.activeGame.events.push(event);
+			latestChat.user = $s.currentUser.firstName;
+			latestChat.text = $s.ff.chat;
+			latestChat.$save();
+			$s.ff.chat = '';
 		};
 
-		$s.callPlayCard = card => {
-			$s.addEvent({
-				name: 'playCard',
-				card: card.id
+		$s.openModal = () => {
+			var instance = $uibM.open({
+				animation: true,
+				templateUrl: 'strengthModal',
+				controller: 'ModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					currentPlayer: () => $s.currentPlayer
+				}
 			});
 		};
 
+		$s.fbLogin = () => {
+			FF.facebookLogin(err => {
+				console.log('There was an error', err);
+				// ** TEMPORARY FOR DEV ***
+				console.log('Dev login: David Moritz');
+				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
+				$s.chatList = [];
+			}, authData => {
+				console.log('Authenticated successfully with payload:', authData);
+				$s.currentUser = FF.getFBObject('users/' + authData.uid);
+				$s.currentUser.$loaded(user => {
+					if (!user.uid) {
+						createNewUser(authData);
+					}
+				});
+				$s.chatList = [];
+			});
+		};
+
+		$s.callPlayCard = cardId => {
+			$s.addEvent({
+				name: 'playCard',
+				card: cardId
+			});
+		};
+
+		// grab all the games and make sure Firebase is working!
 		window.allGames = FF.getFBObject('allGames');
 		allGames.$bindTo($s, 'allGames');
 		allGames.$loaded(() => {

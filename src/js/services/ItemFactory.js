@@ -6,7 +6,8 @@ mainApp.factory('ItemFactory', [
 			indian: () => _.clone({
 				name: 'indian',
 				display: 'Indian',
-				color: 'red'
+				color: 'red',
+				inUse: false
 			}),
 			allItems: [{
 				name: 'wood',

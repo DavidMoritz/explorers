@@ -1,37 +1,22 @@
 mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
 	$scope.currentPlayer = currentPlayer;
 
-	$scope.addStrength = card => {
-		if ($scope.currentPlayer.playStrength < 3) {
-			$scope.currentPlayer.playStrength += card.strength;
-			$scope.currentPlayer.deck.play(card);
-
-			if ($scope.currentPlayer.playStrength > 3) {
-				$scope.currentPlayer.playStrength = 3;
-			}
-		} else {
-			console.log('cannot go above 3');
-		}
+	$scope.addStrength = cardId => {
+		$s.addEvent({
+			name: 'addStrength',
+			card: cardId
+		});
 	};
 
-	$scope.playIndian = removed => {
-		if ($scope.currentPlayer.playStrength < 3) {
-			$scope.currentPlayer.corp.indianBoats.reverse();
-			$scope.currentPlayer.corp.indianBoats.map(boat => {
-				if (boat.content.length && !removed) {
-					boat.content.splice(-1);
-					removed = true;
-					$scope.currentPlayer.playStrength++;
-				}
-			});
-			$scope.currentPlayer.corp.indianBoats.reverse();
-		} else {
-			console.log('cannot go above 3');
-		}
+	$scope.useAbility = idx => {
+		$s.addEvent({
+			name: 'useAbility',
+			idx: idx
+		});
 	};
 
-	$scope.ok = () => {
-		$uibModalInstance.close($scope.currentPlayer);
+	$scope.addIndian = () => {
+		$s.addEvent('addIndianToStrength');
 	};
 
 	$scope.cancel = () => {

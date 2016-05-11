@@ -31,6 +31,16 @@ mainApp.factory('ClassFactory', [
 						});
 					});
 				}
+				reset() {
+					this.indianBoats.map(boat => {
+						boat.content.map(indian => {
+							indian.inUse = false;
+						});
+					});
+				}
+				optimize() {
+					// do something here to move all the supplies & indians to their ideal positions
+				}
 			},
 
 			Deck: class Deck {
@@ -49,6 +59,9 @@ mainApp.factory('ClassFactory', [
 				}
 				get playedCards() {
 					return this.cards.filter(card => card.played);
+				}
+				findById(cardId) {
+					return _.find(this.cards, {id: cardId});
 				}
 				reset() {
 					this.cards.map(card => {
@@ -85,7 +98,7 @@ mainApp.factory('ClassFactory', [
 					return this.playStrength > this.deck.activeCard.plays;
 				}
 				get indianCount() {
-					return this.corp.indianBoats.reduce((total, boat) => total + boat.content.length, 0);
+					return this.corp.indianBoats.reduce((total, boat) => total + boat.content.filter(indian => !indian.inUse).length, 0);
 				}
 				endTurn() {
 					this.playStrength = 0;
@@ -95,6 +108,7 @@ mainApp.factory('ClassFactory', [
 				}
 				camp() {
 					this.notCamped = false;
+					this.corp.optimize();
 
 					if (this.space <= this.cost) {
 						this.space = 0;
@@ -104,10 +118,13 @@ mainApp.factory('ClassFactory', [
 					}
 
 					this.deck.reset();
+					this.corp.reset();
 				}
 				goBack(time) {
 				}
-				useAbility(ability) {
+				useAbility(idx) {
+					var ability = this.deck.activeCard.abilities[idx];
+
 					if (this.strengthAvailable) {
 						if (ability.cost) {
 							if (this.payCost(ability.cost)) {

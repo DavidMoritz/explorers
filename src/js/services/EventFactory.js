@@ -15,33 +15,94 @@ mainApp.factory('EventFactory', [
 		}
 
 		var EF = {
-			startGame: () => {
+			gameCreated: resolve => {
+				resolve();
+			},
+			startGame: resolve => {
 				var users = FF.getFBObject('users');
 				users.$loaded(() => {
 					$s.activeGame.playerIds.map(id => {
 						var user = users[id];
 						$s.allPlayers.push(new Class.Player(user.firstName, $s.allPlayers.length + 1));
 					});
-					EF.changeCurrentPlayer();
+					EF.changeCurrentPlayer(resolve);
 				});
 			},
-			playCard: e => {
-				var card = _.find(CF.journalCards, {id: e.card});
+			// if a function uses `this` for the event, it cannot be an arrow function
+			playCard: function(resolve) {
+				var card = $s.currentPlayer.deck.findById(this.card);
 
 				if ($s.currentPlayer.playCard(card)) {
 					$s.openModal();
 				}
+
 				console.log(`Event ${$s.eventTracker}:`, $s);
+				resolve();
 			},
-			camp: () => {
+			useAbility: function(resolve) {
+				$s.currentPlayer.useAbility(this.idx);
+				resolve();
+			},
+			addStrength: function(resolve) {
+				var card = $s.currentPlayer.deck.findById(this.card);
+
+				if ($s.currentPlayer.playStrength < 3) {
+					$s.currentPlayer.playStrength += card.strength;
+					$s.currentPlayer.deck.play(card);
+
+					if ($s.currentPlayer.playStrength > 3) {
+						$s.currentPlayer.playStrength = 3;
+					}
+				} else {
+					console.log('cannot go above 3');
+				}
+				resolve();
+			},
+			addIndianToStrength: resolve => {
+				var added = false;
+
+				if ($s.currentPlayer.playStrength < 3) {
+					$s.currentPlayer.corp.indianBoats.reverse();
+					$s.currentPlayer.corp.indianBoats.map(boat => {
+						var indian = _.find(boat.content, {inUse: false});
+
+						if (indian && !added) {
+							indian.inUse = true;
+							added = true;
+							$s.currentPlayer.playStrength++;
+						}
+					});
+
+					if (!added) {
+						console.log('you do not have any more to use');
+					}
+					$s.currentPlayer.corp.indianBoats.reverse();
+				} else {
+					console.log('cannot go above 3');
+				}
+				resolve();
+			},
+			camp: resolve => {
 				$s.currentPlayer.camp();
+				resolve();
 			},
-			addIndianFromSupply: player => {
+			addIndianFromSupply: resolve => {
 				if ($s.indianSupply === 0) {
 					return;
 				}
 				$s.currentPlayer.addIndian();
 				$s.indianSupply--;
+				resolve();
+			},
+			changeCurrentPlayer: resolve => {
+				if ($s.currentPlayer) {
+					$s.currentPlayer.endTurn();
+					var currentIdx = $s.currentPlayer.idx;
+					$s.currentPlayer = currentIdx == $s.allPlayers.length ? $s.allPlayers[0] : $s.allPlayers[currentIdx];
+				} else {
+					$s.currentPlayer = $s.allPlayers[0];
+				}
+				resolve();
 			},
 			addBoat: (type, size) => {
 				if ($s.currentPlayer.payCost({wood: 3})) {
@@ -53,15 +114,6 @@ mainApp.factory('EventFactory', [
 					if (type === 'indian') {
 						$s.addIndianFromSupply();
 					}
-				}
-			},
-			changeCurrentPlayer: () => {
-				if ($s.currentPlayer) {
-					$s.currentPlayer.endTurn();
-					var currentIdx = $s.currentPlayer.idx;
-					$s.currentPlayer = currentIdx == $s.allPlayers.length ? $s.allPlayers[0] : $s.allPlayers[currentIdx];
-				} else {
-					$s.currentPlayer = $s.allPlayers[0];
 				}
 			}
 		};
