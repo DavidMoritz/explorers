@@ -30,8 +30,8 @@ mainApp.controller('MainCtrl', [
 
 		function updateGame() {
 			if ($s.eventTracker < $s.activeGame.events.length) {
-				$s.activeGame.events.reduce(nextEvent => {
-					return nextEvent.then(() => {
+				$s.activeGame.events.reduce(prevEvent => {
+					return prevEvent.then(() => {
 						return runEvent(++$s.eventTracker);
 					}, () => $s);
 				}, runEvent($s.eventTracker));
@@ -210,7 +210,7 @@ mainApp.controller('MainCtrl', [
 		$s.callPlayCard = cardId => {
 			$s.addEvent({
 				name: 'playCard',
-				card: cardId
+				cardId: cardId
 			});
 		};
 

@@ -4,7 +4,7 @@ mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInst
 	$scope.addStrength = cardId => {
 		$s.addEvent({
 			name: 'addStrength',
-			card: cardId
+			cardId: cardId
 		});
 	};
 
@@ -19,7 +19,7 @@ mainApp.controller('ModalInstanceCtrl', function ModalCtrl($scope, $uibModalInst
 		$s.addEvent('addIndianToStrength');
 	};
 
-	$scope.cancel = () => {
+	$s.closeModal = () => {
 		$uibModalInstance.dismiss('cancel');
 	};
 });

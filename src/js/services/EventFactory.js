@@ -30,7 +30,7 @@ mainApp.factory('EventFactory', [
 			},
 			// if a function uses `this` for the event, it cannot be an arrow function
 			playCard: function(resolve) {
-				var card = $s.currentPlayer.deck.findById(this.card);
+				var card = $s.currentPlayer.deck.findById(this.cardId);
 
 				if ($s.currentPlayer.playCard(card)) {
 					$s.openModal();
@@ -44,7 +44,7 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			addStrength: function(resolve) {
-				var card = $s.currentPlayer.deck.findById(this.card);
+				var card = $s.currentPlayer.deck.findById(this.cardId);
 
 				if ($s.currentPlayer.playStrength < 3) {
 					$s.currentPlayer.playStrength += card.strength;
@@ -86,6 +86,10 @@ mainApp.factory('EventFactory', [
 				$s.currentPlayer.camp();
 				resolve();
 			},
+			recruit: function(resolve) {
+				// add recuit from this.cardId
+				resolve();
+			},
 			addIndianFromSupply: resolve => {
 				if ($s.indianSupply === 0) {
 					return;
@@ -102,6 +106,7 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.currentPlayer = $s.allPlayers[0];
 				}
+				$s.closeModal();
 				resolve();
 			},
 			addBoat: (type, size) => {
