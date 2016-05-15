@@ -88,6 +88,7 @@ mainApp.factory('ClassFactory', [
 					this.space = findStartSpace();
 					this.idx = idx;
 					this.notCamped = true;
+					this.notRecruited = true;
 					this.takenMainAction = false;
 					this.addIndian();
 				}
@@ -104,6 +105,7 @@ mainApp.factory('ClassFactory', [
 					this.playStrength = 0;
 					this.deck.activeCardId = '';
 					this.notCamped = true;
+					this.notRecruited = true;
 					this.takenMainAction = false;
 				}
 				camp() {

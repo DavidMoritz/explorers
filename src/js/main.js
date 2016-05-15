@@ -62,7 +62,7 @@ mainApp.controller('MainCtrl', [
 		 * so that every user gets the same outcome. This is done by
 		 * 'seeding' the algorithm with the randomly generated gameId.
 		 * This algorthim has been tested over larger iterations here:
-		 * https://jsfiddle.net/sr7djh8x/5/
+		 * https://jsfiddle.net/sr7djh8x/6/
 		 */
 		function shuffleJournal() {
 			var shuffledDeck = CF.journalCards.sort((a, b) => {
@@ -114,7 +114,8 @@ mainApp.controller('MainCtrl', [
 			map: MF.map,
 			eventTracker: 0,
 			chatList: [],
-			closeModal: () => 0
+			closeStrengthModal: () => 0,
+			closeRecruitModal: () => 0
 		});
 
 		$s.addEvent = event => {
@@ -186,14 +187,27 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.openModal = () => {
+		$s.openStrengthModal = () => {
 			var instance = $uibM.open({
 				animation: true,
 				templateUrl: 'strengthModal',
-				controller: 'ModalInstanceCtrl',
+				controller: 'StrengthModalInstanceCtrl',
 				size: 'lg',
 				resolve: {
 					currentPlayer: () => $s.currentPlayer
+				}
+			});
+		};
+
+		$s.openRecruitModal = () => {
+			var instance = $uibM.open({
+				animation: true,
+				templateUrl: 'recruitModal',
+				controller: 'RecruitModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					currentPlayer: () => $s.currentPlayer,
+					journal: () => $s.journal
 				}
 			});
 		};

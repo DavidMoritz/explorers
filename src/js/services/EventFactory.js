@@ -33,7 +33,7 @@ mainApp.factory('EventFactory', [
 				var card = $s.currentPlayer.deck.findById(this.cardId);
 
 				if ($s.currentPlayer.playCard(card)) {
-					$s.openModal();
+					$s.openStrengthModal();
 				}
 
 				console.log(`Event ${$s.eventTracker}:`, $s);
@@ -90,6 +90,10 @@ mainApp.factory('EventFactory', [
 				// add recuit from this.cardId
 				resolve();
 			},
+			openRecruit: resolve => {
+				$s.openRecruitModal();
+				resolve();
+			},
 			addIndianFromSupply: resolve => {
 				if ($s.indianSupply === 0) {
 					return;
@@ -106,7 +110,7 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.currentPlayer = $s.allPlayers[0];
 				}
-				$s.closeModal();
+				$s.closeStrengthModal();
 				resolve();
 			},
 			addBoat: (type, size) => {
