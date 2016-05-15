@@ -1,0 +1,24 @@
+mixin show-cards(type, strength)
+	- items = ['{{card.symbol}}','{{card.id}}']
+	- items.push(type + '-card')
+	- repeat = 'card in currentPlayer.deck.' + type + 'Cards track by card.id'
+	- click = type == 'held' ? 'callPlayCard(card.id)' : ''
+	- click = strength ? 'addStrength(card.id)' : click
+	ul.cards
+		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click)
+			.card-info
+				span.strength {{card.strength}}
+				i.sprite.symbol(class='{{card.symbol}}')
+			.card-name {{card.name}}
+
+mixin active-card()
+	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}')
+		.card-info
+			span.strength {{currentPlayer.deck.activeCard.strength}}
+			i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
+		.card-name {{currentPlayer.deck.activeCard.name}}
+	h3 Card-Abilities
+	ul.abilities
+		li.ability.pointer(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
+			p Cost: {{ability.cost}}
+			p Benefit: {{ability.benefit}}

@@ -138,7 +138,7 @@ mainApp.factory('CardFactory', [
 			],
 			startingCards: () => new Array(
 				{
-					id: 'P11',
+					id: 'SP11',
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
 					strength: 1,
@@ -167,7 +167,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'P12',
+					id: 'SP12',
 					name: 'Pierre Cruzatte',
 					symbol: 'wood',
 					strength: 2,
@@ -179,7 +179,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'P13',
+					id: 'SP13',
 					name: 'Seamor',
 					symbol: 'meat',
 					strength: 1,
@@ -191,7 +191,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'P14',
+					id: 'SP14',
 					name: 'Hugh McNeal',
 					symbol: 'wood',
 					strength: 1,
@@ -203,7 +203,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'P15',
+					id: 'SP15',
 					name: 'Alexander H. Willard',
 					symbol: 'equipment',
 					strength: 1,
@@ -215,7 +215,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'P16',
+					id: 'SP16',
 					name: 'Richard Windsor',
 					symbol: 'fur',
 					strength: 1,
@@ -230,7 +230,7 @@ mainApp.factory('CardFactory', [
 			),
 			journalCards: [
 				{
-					id: 'F11',
+					id: 'JF11',
 					name: 'Joseph Barter',
 					symbol: 'fur',
 					strength: 1,
@@ -243,7 +243,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F12',
+					id: 'JF12',
 					name: 'Ebenezer Tuttle',
 					symbol: 'fur',
 					strength: 1,
@@ -256,7 +256,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F13',
+					id: 'JF13',
 					name: 'Rene Jassaume',
 					symbol: 'fur',
 					strength: 1,
@@ -269,7 +269,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F14',
+					id: 'JF14',
 					name: 'Moses B. Reed',
 					symbol: 'fur',
 					strength: 1,
@@ -282,7 +282,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F21',
+					id: 'JF21',
 					name: 'P. Antoine Tabeau',
 					symbol: 'fur',
 					strength: 2,
@@ -296,7 +296,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F22',
+					id: 'JF22',
 					name: 'Hawks Feather',
 					symbol: 'fur',
 					strength: 2,
@@ -309,7 +309,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'F31',
+					id: 'JF31',
 					name: 'Coboway',
 					symbol: 'fur',
 					strength: 3,
@@ -325,7 +325,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'M11',
+					id: 'JH11',
 					name: 'J. Baptiste',
 					symbol: 'meat',
 					strength: 1,
@@ -339,7 +339,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'M31',
+					id: 'JH31',
 					name: 'Broken Arm',
 					symbol: 'meat',
 					strength: 3,
@@ -352,7 +352,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E11',
+					id: 'JE11',
 					name: 'Buffalo Medicine',
 					symbol: 'equipment',
 					strength: 1,
@@ -365,7 +365,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E12',
+					id: 'JE12',
 					name: 'John Dame',
 					symbol: 'equipment',
 					strength: 1,
@@ -378,7 +378,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E13',
+					id: 'JE13',
 					name: 'Charles Mackenzie',
 					symbol: 'equipment',
 					strength: 1,
@@ -392,7 +392,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E21',
+					id: 'JE21',
 					name: 'Pierre Dorian',
 					symbol: 'equipment',
 					strength: 2,
@@ -405,7 +405,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E31',
+					id: 'JE31',
 					name: 'Comcomly',
 					symbol: 'equipment',
 					strength: 3,
@@ -421,7 +421,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'E32',
+					id: 'JE32',
 					name: 'Crow At Rest',
 					symbol: 'equipment',
 					strength: 3,
@@ -435,7 +435,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'W11',
+					id: 'JG11',
 					name: 'John Robertson',
 					symbol: 'wood',
 					strength: 1,
@@ -448,7 +448,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'W21',
+					id: 'JG21',
 					name: 'Three Eagles',
 					symbol: 'wood',
 					strength: 2,
@@ -461,7 +461,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'W22',
+					id: 'JG22',
 					name: 'Man Crow',
 					symbol: 'wood',
 					strength: 2,
@@ -474,7 +474,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'W31',
+					id: 'JG31',
 					name: 'Twisted Hair',
 					symbol: 'wood',
 					strength: 3,

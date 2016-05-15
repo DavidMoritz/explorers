@@ -1,4 +1,5 @@
-include mixins
+include utils/mixins
+include utils/cards
 
 doctype html
 html(ng-app='mainApp')
@@ -68,23 +69,9 @@ html(ng-app='mainApp')
 								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
 				+col(6)
 					h3 {{currentPlayer.name}} Cards in Hand
-					ul
-						li.held-card(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='callPlayCard(card.id)')
-							p
-								span.badge {{card.strength}}
-								|  {{card.name}}
-								i.sprite.symbol(class='{{card.symbol}}')
-							ul
-								li.ability(ng-repeat='ability in card.abilities track by $index')
-									p Cost: {{ability.cost}}
-									p Benefit: {{ability.benefit}}
+					+show-cards('held')
 					h3 {{currentPlayer.name}} Cards in Play
-					ul
-						li.played-card(ng-repeat='card in currentPlayer.deck.playedCards track by card.id' class='{{card.symbol}}')
-							p
-								span.badge {{card.strength}}
-								| {{card.name}}
-								i.sprite.symbol(class='{{card.symbol}}')
+					+show-cards('played')
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
 		script#strengthModal(type='text/ng-template')
@@ -92,21 +79,9 @@ html(ng-app='mainApp')
 				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 			.modal-body.row
 				+col(null, 8, 8)
-					ul
-					li.held-card.pointer(ng-repeat='card in currentPlayer.deck.heldCards track by card.id' class='{{card.symbol}}' ng-click='addStrength(card.id)')
-						p
-							span.badge {{card.strength}}
-							|  {{card.name}}
-							i.sprite.symbol(class='{{card.symbol}}')
+					+show-cards('held', true)
 					.btn.btn-danger(ng-click='addIndian()') Add Indian
 						span.badge  {{currentPlayer.indianCount}}
-				+col(null, 4, 4)
-					li.held-card(class='{{currentPlayer.deck.activeCard.symbol}}')
-						h3
-							i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
-							| {{currentPlayer.deck.activeCard.name}}
-						ul
-							li.ability.pointer(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
-								p Cost: {{ability.cost}}
-								p Benefit: {{ability.benefit}}
+				+col(null, 4, 4, 4, 4, 'active-card')
+					+active-card()
 //		| @@javascriptReplaceFiles

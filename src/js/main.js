@@ -56,6 +56,14 @@ mainApp.controller('MainCtrl', [
 			});
 		}
 
+		/**
+		 * Shuffle Journal
+		 * The game needs to shuffle the cards in a predictable way
+		 * so that every user gets the same outcome. This is done by
+		 * 'seeding' the algorithm with the randomly generated gameId.
+		 * This algorthim has been tested over larger iterations here:
+		 * https://jsfiddle.net/sr7djh8x/5/
+		 */
 		function shuffleJournal() {
 			var shuffledDeck = CF.journalCards.sort((a, b) => {
 				var gameNumber = parseInt($s.activeGame.id, 36);
@@ -65,7 +73,7 @@ mainApp.controller('MainCtrl', [
 				return (gameNumber % firstCardNum) - (gameNumber % secondCardNum);
 			});
 
-			var startJournal = shuffleDeck.splice(0,5);
+			var startJournal = shuffledDeck.splice(0,5);
 			startJournal.sort((a, b) => a.strength - b.strength);
 
 			$s.journal = startJournal.concat(shuffledDeck);
@@ -105,7 +113,8 @@ mainApp.controller('MainCtrl', [
 			},
 			map: MF.map,
 			eventTracker: 0,
-			chatList: []
+			chatList: [],
+			closeModal: () => 0
 		});
 
 		$s.addEvent = event => {
@@ -153,6 +162,7 @@ mainApp.controller('MainCtrl', [
 				if ($s.activeGame.playerIds.indexOf($s.currentUser.uid) === -1) {
 					$s.activeGame.playerIds.push($s.currentUser.uid);
 				}
+				shuffleJournal();
 				$s.eventTracker = 0;
 				$s.$watch('activeGame.events', updateGame);
 			});
@@ -208,10 +218,12 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.callPlayCard = cardId => {
-			$s.addEvent({
-				name: 'playCard',
-				cardId: cardId
-			});
+			if (!$s.currentPlayer.takenMainAction) {
+				$s.addEvent({
+					name: 'playCard',
+					cardId: cardId
+				});
+			}
 		};
 
 		// grab all the games and make sure Firebase is working!

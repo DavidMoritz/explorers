@@ -1,6 +1,6 @@
 //- all 4 sizes are passed into the mixin in case a different ratio size is provided for the various sizes
-mixin col(xs, ms, sm, md, lg)
-	- items = []
+mixin col(xs, ms, sm, md, lg, otherClass)
+	- items = [otherClass]
 	- (xs > 1 && xs <= 12) ? items.push('col-xs-' + xs) : undefined
 	- (ms > 1 && ms <= 12) ? items.push('col-ms-' + ms) : undefined
 	- (sm > 1 && sm <= 12) ? items.push('col-sm-' + sm) : undefined

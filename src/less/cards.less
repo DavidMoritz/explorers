@@ -1,0 +1,152 @@
+ul.cards {
+	display: flex;
+	flex-wrap: wrap;
+}
+.active-card {
+	border-left: solid 1px gray;
+}
+.played-card {
+	border: red dashed 4px !important;
+}
+.held-card {
+	cursor: pointer;
+}
+.played-card,
+.ability,
+.held-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border: solid 2px green;
+	margin: 3px;
+	border-radius: 5px;
+	padding: 5px;
+	.card-name {
+		font-size: 16px;
+		margin: 0 0 12px 27px;
+		width: 100px;
+		text-align: center;
+		background: gainsboro;
+	}
+	.card-info {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		.strength {
+			display: inline-block;
+			min-width: 10px;
+			padding: 4px 10px;
+			font-size: 13px;
+			font-weight: bold;
+			color: black;
+			vertical-align: middle;
+			white-space: nowrap;
+			text-align: center;
+			border-radius: 13px;
+		}
+	}
+	&.fur {
+		border-color: yellow;
+		.strength {
+			background-color: yellow;
+		}
+	}
+	&.meat {
+		border-color: lightcoral;
+		.strength {
+			background-color: lightcoral;
+		}
+	}
+	&.equipment {
+		border-color: #ddd;
+		.strength {
+			background-color: #ddd
+		}
+	}
+	&.wood {
+		border-color: #c86;
+		.strength {
+			background-color: #c86;
+		}
+	}
+}
+.card-img {
+	width: 140px;
+	height: 185px;
+	background-image: url(../img/all-cards.jpg);
+	&.P11 {
+		background-position: -42px -30px;
+	}
+	&.P12 {
+		background-position: -194px -38px;
+	}
+	&.P14 {
+		background-position: -340px -40px;
+	}
+	&.P13 {
+		background-position: -476px -40px;
+	}
+	&.P15 {
+		background-position: -612px -40px;
+	}
+	&.P16 {
+		background-position: -762px -40px;
+	}
+	&.JF11 {
+		background-position: -1186px -1048px;
+	}
+	&.JF12 {
+		background-position: -478px -1050px;
+	}
+	&.JF13 {
+		background-position: -622px -1050px;
+	}
+	&.JF14 {
+		background-position: -906px -1052px;
+	}
+	&.JF21 {
+		background-position: -770px -1460px;
+	}
+	&.JF22 {
+		background-position: -1046px -1462px;
+	}
+	&.JF31 {
+		background-position: -334px -2074px;
+	}
+	&.JH11 {
+		background-position: -32px -1254px;
+	}
+	&.JH31 {
+		background-position: -768px -1870px;
+	}
+	&.JE11 {
+		background-position: -336px -1052px;
+	}
+	&.JE12 {
+		background-position: -482px -1250px;
+	}
+	&.JE13 {
+		background-position: -336px -1250px;
+	}
+	&.JE21 {
+		background-position: -912px -1664px;
+	}
+	&.JE31 {
+		background-position: -913px -1874px;
+	}
+	&.JE32 {
+		background-position: -484px -2078px;
+	}
+	&.G11 {
+		background-position: -1040px -1050px;
+	}
+	&.G21 {
+		background-position: -908px -1465px;
+	}
+	&.G22 {
+		background-position: -1193px -1465px;
+	}
+	&.G31 {
+		background-position: -480px -1870px;
+	}
+}
