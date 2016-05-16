@@ -1,19 +1,18 @@
-mixin show-cards(type, strength)
+mixin show-cards(type, click)
 	- items = ['{{card.symbol}}','{{card.id}}']
 	- items.push(type + '-card')
 	- repeat = 'card in currentPlayer.deck.' + type + 'Cards track by card.id'
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
-	- click = type == 'held' ? 'callPlayCard(card.id)' : ''
-	- click = strength ? 'addStrength(card.id)' : click
+	- click = click ? click + '(card)' : ''
 	ul.cards
-		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click)
+		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='Description for {{card.name}}')
 			.card-info
 				span.strength {{card.strength}}
 				i.sprite.symbol(class='{{card.symbol}}')
 			.card-name {{card.name}}
 
 mixin active-card()
-	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}')
+	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='Description for {{card.name}}')
 		.card-info
 			span.strength {{currentPlayer.deck.activeCard.strength}}
 			i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')

@@ -33,7 +33,7 @@ mainApp.factory('EventFactory', [
 				var card = $s.currentPlayer.deck.findById(this.cardId);
 
 				if ($s.currentPlayer.playCard(card)) {
-					$s.openStrengthModal();
+					$s.openModal('Strength');
 				}
 
 				console.log(`Event ${$s.eventTracker}:`, $s);
@@ -86,12 +86,24 @@ mainApp.factory('EventFactory', [
 				$s.currentPlayer.camp();
 				resolve();
 			},
-			recruit: function(resolve) {
-				// add recuit from this.cardId
+			recruitCard: function(resolve) {
+				var card = $s.journal.splice(this.idx, 1)[0];
+				card.played = false;
+				card.plays = 0;
+
+				$s.currentPlayer.deck.cards.push(card);
+				resolve();
+			},
+			closeModal: resolve => {
+				$s.modalInstance.close();
 				resolve();
 			},
 			openRecruit: resolve => {
-				$s.openRecruitModal();
+				$s.openModal('Recruit');
+				resolve();
+			},
+			openBoard: resolve => {
+				$s.openModal('Board');
 				resolve();
 			},
 			addIndianFromSupply: resolve => {
@@ -110,8 +122,7 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.currentPlayer = $s.allPlayers[0];
 				}
-				$s.closeStrengthModal();
-				resolve();
+				EF.closeModal(resolve);
 			},
 			addBoat: (type, size) => {
 				if ($s.currentPlayer.payCost({wood: 3})) {

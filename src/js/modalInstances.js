@@ -1,10 +1,10 @@
-mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer) {
-	$scope.currentPlayer = currentPlayer;
+mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
+	$scope.currentPlayer = $s.currentPlayer;
 
-	$scope.addStrength = cardId => {
+	$scope.addStrength = card => {
 		$s.addEvent({
 			name: 'addStrength',
-			cardId: cardId
+			cardId: card.id
 		});
 	};
 
@@ -18,17 +18,26 @@ mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibM
 	$scope.addIndian = () => {
 		$s.addEvent('addIndianToStrength');
 	};
+});
 
-	$s.closeStrengthModal = () => {
-		$uibModalInstance.dismiss('cancel');
+mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
+	$scope.currentPlayer = $s.currentPlayer;
+	$scope.journal = $s.journal;
+
+	$scope.recruitCard = card => {
+		$s.addEvent({
+			name: 'recruitCard',
+			cardId: card.id,
+			idx: $s.journal.indexOf(card)
+		});
 	};
 });
 
-mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, currentPlayer, journal) {
-	$scope.currentPlayer = currentPlayer;
-	$scope.journal = journal;
+mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, CardFactory) {
+	$scope.currentPlayer = $s.currentPlayer;
+	$scope.boardSpaces = CardFactory.boardSpaces;
 
-	$s.closeRecuitModal = () => {
-		$uibModalInstance.dismiss('cancel');
+	$scope.clickBoardSpace = space => {
+		console.log(space);
 	};
 });

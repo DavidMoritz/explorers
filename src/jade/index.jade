@@ -52,6 +52,7 @@ html(ng-app='mainApp')
 					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!currentPlayer.takenMainAction') End Turn
 					button.btn.btn-warning(ng-click='addEvent("camp")' ng-enabled='currentPlayer.notCamped') Camp
 					button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-enabled='currentPlayer.notRecruited') Recruit
+					button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
 					h4 All Players
 					ul.players
 						li(ng-repeat='player in allPlayers')
@@ -70,7 +71,7 @@ html(ng-app='mainApp')
 								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
 				+col(6)
 					h3 {{currentPlayer.name}} Cards in Hand
-					+show-cards('held')
+					+show-cards('held', 'callPlayCard')
 					h3 {{currentPlayer.name}} Cards in Play
 					+show-cards('played')
 		script(src='inc/lib.js')
@@ -80,7 +81,7 @@ html(ng-app='mainApp')
 				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 			.modal-body.row
 				+col(null, 8, 8)
-					+show-cards('held', true)
+					+show-cards('held', 'addStrength')
 					.btn.btn-danger(ng-click='addIndian()') Add Indian
 						span.badge  {{currentPlayer.indianCount}}
 				+col(null, 4, 4, 4, 4, 'active-card')
@@ -89,5 +90,13 @@ html(ng-app='mainApp')
 			.modal-header
 				h3 Recruit for the team:
 			.modal-body
-				+show-cards('recruit')
+				+show-cards('recruit', 'recruitCard')
+		script#boardModal(type='text/ng-template')
+			.modal-header
+				h3 Board Spaces:
+			.modal-body
+				ul.abilities
+					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)')
+						p Cost: {{space.cost}}
+						p Benefit: {{space.benefit}}
 //		| @@javascriptReplaceFiles

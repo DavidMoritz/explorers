@@ -114,8 +114,9 @@ mainApp.controller('MainCtrl', [
 			map: MF.map,
 			eventTracker: 0,
 			chatList: [],
-			closeStrengthModal: () => 0,
-			closeRecruitModal: () => 0
+			modalInstance: {
+				close: () => 0
+			}
 		});
 
 		$s.addEvent = event => {
@@ -187,29 +188,15 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.openStrengthModal = () => {
-			var instance = $uibM.open({
+		$s.openModal = name => {
+			$s.modalInstance = $uibM.open({
 				animation: true,
-				templateUrl: 'strengthModal',
-				controller: 'StrengthModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					currentPlayer: () => $s.currentPlayer
-				}
+				templateUrl: name.toLower() + 'Modal',
+				controller: name + 'ModalInstanceCtrl',
+				size: 'lg'
 			});
-		};
 
-		$s.openRecruitModal = () => {
-			var instance = $uibM.open({
-				animation: true,
-				templateUrl: 'recruitModal',
-				controller: 'RecruitModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					currentPlayer: () => $s.currentPlayer,
-					journal: () => $s.journal
-				}
-			});
+			$s.modalInstance.result.then(() => $s.addEvent('modalClose'));
 		};
 
 		$s.fbLogin = () => {
