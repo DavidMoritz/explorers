@@ -189,14 +189,15 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.openModal = name => {
+			$s.modalInstance.close();
 			$s.modalInstance = $uibM.open({
 				animation: true,
-				templateUrl: name.toLower() + 'Modal',
+				templateUrl: name.toLowerCase() + 'Modal',
 				controller: name + 'ModalInstanceCtrl',
 				size: 'lg'
 			});
 
-			$s.modalInstance.result.then(() => $s.addEvent('modalClose'));
+			$s.modalInstance.result.then(() => 0, () => $s.addEvent('closeModal'));
 		};
 
 		$s.fbLogin = () => {
