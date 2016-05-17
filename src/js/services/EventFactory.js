@@ -31,13 +31,13 @@ mainApp.factory('EventFactory', [
 			// if a function uses `this` for the event, it cannot be an arrow function
 			playCard: function(resolve) {
 				var card = $s.currentPlayer.deck.findById(this.cardId);
+				console.log(`Event ${$s.eventTracker}:`, $s);
 
 				if ($s.currentPlayer.playCard(card)) {
-					$s.openModal('Strength');
+					$s.openModal('Strength', resolve);
+				} else {
+					resolve();
 				}
-
-				console.log(`Event ${$s.eventTracker}:`, $s);
-				resolve();
 			},
 			useAbility: function(resolve) {
 				$s.currentPlayer.useAbility(this.idx);
@@ -88,6 +88,11 @@ mainApp.factory('EventFactory', [
 			},
 			recruitCard: function(resolve) {
 				var card = $s.journal.splice(this.idx, 1)[0];
+				$s.currentPlayer.payCost({
+					equipment: card.strength - $s.currentPlayer.recruitPayment,
+					fur: this.idx + 1
+				});
+				$s.currentPlayer.recruitPayment = 0;
 				card.played = false;
 				card.plays = 0;
 
@@ -99,11 +104,18 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			openRecruit: resolve => {
-				$s.openModal('Recruit');
-				resolve();
+				$s.openModal('Recruit', resolve);
+			},
+			openRecruitPayment: resolve => {
+				$s.openModal('RecruitPayment', resolve);
 			},
 			openBoard: resolve => {
-				$s.openModal('Board');
+				$s.openModal('Board', resolve);
+			},
+			recruitPayment: function(resolve) {
+				var card = $s.currentPlayer.deck.findById(this.cardId);
+				$s.currentPlayer.recruitPayment = card.strength;
+				$s.currentPlayer.deck.remove(card);
 				resolve();
 			},
 			addIndianFromSupply: resolve => {

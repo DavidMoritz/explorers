@@ -141,6 +141,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP11',
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
+					description: 'travel 2 water for 1 food / travel 4 water for 1 canoe / travel 2 mountain for 1 horse.',
 					strength: 1,
 					played: false,
 					plays: 0,
@@ -170,6 +171,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP12',
 					name: 'Pierre Cruzatte',
 					symbol: 'wood',
+					description: 'gather indians from the board and trash last card in journal.',
 					strength: 2,
 					played: false,
 					plays: 0,
@@ -182,6 +184,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP13',
 					name: 'Seamor',
 					symbol: 'meat',
+					description: 'collect action on food.',
 					strength: 1,
 					played: false,
 					plays: 0,
@@ -194,6 +197,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP14',
 					name: 'Hugh McNeal',
 					symbol: 'wood',
+					description: 'collect action on wood.',
 					strength: 1,
 					played: false,
 					plays: 0,
@@ -206,6 +210,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP15',
 					name: 'Alexander H. Willard',
 					symbol: 'equipment',
+					description: 'collect action on equipment.',
 					strength: 1,
 					played: false,
 					plays: 0,
@@ -218,6 +223,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP16',
 					name: 'Richard Windsor',
 					symbol: 'fur',
+					description: 'collect action on fur.',
 					strength: 1,
 					played: false,
 					plays: 0,
@@ -233,6 +239,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF11',
 					name: 'Joseph Barter',
 					symbol: 'fur',
+					description: 'travel 5 water for 1 canoe.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -246,6 +253,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF12',
 					name: 'Ebenezer Tuttle',
 					symbol: 'fur',
+					description: 'receive 1 canoe for 1 wood / receive 1 wood for 1 canoe.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -254,11 +262,19 @@ mainApp.factory('CardFactory', [
 						benefit: {
 							canoe: 1
 						}
+					},{
+						cost: {
+							canoe: 1
+						},
+						benefit: {
+							wood: 1
+						}
 					}]
 				}, {
 					id: 'JF13',
 					name: 'Rene Jassaume',
 					symbol: 'fur',
+					description: 'receive 1 horse for 3 fur.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -272,6 +288,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF14',
 					name: 'Moses B. Reed',
 					symbol: 'fur',
+					description: 'travel 2 water for 2 wood.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -285,6 +302,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF21',
 					name: 'P. Antoine Tabeau',
 					symbol: 'fur',
+					description: 'receive 2 canoes for 1 food and 1 wood.',
 					strength: 2,
 					abilities: [{
 						cost: {
@@ -299,6 +317,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF22',
 					name: 'Hawks Feather',
 					symbol: 'fur',
+					description: 'travel 3 water for 1 food.',
 					strength: 2,
 					abilities: [{
 						cost: {
@@ -312,6 +331,7 @@ mainApp.factory('CardFactory', [
 					id: 'JF31',
 					name: 'Coboway',
 					symbol: 'fur',
+					description: 'travel 4 mountain for 1 equipment, 1 fur, 1 food, and 1 wood.',
 					strength: 3,
 					abilities: [{
 						cost: {
@@ -328,6 +348,7 @@ mainApp.factory('CardFactory', [
 					id: 'JH11',
 					name: 'J. Baptiste',
 					symbol: 'meat',
+					description: 'travel 6 water for 1 canoe and 1 food.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -342,6 +363,7 @@ mainApp.factory('CardFactory', [
 					id: 'JH31',
 					name: 'Broken Arm',
 					symbol: 'meat',
+					description: 'receive 1 horse for 1 equipment.',
 					strength: 3,
 					abilities: [{
 						cost: {
@@ -355,6 +377,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE11',
 					name: 'Buffalo Medicine',
 					symbol: 'equipment',
+					description: 'receive 1 canoe for 1 food.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -368,6 +391,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE12',
 					name: 'John Dame',
 					symbol: 'equipment',
+					description: 'travel 1 mountain for 2 wood.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -381,6 +405,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE13',
 					name: 'Charles Mackenzie',
 					symbol: 'equipment',
+					description: 'travel 3 mountain for 1 horse and 1 fur.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -395,6 +420,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE21',
 					name: 'Pierre Dorian',
 					symbol: 'equipment',
+					description: 'travel 2 mountain for 3 fur.',
 					strength: 2,
 					abilities: [{
 						cost: {
@@ -408,6 +434,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE31',
 					name: 'Comcomly',
 					symbol: 'equipment',
+					description: 'travel 7 water for 1 equipment, 1 fur, 1 food, and 1 wood.',
 					strength: 3,
 					abilities: [{
 						cost: {
@@ -424,6 +451,7 @@ mainApp.factory('CardFactory', [
 					id: 'JE32',
 					name: 'Crow At Rest',
 					symbol: 'equipment',
+					description: 'travel 3 mountain for 2 equipment and 2 fur.',
 					strength: 3,
 					abilities: [{
 						cost: {
@@ -438,6 +466,7 @@ mainApp.factory('CardFactory', [
 					id: 'JG11',
 					name: 'John Robertson',
 					symbol: 'wood',
+					description: 'travel 3 water for 2 equipment.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -451,6 +480,7 @@ mainApp.factory('CardFactory', [
 					id: 'JG21',
 					name: 'Three Eagles',
 					symbol: 'wood',
+					description: 'receive 1 horse for 2 equipment.',
 					strength: 2,
 					abilities: [{
 						cost: {
@@ -464,6 +494,7 @@ mainApp.factory('CardFactory', [
 					id: 'JG22',
 					name: 'Man Crow',
 					symbol: 'wood',
+					description: 'travel 4 water for 3 wood.',
 					strength: 2,
 					abilities: [{
 						cost: {
@@ -477,6 +508,7 @@ mainApp.factory('CardFactory', [
 					id: 'JG31',
 					name: 'Twisted Hair',
 					symbol: 'wood',
+					description: 'receive 2 canoes for 1 canoe.',
 					strength: 3,
 					abilities: [{
 						cost: {

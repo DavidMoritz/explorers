@@ -74,6 +74,11 @@ mainApp.factory('ClassFactory', [
 
 					this.cards[idx].played = true;
 				}
+				remove(card) {
+					var idx = _.findIndex(this.cards, card);
+
+					this.cards.splice(idx, 1);
+				}
 			},
 
 			Player: class Player {
@@ -90,6 +95,7 @@ mainApp.factory('ClassFactory', [
 					this.notCamped = true;
 					this.notRecruited = true;
 					this.takenMainAction = false;
+					this.recruitPayment = 0;
 					this.addIndian();
 				}
 				get cost() {

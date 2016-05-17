@@ -188,7 +188,7 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.openModal = name => {
+		$s.openModal = (name, resolve) => {
 			$s.modalInstance.close();
 			$s.modalInstance = $uibM.open({
 				animation: true,
@@ -196,6 +196,8 @@ mainApp.controller('MainCtrl', [
 				controller: name + 'ModalInstanceCtrl',
 				size: 'lg'
 			});
+
+			$s.modalInstance.opened.then(resolve);
 
 			$s.modalInstance.result.then(() => 0, () => $s.addEvent('closeModal'));
 		};

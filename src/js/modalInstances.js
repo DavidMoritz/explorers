@@ -25,11 +25,12 @@ mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibMo
 	$scope.journal = $s.journal;
 
 	$scope.recruitCard = card => {
-		$s.addEvent({
-			name: 'recruitCard',
-			cardId: card.id,
-			idx: $s.journal.indexOf(card)
-		});
+		$s.addEvent('openRecruitPayment');
+		// $s.addEvent({
+		// 	name: 'recruitCard',
+		// 	cardId: card.id,
+		// 	idx: $s.journal.indexOf(card)
+		// });
 	};
 });
 
@@ -39,5 +40,16 @@ mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModa
 
 	$scope.clickBoardSpace = space => {
 		console.log(space);
+	};
+});
+
+mainApp.controller('RecruitPaymentModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
+	$scope.currentPlayer = $s.currentPlayer;
+
+	$scope.recruitPayment = card => {
+		$s.addEvent({
+			name: 'recruitPayment',
+			cardId: card.id
+		});
 	};
 });
