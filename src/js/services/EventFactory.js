@@ -18,6 +18,9 @@ mainApp.factory('EventFactory', [
 			gameCreated: resolve => {
 				resolve();
 			},
+			restartTurn: resolve => {
+				resolve();
+			},
 			startGame: resolve => {
 				var users = FF.getFBObject('users');
 				users.$loaded(() => {
