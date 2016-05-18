@@ -24,7 +24,7 @@ mainApp.factory('EventFactory', [
 				setTimeout(() => {
 					$s.activeGame.events.splice(idx);
 					$s.restartTurn = true;
-					resolve();	
+					resolve();
 				}, 1000);
 			},
 			startGame: resolve => {
@@ -115,8 +115,19 @@ mainApp.factory('EventFactory', [
 			openRecruit: resolve => {
 				$s.openModal('Recruit', resolve);
 			},
-			openRecruitPayment: resolve => {
-				$s.openModal('RecruitPayment', resolve);
+			openRecruitPayment: function(resolve) {
+				if ($s.currentPlayer.checkEquipmentForRecruit(this.equipment)) {
+					if ($s.currentPlayer.payCost({fur: this.fur})) {
+						$s.currentPlayer.recruitCard = this.cardId;
+						$s.openModal('RecruitPayment', resolve);
+					} else {
+						console.log('you do not have enough fur.');
+						resolve();
+					}
+				} else {
+					console.log('you do not have enough equipment');
+					resolve();
+				}
 			},
 			openBoard: resolve => {
 				$s.openModal('Board', resolve);
@@ -145,17 +156,18 @@ mainApp.factory('EventFactory', [
 				}
 				EF.closeModal(resolve);
 			},
-			addBoat: (type, size) => {
+			addBoat: function(resolve) {
 				if ($s.currentPlayer.payCost({wood: 3})) {
-					var boatsArr = $s.currentPlayer.corp[type + 'Boats'];
+					var boatsArr = $s.currentPlayer.corp[this.type + 'Boats'];
 
-					boatsArr.push(BF[type + size]());
-					$s.currentPlayer.corp[type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
+					boatsArr.push(BF[this.type + this.size]());
+					$s.currentPlayer.corp[this.type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
 
-					if (type === 'indian') {
+					if (this.type === 'indian') {
 						$s.addIndianFromSupply();
 					}
 				}
+				resolve();
 			}
 		};
 

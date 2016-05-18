@@ -25,12 +25,12 @@ mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibMo
 	$scope.journal = $s.journal;
 
 	$scope.recruitCard = card => {
-		$s.addEvent('openRecruitPayment');
-		// $s.addEvent({
-		// 	name: 'recruitCard',
-		// 	cardId: card.id,
-		// 	idx: $s.journal.indexOf(card)
-		// });
+		$s.addEvent({
+			name: 'openRecruitPayment',
+			cardId: card.id,
+			equipment: card.strength,
+			fur: $s.journal.indexOf(card) + 1
+		});
 	};
 });
 

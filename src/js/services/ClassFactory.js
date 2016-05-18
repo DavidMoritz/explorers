@@ -41,6 +41,15 @@ mainApp.factory('ClassFactory', [
 				optimize() {
 					// do something here to move all the supplies & indians to their ideal positions
 				}
+				count(countItem) {
+					var count = 0;
+
+					this.supplyBoats.map(boat => {
+						count += boat.content.filter(item => item.name == countItem).length;
+					});
+
+					return count;
+				}
 			},
 
 			Deck: class Deck {
@@ -59,6 +68,15 @@ mainApp.factory('ClassFactory', [
 				}
 				get playedCards() {
 					return this.cards.filter(card => card.played);
+				}
+				get highestHeldCardStrength() {
+					return this.cards.reduce((strength, card) => {
+						if (!card.played) {
+							return Math.max(strength, card.strength);
+						}
+
+						return strength;
+					}, 0);
 				}
 				findById(cardId) {
 					return _.find(this.cards, {id: cardId});
@@ -153,7 +171,7 @@ mainApp.factory('ClassFactory', [
 					this.playStrength = 0;
 					this.deck.play(card);
 					this.deck.activeCardId = card.id;
-					
+
 					return true;
 				}
 				addIndian(added) {
@@ -224,6 +242,11 @@ mainApp.factory('ClassFactory', [
 					if (!added) {
 						console.log('no space for that item');
 					}
+				}
+				checkEquipmentForRecruit(equipmentNeed) {
+					var supplyEquipment = this.corp.count('equipment');
+
+					return equipmentNeed <= (supplyEquipment + this.deck.highestHeldCardStrength);
 				}
 				// checkForScouts(direction) {
 				// 	var dupes = $s.allPlayers.filter(
