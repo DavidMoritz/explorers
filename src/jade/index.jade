@@ -24,10 +24,10 @@ html(ng-app='mainApp')
 				div(ng-hide='currentUser')
 					button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
 				h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
-				.notices
+				+notify()
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
-			.pre-game.row(ng-show='currentUser.uid && !activeGame')
+			.pre-game.row(ng-show='currentUser.uid && !activeGame.id')
 				+col(6)
 					h3 Choose a game:
 					ul
@@ -41,7 +41,7 @@ html(ng-app='mainApp')
 					form(name='chatWindow' ng-submit='submitChat()')
 						input(ng-model='ff.chat' placeholder='respond to chat')
 						button(ng-hide='true' type='submit')
-			.pre-game.row(ng-show='activeGame && !currentPlayer')
+			.pre-game.row(ng-show='activeGame.id && !currentPlayer')
 				+col(6)
 					h3 Players:
 					ul
@@ -81,30 +81,37 @@ html(ng-app='mainApp')
 		script#strengthModal(type='text/ng-template')
 			.modal-header
 				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
-			.modal-body.row
-				+col(null, 8, 8)
-					+show-cards('held', 'addStrength')
-					.btn.btn-danger(ng-click='addIndian()') Add Indian
-						span.badge  {{currentPlayer.indianCount}}
-				+col(null, 4, 4, 4, 4, 'active-card')
-					+active-card()
+			.modal-body
+				+notify()
+				.row
+					+col(null, 8, 8)
+						+show-cards('held', 'addStrength')
+						.btn.btn-danger(ng-click='addIndian()') Add Indian
+							span.badge  {{currentPlayer.indianCount}}
+					+col(null, 4, 4, 4, 4, 'active-card')
+						+active-card()
 		script#recruitModal(type='text/ng-template')
 			.modal-header
 				h3 Recruit for the team:
 			.modal-body
+				+notify()
 				+show-cards('recruit', 'recruitCard')
 		script#recruitpaymentModal(type='text/ng-template')
 			.modal-header
 				h3 Payment for new Recruit?
-			.modal-body.row
-				+col(null, 8, 8)
-					+show-cards('held', 'recruitPayment')
-				+col(null, 4, 4, 4, 4, 'active-card')
-					+recruit-card()
+			.modal-body
+				+notify()
+				.row
+					+col(null, 8, 8)
+						+show-cards('held', 'recruitPayment')
+						.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment({})') Use {{recruitCard.strength}} equipment
+					+col(null, 4, 4, 4, 4, 'active-card')
+						+recruit-card()
 		script#boardModal(type='text/ng-template')
 			.modal-header
 				h3 Board Spaces:
 			.modal-body
+				+notify()
 				ul.abilities
 					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)')
 						p Cost: {{space.cost}}

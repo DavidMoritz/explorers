@@ -51,7 +51,8 @@ mainApp.controller('MainCtrl', [
 		}
 
 		function runEvent(idx) {
-			if (idx === $s.activeGame.events.length) {
+			if (idx >= $s.activeGame.events.length) {
+				$s.eventTracker = $s.activeGame.events.length;
 				// return meaningless function to avoid error
 				return {then: () => 0};
 			}
@@ -127,6 +128,7 @@ mainApp.controller('MainCtrl', [
 			eventTracker: 0,
 			chatList: [],
 			recruitCard: {},
+			activeGame: {},
 			modalInstance: {
 				close: () => 0
 			}
@@ -162,7 +164,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.joinActiveGame = game => {
-			if ($s.activeGame || !$s.currentUser) {
+			if ($s.activeGame.id || !$s.currentUser) {
 				return;
 			}
 
@@ -243,12 +245,25 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
+		$s.notify = (message, type) => {
+			clearTimeout($s.cancelMessage);
+			type = type || 'info';
+
+			$s.activeGame.message = {
+				text: message,
+				type: type
+			};
+
+			$s.cancelMessage = setTimeout(() => {
+				$s.activeGame.message = {};
+			}, 10000);
+		};
+
 		// grab all the games and make sure Firebase is working!
 		window.allGames = FF.getFBObject('allGames');
 		allGames.$bindTo($s, 'allGames');
 		allGames.$loaded(() => {
-			console.log('Firebase is working');
-			$('.notices').text('Firebase is working!');
+			$s.notify('Firebase is working!');
 			$('body').addClass('facebook-available');
 			init();
 		});

@@ -97,6 +97,9 @@ mainApp.factory('ClassFactory', [
 
 					this.cards.splice(idx, 1);
 				}
+				add(card) {
+					this.cards.push(card);
+				}
 			},
 
 			Player: class Player {
@@ -156,7 +159,7 @@ mainApp.factory('ClassFactory', [
 							if (this.payCost(ability.cost)) {
 								this.benefit(ability.benefit);
 							} else {
-								console.log('you cannot aford that ability');
+								$s.notify('you cannot aford that ability', 'warning');
 							}
 						} else {
 							this.benefit(ability.benefit);
@@ -201,6 +204,8 @@ mainApp.factory('ClassFactory', [
 						return true;
 					} else {
 						this.corp.noPay();
+
+						return false;
 					}
 				}
 				benefit(benefit) {
@@ -240,7 +245,7 @@ mainApp.factory('ClassFactory', [
 					});
 
 					if (!added) {
-						console.log('no space for that item');
+						$s.notify('no space for that item', 'warning');
 					}
 				}
 				checkEquipmentForRecruit(equipmentNeed) {

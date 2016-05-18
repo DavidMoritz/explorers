@@ -171,7 +171,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP12',
 					name: 'Pierre Cruzatte',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash last card in journal.',
+					description: 'gather indians from the board and trash first card in journal.',
 					strength: 2,
 					played: false,
 					plays: 0,

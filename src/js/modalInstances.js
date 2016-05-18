@@ -1,5 +1,6 @@
 mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.currentPlayer = $s.currentPlayer;
+	$scope.activeGame = $s.activeGame;
 
 	$scope.addStrength = card => {
 		$s.addEvent({
@@ -22,12 +23,14 @@ mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibM
 
 mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.currentPlayer = $s.currentPlayer;
+	$scope.activeGame = $s.activeGame;
 	$scope.journal = $s.journal;
 
 	$scope.recruitCard = card => {
 		$s.addEvent({
 			name: 'openRecruitPayment',
-			card: card,
+			cardId: card.id,
+			strength: card.strength,
 			fur: $s.journal.indexOf(card) + 1
 		});
 	};
@@ -35,6 +38,7 @@ mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibMo
 
 mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, CardFactory) {
 	$scope.currentPlayer = $s.currentPlayer;
+	$scope.activeGame = $s.activeGame;
 	$scope.boardSpaces = CardFactory.boardSpaces;
 
 	$scope.clickBoardSpace = space => {
@@ -45,11 +49,17 @@ mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModa
 mainApp.controller('RecruitPaymentModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.recruitCard = $s.recruitCard;
 	$scope.currentPlayer = $s.currentPlayer;
+	$scope.activeGame = $s.activeGame;
 
 	$scope.recruitPayment = card => {
-		$s.addEvent({
-			name: 'recruitPayment',
-			cardId: card.id
-		});
+		if (card) {
+			$s.addEvent({
+				name: 'recruitPayment',
+				cardId: card.id
+			});
+		} else {
+			$s.addEvent('recruitPayment');
+		}
+		$s.addEvent('closeModal');
 	};
 });

@@ -10,10 +10,6 @@ mainApp.factory('EventFactory', [
 		 * factory as a property of $s and calling the methods from that property
 		 */
 
-		function notify(message) {
-			$('.notices').text(message);
-		}
-
 		var EF = {
 			gameCreated: resolve => {
 				resolve();
@@ -63,7 +59,7 @@ mainApp.factory('EventFactory', [
 						$s.currentPlayer.playStrength = 3;
 					}
 				} else {
-					console.log('cannot go above 3');
+					$s.notify('cannot go above 3', 'warning');
 				}
 				resolve();
 			},
@@ -83,11 +79,11 @@ mainApp.factory('EventFactory', [
 					});
 
 					if (!added) {
-						console.log('you do not have any more to use');
+						$s.notify('you do not have any more to use');
 					}
 					$s.currentPlayer.corp.indianBoats.reverse();
 				} else {
-					console.log('cannot go above 3');
+					$s.notify('cannot go above 3');
 				}
 				resolve();
 			},
@@ -116,16 +112,16 @@ mainApp.factory('EventFactory', [
 				$s.openModal('Recruit', resolve);
 			},
 			openRecruitPayment: function(resolve) {
-				if ($s.currentPlayer.checkEquipmentForRecruit(this.card.strength)) {
+				if ($s.currentPlayer.checkEquipmentForRecruit(this.strength)) {
 					if ($s.currentPlayer.payCost({fur: this.fur})) {
-						$s.recruitCard = this.card;
+						$s.recruitCard = _.find($s.journal, {id: this.cardId});
 						$s.openModal('RecruitPayment', resolve);
 					} else {
-						console.log('you do not have enough fur.');
+						$s.notify('you do not have enough fur.', 'danger');
 						resolve();
 					}
 				} else {
-					console.log('you do not have enough equipment');
+					$s.notify('you do not have enough equipment', 'danger');
 					resolve();
 				}
 			},
@@ -133,9 +129,20 @@ mainApp.factory('EventFactory', [
 				$s.openModal('Board', resolve);
 			},
 			recruitPayment: function(resolve) {
-				var card = $s.currentPlayer.deck.findById(this.cardId);
-				$s.currentPlayer.recruitPayment = card.strength;
-				$s.currentPlayer.deck.remove(card);
+				var payment = {
+					equipment: $s.recruitCard.strength
+				};
+
+				if (this.cardId) {
+					var card = $s.currentPlayer.deck.findById(this.cardId);
+					payment.equipment = Math.max(payment.equipment - card.strength, 0);
+					$s.currentPlayer.deck.remove(card);
+				}
+
+				$s.currentPlayer.payCost(payment);
+				$s.currentPlayer.deck.add($s.recruitCard);
+				_.remove($s.journal, $s.recruitCard);
+				$s.recruitCard = null;
 				resolve();
 			},
 			addIndianFromSupply: resolve => {
@@ -154,6 +161,7 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.currentPlayer = $s.allPlayers[0];
 				}
+				$s.activeGame.message = {};
 				EF.closeModal(resolve);
 			},
 			addBoat: function(resolve) {

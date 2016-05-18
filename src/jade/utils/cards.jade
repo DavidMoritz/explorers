@@ -5,7 +5,7 @@ mixin show-cards(type, click)
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
 	- click = click ? click + '(card)' : ''
 	ul.cards
-		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}&#58; {{card.description}}')
+		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
 			.card-info
 				span.strength {{card.strength}}
 				i.sprite.symbol(class='{{card.symbol}}')
