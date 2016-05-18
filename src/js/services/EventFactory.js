@@ -116,9 +116,9 @@ mainApp.factory('EventFactory', [
 				$s.openModal('Recruit', resolve);
 			},
 			openRecruitPayment: function(resolve) {
-				if ($s.currentPlayer.checkEquipmentForRecruit(this.equipment)) {
+				if ($s.currentPlayer.checkEquipmentForRecruit(this.card.strength)) {
 					if ($s.currentPlayer.payCost({fur: this.fur})) {
-						$s.currentPlayer.recruitCard = this.cardId;
+						$s.recruitCard = this.card;
 						$s.openModal('RecruitPayment', resolve);
 					} else {
 						console.log('you do not have enough fur.');

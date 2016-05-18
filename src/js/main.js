@@ -126,6 +126,7 @@ mainApp.controller('MainCtrl', [
 			map: MF.map,
 			eventTracker: 0,
 			chatList: [],
+			recruitCard: {},
 			modalInstance: {
 				close: () => 0
 			}

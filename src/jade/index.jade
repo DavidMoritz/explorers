@@ -96,11 +96,11 @@ html(ng-app='mainApp')
 		script#recruitpaymentModal(type='text/ng-template')
 			.modal-header
 				h3 Payment for new Recruit?
-			.modal-body
+			.modal-body.row
 				+col(null, 8, 8)
 					+show-cards('held', 'recruitPayment')
 				+col(null, 4, 4, 4, 4, 'active-card')
-					+active-card()
+					+recruit-card()
 		script#boardModal(type='text/ng-template')
 			.modal-header
 				h3 Board Spaces:

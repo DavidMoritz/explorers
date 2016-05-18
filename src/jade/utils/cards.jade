@@ -5,14 +5,14 @@ mixin show-cards(type, click)
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
 	- click = click ? click + '(card)' : ''
 	ul.cards
-		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
+		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}&#58; {{card.description}}')
 			.card-info
 				span.strength {{card.strength}}
 				i.sprite.symbol(class='{{card.symbol}}')
 			.card-name {{card.name}}
 
 mixin active-card()
-	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{card.name}}: {{card.description}}')
+	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{currentPlayer.deck.activeCard.name}}: {{currentPlayer.deck.activeCard.description}}')
 		.card-info
 			span.strength {{currentPlayer.deck.activeCard.strength}}
 			i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
@@ -22,3 +22,11 @@ mixin active-card()
 		li.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
 			p Cost: {{ability.cost}}
 			p Benefit: {{ability.benefit}}
+
+mixin recruit-card()
+	h3 New Recruit:
+	.held-card.card-img(class='{{recruitCard.symbol}} {{recruitCard.id}}' title='{{recruitCard.name}}: {{recruitCard.description}}')
+		.card-info
+			span.strength {{recruitCard.strength}}
+			i.sprite.symbol(class='{{recruitCard.symbol}}')
+		.card-name {{recruitCard.name}}
