@@ -19,7 +19,13 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			restartTurn: resolve => {
-				resolve();
+				// not currently working
+				var idx = _.findLastIndex($s.activeGame.events, e => e.name == 'changeCurrentPlayer' || e.name == 'startGame') + 1;
+				setTimeout(() => {
+					$s.activeGame.events.splice(idx);
+					$s.restartTurn = true;
+					resolve();	
+				}, 1000);
 			},
 			startGame: resolve => {
 				var users = FF.getFBObject('users');

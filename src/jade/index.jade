@@ -53,7 +53,8 @@ html(ng-app='mainApp')
 					button.btn.btn-warning(ng-click='addEvent("camp")' ng-enabled='currentPlayer.notCamped') Camp
 					button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-enabled='currentPlayer.notRecruited') Recruit
 					button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
-					button.btn.btn-danger(ng-click='addEvent("restartTurn")') Restart Turn
+					//- Restart turn is not currently working
+					//- button.btn.btn-danger(ng-click='addEvent("restartTurn")') Restart Turn
 					h4 All Players
 					ul.players
 						li(ng-repeat='player in allPlayers')

@@ -28,8 +28,20 @@ mainApp.controller('MainCtrl', [
 			listenToChat();
 		}
 
+		function restartTurn() {
+			// this is not working.
+			var id = $s.activeGame.id;
+			$s.currentPlayer = null;
+			$s.allPlayers = [];
+			$s.activeGame = null;
+			$s.joinActiveGame({id: id});
+			$s.restartTurn = false;
+		}
+
 		function updateGame() {
-			if ($s.eventTracker < $s.activeGame.events.length) {
+			if ($s.restartTurn) {
+				restartTurn();
+			} else if ($s.eventTracker < $s.activeGame.events.length) {
 				$s.activeGame.events.reduce(prevEvent => {
 					return prevEvent.then(() => {
 						return runEvent(++$s.eventTracker);
@@ -221,11 +233,11 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
-		$s.callPlayCard = cardId => {
+		$s.callPlayCard = card => {
 			if (!$s.currentPlayer.takenMainAction) {
 				$s.addEvent({
 					name: 'playCard',
-					cardId: cardId
+					cardId: card.id
 				});
 			}
 		};
