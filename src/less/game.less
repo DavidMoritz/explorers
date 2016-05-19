@@ -2,9 +2,14 @@ body {
 	background-color: darkslategray;
 }
 .container {
-    width: 1170px !important;
-    background: @gray-lightest;
-    padding: 20px;
+	width: 1170px !important;
+	max-width: 1170px !important;
+	background: @gray-lightest;
+	padding: 20px;
+	.jumbotron {
+		padding-left: 60px;
+		padding-right: 60px;
+	}
 }
 #cursor {
 	transition: all ease 0.33s;
