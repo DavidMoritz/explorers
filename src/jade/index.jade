@@ -16,7 +16,7 @@ html(ng-app='mainApp')
 		script(src='inc/angular.js')
 	body(ng-cloak, ng-controller='MainCtrl')
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
-			img#cursor.img.img-responsive(src='img/hand.png' ng-style='activeGame.cursor' ng-hide='currentUser.uid == currentPlayer.uid')
+			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
 			.jumbotron

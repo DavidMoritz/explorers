@@ -117,6 +117,11 @@ mainApp.controller('MainCtrl', [
 			listenToChat();
 		}
 
+		function updateCursor() {
+			$s.cursor.left = ($s.activeGame.cursor.left + Math.max(($('body').width() - $('.container').width()) / 2, 0)) + 'px';
+			$s.cursor.top = $s.activeGame.cursor.top + 'px';
+		}
+
 		//	initialize scoped variables
 		_.assign($s, {
 			allItems: IF.allItems,
@@ -131,6 +136,10 @@ mainApp.controller('MainCtrl', [
 			activeGame: {},
 			modalInstance: {
 				close: () => 0
+			},
+			cursor: {
+				left: '0px',
+				top: '0px'
 			}
 		});
 
@@ -155,8 +164,8 @@ mainApp.controller('MainCtrl', [
 				active: true,
 				public: true,
 				cursor: {
-					left: '0px',
-					top: '0px'
+					left: 0,
+					top: 0
 				}
 			}}, () => {
 				$s.joinActiveGame({id: rand});
@@ -182,14 +191,16 @@ mainApp.controller('MainCtrl', [
 				shuffleJournal();
 				$s.eventTracker = 0;
 				$s.$watch('activeGame.events', updateGame);
+				$s.$watch('activeGame.cursor', updateCursor);
 			});
 			stopChat();
 		};
 
 		$s.moveCursor = e => {
 			if ($s.activeGame && $s.activeGame.cursor) {
-				$s.activeGame.cursor.left = (e.pageX + 2) + 'px';
-				$s.activeGame.cursor.top = (e.pageY + 2) + 'px';
+				var offset = Math.max(($('body').width() - $('.container').width()) / 2, 0);
+				$s.activeGame.cursor.left = e.pageX - offset + 2;
+				$s.activeGame.cursor.top = e.pageY + 2;
 			}
 		};
 
