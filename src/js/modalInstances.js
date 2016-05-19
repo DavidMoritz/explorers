@@ -1,6 +1,7 @@
 mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.currentPlayer = $s.currentPlayer;
 	$scope.activeGame = $s.activeGame;
+	$scope.addEvent = $s.addEvent;
 
 	$scope.addStrength = card => {
 		$s.addEvent({
@@ -24,6 +25,7 @@ mainApp.controller('StrengthModalInstanceCtrl', function ModalCtrl($scope, $uibM
 mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.currentPlayer = $s.currentPlayer;
 	$scope.activeGame = $s.activeGame;
+	$scope.addEvent = $s.addEvent;
 	$scope.journal = $s.journal;
 
 	$scope.recruitCard = card => {
@@ -39,6 +41,7 @@ mainApp.controller('RecruitModalInstanceCtrl', function ModalCtrl($scope, $uibMo
 mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, CardFactory) {
 	$scope.currentPlayer = $s.currentPlayer;
 	$scope.activeGame = $s.activeGame;
+	$scope.addEvent = $s.addEvent;
 	$scope.boardSpaces = CardFactory.boardSpaces;
 
 	$scope.clickBoardSpace = space => {
@@ -50,6 +53,7 @@ mainApp.controller('RecruitPaymentModalInstanceCtrl', function ModalCtrl($scope,
 	$scope.recruitCard = $s.recruitCard;
 	$scope.currentPlayer = $s.currentPlayer;
 	$scope.activeGame = $s.activeGame;
+	$scope.addEvent = $s.addEvent;
 
 	$scope.recruitPayment = card => {
 		if (card) {

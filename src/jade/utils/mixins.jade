@@ -12,4 +12,7 @@ mixin col(xs, ms, sm, md, lg, otherClass)
 			block
 
 mixin notify()
-	.alert(class='alert-{{activeGame.message.type}}' ng-show='activeGame.message') {{activeGame.message.text}} 
+	.alert(class='alert-{{activeGame.message.type}}' ng-show='activeGame.message') {{activeGame.message.text}}
+
+mixin close()
+	.close(ng-click='addEvent("closeModal")') &times;

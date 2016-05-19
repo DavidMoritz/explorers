@@ -12,7 +12,7 @@ mainApp.factory('ClassFactory', [
 			return _.indexOf(MAP.map, start);
 		}
 
-		const allColors = ['lightsalmon', 'orchid', 'lightgreen', 'lightblue', 'lightcoral'];
+		const allColors = ['lightsalmon', 'orchid', 'lightcoral', 'lightgreen', 'lightblue'];
 		const ClassFactory = {
 			Corp: class Corp {
 				constructor() {

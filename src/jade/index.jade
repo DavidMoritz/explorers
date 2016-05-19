@@ -27,6 +27,7 @@ html(ng-app='mainApp')
 				+notify()
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
+					span.space-arrow(ng-show='$index == currentPlayer.space' style='border-color: {{currentPlayer.color}}')
 			.pre-game.row(ng-show='currentUser.uid && !activeGame.id')
 				+col(6)
 					h3 Choose a game:
@@ -80,6 +81,7 @@ html(ng-app='mainApp')
 		script(src='inc/main.js')
 		script#strengthModal(type='text/ng-template')
 			.modal-header
+				+close()
 				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 			.modal-body
 				+notify()
@@ -92,12 +94,14 @@ html(ng-app='mainApp')
 						+active-card()
 		script#recruitModal(type='text/ng-template')
 			.modal-header
+				+close()
 				h3 Recruit for the team:
 			.modal-body
 				+notify()
 				+show-cards('recruit', 'recruitCard')
 		script#recruitpaymentModal(type='text/ng-template')
 			.modal-header
+				+close()
 				h3 Payment for new Recruit?
 			.modal-body
 				+notify()
@@ -109,6 +113,7 @@ html(ng-app='mainApp')
 						+recruit-card()
 		script#boardModal(type='text/ng-template')
 			.modal-header
+				+close()
 				h3 Board Spaces:
 			.modal-body
 				+notify()
