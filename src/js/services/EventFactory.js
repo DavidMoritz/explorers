@@ -141,6 +141,7 @@ mainApp.factory('EventFactory', [
 
 				$s.currentPlayer.payCost(payment);
 				$s.currentPlayer.deck.add($s.recruitCard);
+				$s.currentPlayer.notRecruited = false;
 				_.remove($s.journal, $s.recruitCard);
 				$s.recruitCard = null;
 				resolve();

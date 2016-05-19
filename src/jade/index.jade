@@ -50,8 +50,8 @@ html(ng-app='mainApp')
 			.game-started.row(ng-show='currentPlayer')
 				+col(6)
 					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!currentPlayer.takenMainAction') End Turn
-					button.btn.btn-warning(ng-click='addEvent("camp")' ng-enabled='currentPlayer.notCamped') Camp
-					button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-enabled='currentPlayer.notRecruited') Recruit
+					button.btn.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
+					button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-disabled='!currentPlayer.notRecruited') Recruit
 					button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
 					//- Restart turn is not currently working
 					//- button.btn.btn-danger(ng-click='addEvent("restartTurn")') Restart Turn
@@ -104,7 +104,7 @@ html(ng-app='mainApp')
 				.row
 					+col(null, 8, 8)
 						+show-cards('held', 'recruitPayment')
-						.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment({})') Use {{recruitCard.strength}} equipment
+						.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment()') Use {{recruitCard.strength}} equipment
 					+col(null, 4, 4, 4, 4, 'active-card')
 						+recruit-card()
 		script#boardModal(type='text/ng-template')
