@@ -15,8 +15,8 @@ html(ng-app='mainApp')
 		link(rel='stylesheet', href='inc/main.css')
 		script(src='inc/angular.js')
 	body(ng-cloak, ng-controller='MainCtrl')
+		+cursor()
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
-			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
 			.jumbotron
@@ -32,7 +32,7 @@ html(ng-app='mainApp')
 				+col(6)
 					h3 Choose a game:
 					ul
-						li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+						li.btn.btn-info(ng-repeat='game in allGames track by $index' ng-show='currentUser && game.active' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
 					h3 Or create a new one:
 					.btn.btn-success(ng-click='createNewGame()') Create new game
 				+col(6)
@@ -118,7 +118,6 @@ html(ng-app='mainApp')
 			.modal-body
 				+notify()
 				ul.abilities
-					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)')
-						p Cost: {{space.cost}}
-						p Benefit: {{space.benefit}}
+					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)' title='{{space.description}}' ng-disabled='space.contents.length == space.max')
+						p Event: {{space.event}}
 //		| @@javascriptReplaceFiles

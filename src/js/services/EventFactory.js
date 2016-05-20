@@ -28,7 +28,11 @@ mainApp.factory('EventFactory', [
 				users.$loaded(() => {
 					$s.activeGame.playerIds.map(id => {
 						var user = users[id];
-						$s.allPlayers.push(new Class.Player(user.firstName, $s.allPlayers.length + 1));
+						$s.allPlayers.push(new Class.Player({
+							name: user.firstName,
+							uid: user.uid,
+							idx: $s.allPlayers.length + 1
+						}));
 					});
 					EF.changeCurrentPlayer(resolve);
 				});
@@ -64,24 +68,13 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			addIndianToStrength: resolve => {
-				var added = false;
-
 				if ($s.currentPlayer.playStrength < 3) {
-					$s.currentPlayer.corp.indianBoats.reverse();
-					$s.currentPlayer.corp.indianBoats.map(boat => {
-						var indian = _.find(boat.content, {inUse: false});
-
-						if (indian && !added) {
-							indian.inUse = true;
-							added = true;
-							$s.currentPlayer.playStrength++;
-						}
-					});
-
-					if (!added) {
+					if ($s.currentPlayer.indianCount) {
+						$s.currentPlayer.corp.payIndian('strength');
+						$s.currentPlayer.playStrength++;
+					} else {
 						$s.notify('you do not have any more to use');
 					}
-					$s.currentPlayer.corp.indianBoats.reverse();
 				} else {
 					$s.notify('cannot go above 3');
 				}
@@ -175,6 +168,77 @@ mainApp.factory('EventFactory', [
 					if (this.type === 'indian') {
 						$s.addIndianFromSupply();
 					}
+				}
+				resolve();
+			},
+			boardCollectMeatFur: resolve => {
+				$s.currentPlayer.benefit({
+					meat: 1,
+					fur: 1
+				});
+				resolve();
+			},
+			boardCollectEquipmentWood: resolve => {
+				$s.currentPlayer.benefit({
+					equipment: 1,
+					wood: 1
+				});
+				resolve();
+			},
+			boardCollectChoice: resolve => {
+				// TODO: determine which benefit they want
+				var benefit = this.benefit || {wood: 2};
+
+				$s.currentPlayer.benefit(benefit);
+				resolve();
+			},
+			boardCollectCanoe: resolve => {
+				if ($s.currentPlayer.payCost({wood: 2})) {
+					$s.currentPlayer.benefit({
+						meat: 1,
+						fur: 1
+					});
+				} else {
+					$s.notify('You cannot afford a canoe');
+				}
+				resolve();
+			},
+			boardCollectHorse: resolve => {
+				// TODO: determine how they will pay
+				var payment = this.payment || {
+					fur: 1,
+					meat: 1,
+					equipment: 1
+				};
+
+				if ($s.currentPlayer.payCost(payment)) {
+					$s.currentPlayer.benefit({horse: 1});
+				} else {
+					$s.notify('You cannot afford a horse');
+				}
+				resolve();
+			},
+			boardCollectBoat: function(resolve) {
+				// TODO: determine what boat they want
+				this.type = 'indian';
+				this.size = 'small';
+
+				if ($s.currentPlayer.payCost({wood: 3})) {
+					EF.addBoat(resolve);
+				} else {
+					$s.notify('You cannot afford a boat');
+					resolve();
+				}
+			},
+			boardResetJournal: resolve => {
+				$s.journal.splice(0, 5);
+				resolve();
+			},
+			boardUseAbility: resolve => {
+				if ($s.currentPlayer.payCost({meat: 1})) {
+					$s.notify('You used an ability... Sike!');
+				} else {
+					$s.notify('You cannot afford a this space');
 				}
 				resolve();
 			}

@@ -5,135 +5,34 @@ mainApp.factory('CardFactory', [
 		return {
 			boardSpaces: [
 				{
-					cost: {
-						indian: 1
-					},
-					benefit: {
-						meat: 1,
-						fur: 1
-					}
+					event: 'boardCollectMeatFur',
+					description: 'Collect 1 food and 1 fur'
 				},{
-					cost: {
-						indian: 1
-					},
-					benefit: {
-						equipment: 1,
-						wood: 1
-					}
+					event: 'boardCollectEquipmentWood',
+					description: 'Collect 1 equipment and 1 wood'
 				},{
-					cost: {
-						indian: 1
-					},
-					benefit: {
-						fur: 2
-					}
+					event: 'boardCollectChoice',
+					description: 'Collect 2 fur or 2 wood'
 				},{
-					cost: {
-						indian: 1
-					},
-					benefit: {
-						wood: 2
-					}
+					event: 'boardCollectCanoe',
+					max: 20,
+					allow: 3,
+					description: 'Collect 1 canoe for 2 wood'
 				},{
-					cost: {
-						indian: 1,
-						wood: 2
-					},
-					benefit: {
-						canoe: 1
-					}
+					event: 'boardCollectHorse',
+					max: 20,
+					allow: 3,
+					description: 'Collect 1 horse for 3 different items'
 				},{
-					cost: {
-						indian: 1,
-						wood: 1,
-						meat: 1,
-						fur: 1
-					},
-					benefit: {
-						horse: 1
-					}
+					event: 'boardCollectBoat',
+					max: 2,
+					description: 'Collect 1 boat for 3 wood. 4 possible boats. Small Supply: 2 slots free. Big Supply: 5 slots for 1 day. Small Indian: 1 slot free. Big Indian: 3 slots for 1 day.'
 				},{
-					cost: {
-						indian: 1,
-						equipment: 1,
-						meat: 1,
-						fur: 1
-					},
-					benefit: {
-						horse: 1
-					}
+					event: 'boardResetJournal',
+					description: 'Remove all recruit cards from journal. May trash up to 3 cards from hand.'
 				},{
-					cost: {
-						indian: 1,
-						wood: 1,
-						equipment: 1,
-						fur: 1
-					},
-					benefit: {
-						horse: 1
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 1,
-						meat: 1,
-						equipment: 1
-					},
-					benefit: {
-						horse: 1
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 3
-					},
-					benefit: {
-						indian: 1,
-						boat: 'indian'
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 3
-					},
-					benefit: {
-						indian: 1,
-						boat: 'big indian'
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 3
-					},
-					benefit: {
-						basic: 2,
-						boat: 'supply'
-					}
-				},{
-					cost: {
-						indian: 1,
-						wood: 3
-					},
-					benefit: {
-						basic: 2,
-						boat: 'big supply'
-					}
-				},{
-					cost: {
-						indian: 1
-					},
-					benefit: {
-						trash: 3,
-						journal: 'reset'
-					}
-				},{
-					cost: {
-						indian: 1,
-						meat: 1
-					},
-					benefit: {
-						abilities: 'any'
-					}
+					event: 'boardUseAbility',
+					description: 'For 1 food, use any ability of a played card in front of any player. The action may only be executed once.'
 				}
 			],
 			startingCards: () => new Array(

@@ -16,3 +16,6 @@ mixin notify()
 
 mixin close()
 	.close(ng-click='addEvent("closeModal")') &times;
+
+mixin cursor()
+	img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
