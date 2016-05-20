@@ -197,7 +197,9 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.moveCursor = e => {
-			if ($s.activeGame && $s.activeGame.cursor) {
+			var isUser = $s.currentPlayer && $s.currentUser.uid == $s.currentPlayer.uid;
+
+			if ($s.activeGame && $s.activeGame.cursor && isUser) {
 				var offset = Math.max(($('body').width() - $('.container').width()) / 2, 0);
 				$s.activeGame.cursor.left = e.pageX - offset + 2;
 				$s.activeGame.cursor.top = e.pageY + 2;
@@ -215,7 +217,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.openModal = (name, resolve) => {
-			$s.modalInstance.close();
+			//$s.modalInstance.close();
 			$s.modalInstance = $uibM.open({
 				animation: true,
 				templateUrl: name.toLowerCase() + 'Modal',

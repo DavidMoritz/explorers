@@ -15,8 +15,8 @@ html(ng-app='mainApp')
 		link(rel='stylesheet', href='inc/main.css')
 		script(src='inc/angular.js')
 	body(ng-cloak, ng-controller='MainCtrl')
+		+cursor()
 		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
-			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
 			.map
@@ -123,7 +123,6 @@ html(ng-app='mainApp')
 			.modal-body
 				+notify()
 				ul.abilities
-					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)')
-						p Cost: {{space.cost}}
-						p Benefit: {{space.benefit}}
+					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)' title='{{space.description}}' ng-disabled='space.contents.length == space.max')
+						p Event: {{space.event}}
 //		| @@javascriptReplaceFiles

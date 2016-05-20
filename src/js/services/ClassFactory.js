@@ -24,6 +24,28 @@ mainApp.factory('ClassFactory', [
 
 					return this.indianBoats.reduce((time, boat) => time + boat.cost(), time);
 				}
+				payIndian(strength) {
+					var result = false,
+						indian;
+
+					this.indianBoats.reverse();
+					this.indianBoats.map(boat => {
+						indian = _.find(boat.content, {inUse: false});
+
+						if (indian && !result) {
+							if (strength) {
+								indian.inUse = true;
+								result = true;
+							} else {
+								result = indian;
+								_.remove(boat.content, indian);
+							}
+						}
+					});
+					this.indianBoats.reverse();
+
+					return result;
+				}
 				noPay() {
 					this.supplyBoats.map(boat => {
 						boat.content.map(item => {
@@ -106,13 +128,14 @@ mainApp.factory('ClassFactory', [
 				/*
 				 * Player has a name, a color, a deck, and a corp
 				 */
-				constructor(name, idx, color) {
-					this.name = name;
-					this.color = color || allColors.splice(-1)[0];
+				constructor(options) {
+					this.name = options.name;
+					this.uid = options.uid;
+					this.color = options.color || allColors.splice(-1)[0];
 					this.corp = new ClassFactory.Corp();
 					this.deck = new ClassFactory.Deck();
 					this.space = findStartSpace();
-					this.idx = idx;
+					this.idx = options.idx;
 					this.notCamped = true;
 					this.notRecruited = true;
 					this.takenMainAction = false;
@@ -157,11 +180,13 @@ mainApp.factory('ClassFactory', [
 					if (this.strengthAvailable) {
 						if (ability.cost) {
 							if (this.payCost(ability.cost)) {
+								this.deck.activeCard.plays++;
 								this.benefit(ability.benefit);
 							} else {
 								$s.notify('you cannot aford that ability', 'warning');
 							}
 						} else {
+							this.deck.activeCard.plays++;
 							this.benefit(ability.benefit);
 						}
 					}
@@ -209,7 +234,6 @@ mainApp.factory('ClassFactory', [
 					}
 				}
 				benefit(benefit) {
-					this.deck.activeCard.plays++;
 					_.mapKeys(benefit, (amount, key) => {
 						for (let i = 0; i < amount; i++) {
 							var item = _.find(IF.allItems, {name: key});

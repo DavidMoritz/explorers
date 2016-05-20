@@ -42,10 +42,29 @@ mainApp.controller('BoardModalInstanceCtrl', function ModalCtrl($scope, $uibModa
 	$scope.currentPlayer = $s.currentPlayer;
 	$scope.activeGame = $s.activeGame;
 	$scope.addEvent = $s.addEvent;
-	$scope.boardSpaces = CardFactory.boardSpaces;
+	$scope.boardSpaces = CardFactory.boardSpaces.map(space => {
+		space.contents = [];
+		space.max = space.max || 1;
+		space.allow = space.allow || 1;
+
+		return space;
+	});
 
 	$scope.clickBoardSpace = space => {
-		console.log(space);
+		if ($s.currentPlayer.takenMainAction) {
+			$s.notify('You have already taken a main action');
+		} else if ($s.currentPlayer.indianCount) {
+			if (space.contents.length < space.max) {
+				space.contents.push($s.currentPlayer.corp.payIndian());
+				$s.currentPlayer.takenMainAction = true;
+				$s.addEvent(space.event);
+				$s.addEvent('closeModal');
+			} else {
+				$s.notify('That space is full');
+			}			
+		} else {
+			$s.notify('You need an indian to use that space');
+		}
 	};
 });
 
