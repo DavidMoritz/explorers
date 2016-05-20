@@ -71,83 +71,94 @@ ul.cards {
 		}
 	}
 }
+.bgpos(@ex; @why) {
+	background-position: @ex @why;
+	&.small {
+		background-position: @ex/ 2 @why/2;
+	}
+}
 .card-img {
 	width: 140px;
 	height: 185px;
 	background-image: url(../img/all-cards.jpg);
+	&.small {
+		width: 70px;
+		height: 92.5px;
+		background-image: url(../img/all-cards-sm.jpg)
+	}
 	&.SP11 {
-		background-position: -42px -30px;
+		.bgpos(-42px, -30px);
 	}
 	&.SP12 {
-		background-position: -194px -38px;
+		.bgpos(-194px, -38px);
 	}
 	&.SP14 {
-		background-position: -340px -40px;
+		.bgpos(-340px, -40px);
 	}
 	&.SP13 {
-		background-position: -476px -40px;
+		.bgpos(-476px, -40px);
 	}
 	&.SP15 {
-		background-position: -612px -40px;
+		.bgpos(-612px, -40px);
 	}
 	&.SP16 {
-		background-position: -762px -40px;
+		.bgpos(-762px, -40px);
 	}
 	&.JF11 {
-		background-position: -1186px -1048px;
+		.bgpos(-1186px, -1048px);
 	}
 	&.JF12 {
-		background-position: -478px -1050px;
+		.bgpos(-478px, -1050px);
 	}
 	&.JF13 {
-		background-position: -622px -1050px;
+		.bgpos(-622px, -1050px);
 	}
 	&.JF14 {
-		background-position: -906px -1052px;
+		.bgpos(-906px, -1052px);
 	}
 	&.JF21 {
-		background-position: -770px -1460px;
+		.bgpos(-770px, -1460px);
 	}
 	&.JF22 {
-		background-position: -1046px -1462px;
+		.bgpos(-1046px, -1462px);
 	}
 	&.JF31 {
-		background-position: -334px -2074px;
+		.bgpos(-334px, -2074px);
 	}
 	&.JH11 {
-		background-position: -32px -1254px;
+		.bgpos(-32px, -1254px);
 	}
 	&.JH31 {
-		background-position: -768px -1870px;
+		.bgpos(-768px, -1870px);
 	}
 	&.JE11 {
-		background-position: -336px -1052px;
+		.bgpos(-336px, -1052px);
 	}
 	&.JE12 {
-		background-position: -482px -1250px;
+		.bgpos(-482px, -1250px);
 	}
 	&.JE13 {
-		background-position: -336px -1250px;
+		.bgpos(-336px, -1250px);
 	}
 	&.JE21 {
-		background-position: -912px -1664px;
+		.bgpos(-912px, -1664px);
 	}
 	&.JE31 {
-		background-position: -913px -1874px;
+		.bgpos(-913px, -1874px);
 	}
 	&.JE32 {
-		background-position: -484px -2078px;
+		.bgpos(-484px, -2078px);
 	}
 	&.JG11 {
-		background-position: -1040px -1050px;
+		.bgpos(-1040px, -1050px);
 	}
 	&.JG21 {
-		background-position: -908px -1465px;
+		.bgpos(-908px, -1465px);
 	}
 	&.JG22 {
-		background-position: -1193px -1465px;
+		.bgpos(-1193px, -1465px);
 	}
 	&.JG31 {
-		background-position: -480px -1870px;
+		.bgpos(-480px, -1870px);
 	}
 }

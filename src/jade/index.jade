@@ -19,8 +19,8 @@ html(ng-app='mainApp')
 			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
-			ul.map
-				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
+			.map
+				.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 					span.space-arrow(ng-show='$index == currentPlayer.space' style='border-color: {{currentPlayer.color}}')
 			.row
 				+col(2)
@@ -73,17 +73,14 @@ html(ng-app='mainApp')
 					.current-user-corp
 						h1.alert.alert-info This is your corp
 				+col(2)
-					.row
-						+col(4)
-							button.btn.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
-						+col(4)
-							button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-disabled='!currentPlayer.notRecruited') Recruit
-						+col(4)
-							button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
+					.btn-list
+						button.btn.btn-sm.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
+						button.btn.btn-sm.btn-info(ng-click='addEvent("openRecruit")' ng-disabled='!currentPlayer.notRecruited') Recruit
+						button.btn.btn-sm.btn-primary(ng-click='addEvent("openBoard")') Board
 					h3 {{currentPlayer.name}} Cards in Hand
 					+show-cards('held', 'callPlayCard')
 					h3 {{currentPlayer.name}} Cards in Play
-							+show-cards('played')
+					+show-cards('played')
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
 		//- Modals should be used for reference only!

@@ -1,9 +1,16 @@
 body {
 	background-color: darkslategray;
 }
+.btn-list {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	padding: 0;
+	justify-content: space-between;
+}
 .container {
-	width: 1170px !important;
-	max-width: 1170px !important;
+	width: 1300px !important;
+	max-width: 1300px !important;
 	background: @gray-lightest;
 	padding: 20px;
 	.jumbotron {
@@ -19,6 +26,7 @@ body {
 #cursor {
 	transition: all ease 0.33s;
 	position: absolute;
+	// on top of everything except modals
 	z-index: 1000;
 }
 .active-player #cursor {
@@ -74,8 +82,10 @@ body {
 	border-color: blue;
 }
 .map {
-	list-style: none;
-	padding: 0;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	flex-direction: row-reverse;
 }
 ul.players {
 	list-style: none;
@@ -84,8 +94,6 @@ ul.players {
 .space {
 	height: 1.5em;
 	width: 1em;
-	margin: 0.3em;
-	float: right;
 	&.water {
 		background-color: blue;
 	}
