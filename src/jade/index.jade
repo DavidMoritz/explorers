@@ -19,41 +19,12 @@ html(ng-app='mainApp')
 			img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')
 			header.hide
 				h1 Explorers
-			.jumbotron
-				h2.text-center Welcome to Explorers!
-				div(ng-hide='currentUser')
-					button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
-				h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
-				+notify()
 			ul.map
 				li.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 					span.space-arrow(ng-show='$index == currentPlayer.space' style='border-color: {{currentPlayer.color}}')
-			.pre-game.row(ng-show='currentUser.uid && !activeGame.id')
-				+col(6)
-					h3 Choose a game:
-					ul
-						li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
-					h3 Or create a new one:
-					.btn.btn-success(ng-click='createNewGame()') Create new game
-				+col(6)
-					h3 Message List:
-					ul
-						li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
-					form(name='chatWindow' ng-submit='submitChat()')
-						input(ng-model='ff.chat' placeholder='respond to chat')
-						button(ng-hide='true' type='submit')
-			.pre-game.row(ng-show='activeGame.id && !currentPlayer')
-				+col(6)
-					h3 Players:
-					ul
-						li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
-					button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
-			.game-started.row(ng-show='currentPlayer')
-				+col(6)
+			.row
+				+col(2)
 					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!currentPlayer.takenMainAction') End Turn
-					button.btn.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
-					button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-disabled='!currentPlayer.notRecruited') Recruit
-					button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
 					//- Restart turn is not currently working
 					//- button.btn.btn-danger(ng-click='addEvent("restartTurn")') Restart Turn
 					h4 All Players
@@ -72,13 +43,50 @@ html(ng-app='mainApp')
 							h6 Indians:
 							ul
 								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-				+col(6)
+				+col(8)
+					.jumbotron
+						h2.text-center Welcome to Explorers!
+						div(ng-hide='currentUser')
+							button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
+						h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
+						+notify()
+					.pre-game.row(ng-show='currentUser.uid && !activeGame.id')
+						+col(6)
+							h3 Choose a game:
+							ul
+								li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+							h3 Or create a new one:
+							.btn.btn-success(ng-click='createNewGame()') Create new game
+						+col(6)
+							h3 Message List:
+							ul
+								li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
+							form(name='chatWindow' ng-submit='submitChat()')
+								input(ng-model='ff.chat' placeholder='respond to chat')
+								button(ng-hide='true' type='submit')
+					.pre-game.row(ng-show='activeGame.id && !currentPlayer')
+						+col(6)
+							h3 Players:
+							ul
+								li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
+							button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
+					.current-user-corp
+						h1.alert.alert-info This is your corp
+				+col(2)
+					.row
+						+col(4)
+							button.btn.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
+						+col(4)
+							button.btn.btn-info(ng-click='addEvent("openRecruit")' ng-disabled='!currentPlayer.notRecruited') Recruit
+						+col(4)
+							button.btn.btn-primary(ng-click='addEvent("openBoard")') Board
 					h3 {{currentPlayer.name}} Cards in Hand
 					+show-cards('held', 'callPlayCard')
 					h3 {{currentPlayer.name}} Cards in Play
-					+show-cards('played')
+							+show-cards('played')
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
+		//- Modals should be used for reference only!
 		script#strengthModal(type='text/ng-template')
 			.modal-header
 				+close()
