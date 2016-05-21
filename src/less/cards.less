@@ -1,12 +1,16 @@
-ul.cards {
+.cards {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: space-around;
 }
 .active-card {
 	border-left: solid 1px gray;
 }
 .played-card {
 	border: red dashed 4px !important;
+	&.small {
+		border-width: 2px !important;
+	}
 }
 .held-card {
 	cursor: pointer;
@@ -22,6 +26,9 @@ ul.cards {
 	margin: 3px;
 	border-radius: 5px;
 	padding: 5px;
+	&.small {
+		padding: 2px;
+	}
 	.card-name {
 		font-size: 16px;
 		margin: 0 0 12px 27px;
@@ -44,6 +51,11 @@ ul.cards {
 			white-space: nowrap;
 			text-align: center;
 			border-radius: 13px;
+			&.small {
+				min-width: 7px;
+				padding: 2px 5px;
+				font-size: 10px;
+			}
 		}
 	}
 	&.fur {

@@ -9,6 +9,7 @@ body {
 	justify-content: space-between;
 }
 .container {
+	margin-top: 40px;
 	width: 1300px !important;
 	max-width: 1300px !important;
 	background: @gray-lightest;
@@ -18,10 +19,29 @@ body {
 		padding-right: 60px;
 	}
 }
+.main-content {
+	display: flex;
+	flex-direction: column;
+	min-height: 500px;
+	justify-content: space-between;
+}
 .space-arrow {
-    border: solid 7px white;
+	position: absolute;
+	display: none;
+	right: -5px;
+    border: solid 12px white;
     border-left-color: transparent !important;
     border-right-color: transparent !important;
+    &.camp&:not(.scout) {
+    	border-top-color: transparent !important;
+    	top: 4px;
+    	display: block;
+    }
+    &.scout {
+    	border-bottom-color: transparent !important;
+		bottom: 4px;
+		display: block;
+    }
 }
 #cursor {
 	transition: all ease 0.33s;
@@ -33,49 +53,51 @@ body {
 	// ONLY FOR ACTIVE PLAYER
 	display: none;
 }
+.bgsprite(@ex) {
+	background-position: @ex 0;
+	&.small {
+		background-position: @ex/3*2 0;
+	}
+	&.symbol {
+		background-position: @ex -30px;
+		&.small {
+			background-position: @ex/3*2 -22px;
+		}
+	}
+}
 .sprite {
 	background-image: url(../img/sprite_alpha.png);
 	display: inline-block;
 	height: 27px;
 	width: 27px;
+	&.small {
+		background-image: url(../img/sprite_alpha-sm.png);
+		height: 16px;
+		width: 18px;
+	}
 	&.white {
 		background-image: url(../img/sprite_white.png);
+		&.small {
+			background-image: url(../img/sprite_white-sm.png);
+		}
 	}
 	&.wood {
-		background-position: 0 0;
-		&.symbol {
-			background-position: 0 -30px;
-		}
+		.bgsprite(0);
 	}
 	&.fur {
-		background-position: -30px 0;
-		&.symbol {
-			background-position: -30px -30px;
-		}
+		.bgsprite(-30px);
 	}
 	&.meat {
-		background-position: -60px 0;
-		&.symbol {
-			background-position: -60px -30px;
-		}
+		.bgsprite(-60px);
 	}
 	&.equipment {
-		background-position: -90px 0;
-		&.symbol {
-			background-position: -90px -30px;
-		}
+		.bgsprite(-90px);
 	}
 	&.canoe {
-		background-position: -120px 0;
-		&.symbol {
-			background-position: -120px -30px;
-		}
+		.bgsprite(-120px);
 	}
 	&.horse {
-		background-position: -150px 0;
-		&.symbol {
-			background-position: -150px -30px;
-		}
+		.bgsprite(-150px);
 	}
 }
 .ability {
@@ -89,9 +111,10 @@ body {
 }
 ul.players {
 	list-style: none;
-	padding: none;
+	padding: 0;
 }
 .space {
+	position: relative;
 	height: 1.5em;
 	width: 1em;
 	&.water {

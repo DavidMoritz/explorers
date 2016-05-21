@@ -34,6 +34,7 @@ mainApp.factory('EventFactory', [
 							idx: $s.allPlayers.length + 1
 						}));
 					});
+					$s.user = _.find($s.allPlayers, {uid: $s.currentUser.uid});
 					EF.changeCurrentPlayer(resolve);
 				});
 			},

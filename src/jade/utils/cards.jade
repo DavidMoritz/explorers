@@ -4,12 +4,29 @@ mixin show-cards(type, click)
 	- repeat = 'card in currentPlayer.deck.' + type + 'Cards track by card.id'
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
 	- click = click ? click + '(card)' : ''
-	ul.cards
-		li.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
+	.cards
+		.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
 			.card-info
 				span.strength {{card.strength}}
 				i.sprite.symbol(class='{{card.symbol}}')
 			.card-name {{card.name}}
+
+mixin view-card()
+	.card-img(class='{{card.symbol}} {{card.id}} held-card' title='{{card.name}}: {{card.description}}')
+		.card-info
+			span.strength {{card.strength}}
+			i.sprite.symbol(class='{{card.symbol}}')
+		.card-name {{card.name}}
+
+mixin show-small-cards(type, person)
+	- items = ['{{card.symbol}}','{{card.id}}']
+	- items.push(type + '-card')
+	- repeat = 'card in ' + person + '.deck.' + type + 'Cards track by card.id'
+	.cards
+		.card-img.small(ng-repeat=repeat class=items.join(' ') ng-click='viewCard(card)' title='{{card.name}}: {{card.description}}')
+			.card-info
+				span.strength.small {{card.strength}}
+				i.sprite.symbol.small(class='{{card.symbol}}')
 
 mixin active-card()
 	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{currentPlayer.deck.activeCard.name}}: {{currentPlayer.deck.activeCard.description}}')

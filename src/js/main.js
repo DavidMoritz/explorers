@@ -249,6 +249,39 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
+		$s.viewCard = card => {
+			$s.modalInstance = $uibM.open({
+				animation: true,
+				templateUrl: 'viewcardModal',
+				controller: 'ViewCardModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					card: () => card
+				}
+			});
+		};
+
+		$s.viewPlayer = player => {
+			$s.modalInstance = $uibM.open({
+				animation: true,
+				templateUrl: 'viewplayerModal',
+				controller: 'ViewPlayerModalInstanceCtrl',
+				size: 'lg',
+				resolve: {
+					player: () => player
+				}
+			});
+		};
+
+		$s.viewRecruit = card => {
+			$s.modalInstance = $uibM.open({
+				animation: true,
+				templateUrl: 'viewrecruitModal',
+				controller: 'ViewRecruitModalInstanceCtrl',
+				size: 'lg'
+			});
+		};
+
 		$s.callPlayCard = card => {
 			if (!$s.currentPlayer.takenMainAction) {
 				$s.addEvent({

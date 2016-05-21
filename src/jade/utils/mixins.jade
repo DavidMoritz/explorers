@@ -15,7 +15,7 @@ mixin notify()
 	.alert(class='alert-{{activeGame.message.type}}' ng-show='activeGame.message') {{activeGame.message.text}}
 
 mixin close()
-	.close(ng-click='addEvent("closeModal")') &times;
+	.close(ng-click='cancel()') &times;
 
 mixin cursor()
 	img#cursor.img.img-responsive(src='img/hand.png' ng-style='cursor' ng-hide='currentUser.uid == currentPlayer.uid')

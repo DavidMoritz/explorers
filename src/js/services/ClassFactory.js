@@ -134,7 +134,8 @@ mainApp.factory('ClassFactory', [
 					this.color = options.color || allColors.splice(-1)[0];
 					this.corp = new ClassFactory.Corp();
 					this.deck = new ClassFactory.Deck();
-					this.space = findStartSpace();
+					this.scout = findStartSpace();
+					this.camp = findStartSpace();
 					this.idx = options.idx;
 					this.notCamped = true;
 					this.notRecruited = true;
@@ -162,11 +163,15 @@ mainApp.factory('ClassFactory', [
 					this.notCamped = false;
 					this.corp.optimize();
 
-					if (this.space <= this.cost) {
-						this.space = 0;
+					if (this.scout <= this.cost) {
+						this.scout = 0;
 					} else {
-						this.space -= this.cost;
+						this.scout -= this.cost;
 						//this.checkForScouts(-1);
+					}
+
+					if (this.camp < this.scout) {
+						this.camp = this.scout;
 					}
 
 					this.deck.reset();
@@ -250,12 +255,12 @@ mainApp.factory('ClassFactory', [
 					//this.checkForScouts(1);
 				}
 				travel(terrain) {
-					var space = this.space;
+					var space = this.scout;
 					var nextSpace = MAP.map[space + 1];
 
 					if (nextSpace.terrain == terrain || nextSpace.terrain == 'mixed') {
 						console.log('You moved 1 space on to ' + nextSpace.terrain + ' terrain');
-						this.space++;
+						this.scout++;
 					} else {
 						console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
 					}
@@ -279,11 +284,11 @@ mainApp.factory('ClassFactory', [
 				}
 				// checkForScouts(direction) {
 				// 	var dupes = $s.allPlayers.filter(
-				// 		player => (player.name != this.name) && (player.space == this.space)
+				// 		player => (player.name != this.name) && (player.scout == this.scout)
 				// 	);
 
 				// 	if (dupes.length) {
-				// 		this.space += direction;
+				// 		this.scout += direction;
 				// 		this.checkForScouts(direction);
 				// 	}
 				// }
