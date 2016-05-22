@@ -135,13 +135,15 @@ mainApp.factory('ClassFactory', [
 					this.corp = new ClassFactory.Corp();
 					this.deck = new ClassFactory.Deck();
 					this.scout = findStartSpace();
-					this.camp = findStartSpace();
+					this.baseCamp = findStartSpace();
 					this.idx = options.idx;
 					this.notCamped = true;
 					this.notRecruited = true;
 					this.takenMainAction = false;
 					this.recruitPayment = 0;
-					this.addIndian();
+					this.collectables = [];
+					this.payment = [];
+					this.corp.indianBoats[0].content.push(IF.indian());
 				}
 				get cost() {
 					return this.deck.cost + this.corp.cost;
@@ -154,10 +156,13 @@ mainApp.factory('ClassFactory', [
 				}
 				endTurn() {
 					this.playStrength = 0;
+					this.collectables = [];
+					this.payment = [];
 					this.deck.activeCardId = '';
 					this.notCamped = true;
 					this.notRecruited = true;
 					this.takenMainAction = false;
+					this.strengthAdded = false;
 				}
 				camp() {
 					this.notCamped = false;
@@ -170,30 +175,32 @@ mainApp.factory('ClassFactory', [
 						//this.checkForScouts(-1);
 					}
 
-					if (this.camp < this.scout) {
-						this.camp = this.scout;
+					if (this.baseCamp < this.scout) {
+						this.baseCamp = this.scout;
 					}
 
 					this.deck.reset();
 					this.corp.reset();
 				}
-				goBack(time) {
-				}
-				useAbility(idx) {
-					var ability = this.deck.activeCard.abilities[idx];
+				useAbility(options) {
+					var ability = this.deck.activeCard.abilities[options.idx];
 
-					if (this.strengthAvailable) {
-						if (ability.cost) {
-							if (this.payCost(ability.cost)) {
-								this.deck.activeCard.plays++;
-								this.benefit(ability.benefit);
-							} else {
-								$s.notify('you cannot aford that ability', 'warning');
-							}
-						} else {
+					if (!this.strengthAvailable) {
+						return;
+					} else if (ability.collect) {
+						ability.benefit[ability.collect] = options[ability.collect];
+					}
+
+					if (ability.cost) {
+						if (this.payCost(ability.cost)) {
 							this.deck.activeCard.plays++;
 							this.benefit(ability.benefit);
+						} else {
+							$s.notify('you cannot aford that ability', 'warning');
 						}
+					} else {
+						this.deck.activeCard.plays++;
+						this.benefit(ability.benefit);
 					}
 				}
 				playCard(card) {
@@ -206,14 +213,6 @@ mainApp.factory('ClassFactory', [
 					this.deck.activeCardId = card.id;
 
 					return true;
-				}
-				addIndian(added) {
-					this.corp.indianBoats.map(boat => {
-						if (boat.content.length < boat.capacity && !added) {
-							boat.content.push(IF.indian());
-							added = true;
-						}
-					});
 				}
 				payCost(cost) {
 					var tempCost = _.clone(cost);
@@ -246,7 +245,7 @@ mainApp.factory('ClassFactory', [
 							if (item) {
 								this.collect(item);
 							} else if (key === 'indian') {
-								this.addIndian();
+								this.collect(IF.indian());
 							} else if (key === 'mountain' || key === 'water') {
 								this.travel(key);
 							}
@@ -265,17 +264,8 @@ mainApp.factory('ClassFactory', [
 						console.log('You did not move off of your ' + MAP.map[space].terrain + ' terrain');
 					}
 				}
-				collect(item, added) {
-					this.corp.supplyBoats.map(boat => {
-						if (boat.content.length < boat.capacity && !added) {
-							boat.content.push(_.clone(item));
-							added = true;
-						}
-					});
-
-					if (!added) {
-						$s.notify('no space for that item', 'warning');
-					}
+				collect(item) {
+					this.collectables.push(_.clone(item));
 				}
 				checkEquipmentForRecruit(equipmentNeed) {
 					var supplyEquipment = this.corp.count('equipment');

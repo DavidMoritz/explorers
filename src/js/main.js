@@ -33,9 +33,9 @@ mainApp.controller('MainCtrl', [
 			var id = $s.activeGame.id;
 			$s.currentPlayer = null;
 			$s.allPlayers = [];
-			$s.activeGame = null;
-			$s.joinActiveGame({id: id});
+			$s.activeGame = {};
 			$s.restartTurn = false;
+			$s.joinActiveGame({id: id});
 		}
 
 		function updateGame() {
@@ -43,9 +43,9 @@ mainApp.controller('MainCtrl', [
 				restartTurn();
 			} else if ($s.eventTracker < $s.activeGame.events.length) {
 				$s.activeGame.events.reduce(prevEvent => {
-					return prevEvent.then(() => {
+					return prevEvent.then(_ => {
 						return runEvent(++$s.eventTracker);
-					}, () => $s);
+					}, _ => $s);
 				}, runEvent($s.eventTracker));
 			}
 		}
@@ -54,7 +54,7 @@ mainApp.controller('MainCtrl', [
 			if (idx >= $s.activeGame.events.length) {
 				$s.eventTracker = $s.activeGame.events.length;
 				// return meaningless function to avoid error
-				return {then: () => 0};
+				return {then: _ => 0};
 			}
 			var event = $s.activeGame.events[idx];
 			var eventFunction = EF[event.name];
@@ -95,7 +95,7 @@ mainApp.controller('MainCtrl', [
 		function createNewUser(authData) {
 			var allUsers = FF.getFBObject('users');
 
-			allUsers.$loaded(() => {
+			allUsers.$loaded(_ => {
 				allUsers[authData.uid] = {
 					createdDate: moment().format('YYYY-MM-DD HH:mm:ss'),
 					name: authData.facebook.displayName,
@@ -122,6 +122,37 @@ mainApp.controller('MainCtrl', [
 			$s.cursor.top = $s.activeGame.cursor.top + 'px';
 		}
 
+		function openModal(name, resolve) {
+			$s.modalInstance = $uibM.open({
+				animation: true,
+				templateUrl: name.toLowerCase() + 'Modal',
+				controller: name + 'ModalInstanceCtrl',
+				size: 'lg',
+				resolve: resolve
+			});
+		}
+
+		function countSymbols(type) {
+			var searchThesePlayers = [$s.currentPlayer.idx];
+
+			if ($s.currentPlayer.idx == $s.allPlayers.length) {
+				searchThesePlayers.push(1);
+				searchThesePlayers.push($s.currentPlayer.idx - 1);
+			} else if ($s.currentPlayer.idx == 1) {
+				searchThesePlayers.push($s.allPlayers.length);
+				searchThesePlayers.push($s.currentPlayer.idx + 1);
+			} else {
+				searchThesePlayers.push($s.currentPlayer.idx - 1);
+				searchThesePlayers.push($s.currentPlayer.idx + 1);
+			}
+
+			var players = $s.allPlayers.filter(player => searchThesePlayers.indexOf(player.idx) !== -1);
+			
+			return players.reduce((count, player) => {
+				return count + player.deck.playedCards.filter(card => card.symbol == type).length;
+			}, 0);
+		}
+
 		//	initialize scoped variables
 		_.assign($s, {
 			allItems: IF.allItems,
@@ -130,18 +161,67 @@ mainApp.controller('MainCtrl', [
 				gameName: 'newGame'
 			},
 			map: MF.map,
+			state: 'welcome',
 			eventTracker: 0,
 			chatList: [],
 			recruitCard: {},
 			activeGame: {},
 			modalInstance: {
-				close: () => 0
+				close: _ => 0
 			},
 			cursor: {
 				left: '0px',
 				top: '0px'
-			}
+			},
+			boardSpaces: CF.boardSpaces.map(space => {
+				space.contents = [];
+				space.max = space.max || 1;
+				space.allow = space.allow || 1;
+
+				return space;
+			})
 		});
+
+		$s.dragBoatSuccess = (boat, idx) => {
+			$s.addEvent({
+				name: 'removeItem',
+				idx: idx,
+				boatId: boat.id,
+				playerId: $s.user.uid
+			});
+		};
+
+		$s.dragCollectSuccess = idx => {
+			$s.addEvent({
+				name: 'collectItem',
+				idx: idx
+			});
+		};
+
+		$s.dropBoatSuccess = (boat, item) => {
+			$s.addEvent({
+				name: 'addItem',
+				boatId: boat.id,
+				playerId: $s.user.uid,
+				item: item.name
+			});
+		};
+
+		$s.validSupplyDrop = _ => {
+			return $('.dragging').find('.indian').length === 0;
+		};
+
+		$s.validIndianDrop = _ => {
+			return $('.dragging').find('.indian').length;
+		};
+
+		$s.userTurn = _ => {
+			if ($s.currentUser && $s.currentPlayer) {
+				return $s.currentUser.uid == $s.currentPlayer.uid;
+			}
+
+			return false;
+		};
 
 		$s.addEvent = event => {
 			if (typeof event == 'string') {
@@ -151,7 +231,7 @@ mainApp.controller('MainCtrl', [
 			$s.activeGame.events.push(event);
 		};
 
-		$s.createNewGame = () => {
+		$s.createNewGame = _ => {
 			var rand = Math.random().toString(36).substring(2, 10);
 			allGames.$ref().update({[rand]: {
 				id: rand,
@@ -167,7 +247,7 @@ mainApp.controller('MainCtrl', [
 					left: 0,
 					top: 0
 				}
-			}}, () => {
+			}}, _ => {
 				$s.joinActiveGame({id: rand});
 			});
 		};
@@ -180,7 +260,7 @@ mainApp.controller('MainCtrl', [
 			var activeGame = FF.getFBObject(`allGames/${game.id}`);
 			activeGame.$bindTo($s, 'activeGame');
 
-			activeGame.$loaded(() => {
+			activeGame.$loaded(_ => {
 				if (!$s.activeGame.playerIds) {
 					$s.activeGame.playerIds = [];
 				}
@@ -197,16 +277,14 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.moveCursor = e => {
-			var isUser = $s.currentPlayer && $s.currentUser.uid == $s.currentPlayer.uid;
-
-			if ($s.activeGame && $s.activeGame.cursor && isUser) {
+			if ($s.userTurn()) {
 				var offset = Math.max(($('body').width() - $('.container').width()) / 2, 0);
 				$s.activeGame.cursor.left = e.pageX - offset + 2;
 				$s.activeGame.cursor.top = e.pageY + 2;
 			}
 		};
 
-		$s.submitChat = () => {
+		$s.submitChat = _ => {
 			if (!$s.ff.chat.length) {
 				return;
 			}
@@ -216,26 +294,13 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.openModal = (name, resolve) => {
-			//$s.modalInstance.close();
-			$s.modalInstance = $uibM.open({
-				animation: true,
-				templateUrl: name.toLowerCase() + 'Modal',
-				controller: name + 'ModalInstanceCtrl',
-				size: 'lg'
-			});
-
-			$s.modalInstance.opened.then(resolve);
-
-			$s.modalInstance.result.then(() => 0, () => $s.addEvent('closeModal'));
-		};
-
-		$s.fbLogin = () => {
+		$s.fbLogin = _ => {
 			FF.facebookLogin(err => {
 				console.log('There was an error', err);
 				// ** TEMPORARY FOR DEV ***
 				console.log('Dev login: David Moritz');
 				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
+				$s.state = 'joinGame';
 				$s.chatList = [];
 			}, authData => {
 				console.log('Authenticated successfully with payload:', authData);
@@ -244,50 +309,130 @@ mainApp.controller('MainCtrl', [
 					if (!user.uid) {
 						createNewUser(authData);
 					}
+					$s.state = 'joinGame';
 				});
 				$s.chatList = [];
 			});
 		};
 
-		$s.viewCard = card => {
-			$s.modalInstance = $uibM.open({
-				animation: true,
-				templateUrl: 'viewcardModal',
-				controller: 'ViewCardModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					card: () => card
-				}
-			});
-		};
-
-		$s.viewPlayer = player => {
-			$s.modalInstance = $uibM.open({
-				animation: true,
-				templateUrl: 'viewplayerModal',
-				controller: 'ViewPlayerModalInstanceCtrl',
-				size: 'lg',
-				resolve: {
-					player: () => player
-				}
-			});
-		};
-
-		$s.viewRecruit = card => {
-			$s.modalInstance = $uibM.open({
-				animation: true,
-				templateUrl: 'viewrecruitModal',
-				controller: 'ViewRecruitModalInstanceCtrl',
-				size: 'lg'
-			});
-		};
-
 		$s.callPlayCard = card => {
-			if (!$s.currentPlayer.takenMainAction) {
+			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				$s.addEvent({
 					name: 'playCard',
 					cardId: card.id
 				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.addStrength = card => {
+			if ($s.userTurn() && !$s.currentPlayer.strengthAdded) {
+				$s.addEvent({
+					name: 'addStrength',
+					cardId: card.id
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.useAbility = idx => {
+			if ($s.userTurn()) {
+				$s.addEvent({
+					name: 'useAbility',
+					idx: idx,
+					wood: countSymbols('wood'),
+					equipment: countSymbols('equipment'),
+					fur: countSymbols('fur'),
+					meat: countSymbols('meat')
+				});
+			}
+		};
+
+		$s.addIndian = _ => {
+			if ($s.userTurn()) {
+				$s.addEvent('addIndianToStrength');
+			}
+		};	
+
+		$s.recruitThisCard = card => {
+			if ($s.userTurn()) {
+				$s.addEvent({
+					name: 'openRecruitPayment',
+					cardId: card.id,
+					strength: card.strength,
+					fur: $s.journal.indexOf(card) + 1
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.recruitPayment = card => {
+			if ($s.userTurn()) {
+				if (card) {
+					$s.addEvent({
+						name: 'recruitPayment',
+						cardId: card.id
+					});
+				} else {
+					$s.addEvent('recruitPayment');
+				}
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.clickBoardSpace = space => {
+			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
+				if ($s.currentPlayer.indianCount) {
+					if (space.contents.length < space.max) {
+						space.contents.push($s.currentPlayer.corp.payIndian());
+						$s.currentPlayer.takenMainAction = true;
+						$s.addEvent(space.event);
+					} else {
+						$s.notify('That space is full');
+					}			
+				} else {
+					$s.notify('You need an indian to use that space');
+				}
+			}
+		};
+
+		$s.viewCard = card => {
+			openModal('ViewCard', {
+				card: card
+			});
+		};
+
+		$s.viewPlayer = player => {
+			openModal('ViewPlayer', {
+				player: player
+			});
+		};
+
+		$s.viewBoard = _ => {
+			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
+				if ($s.state == 'board') {
+					$s.addEvent('backToPlayCard');
+				} else {
+					$s.addEvent('openBoard');
+				}
+			} else {
+				openModal('ViewBoard');
+			}
+		};
+
+		$s.viewRecruit = _ => {
+			if ($s.userTurn() && $s.currentPlayer.notRecruited) {
+				if ($s.state == 'recruit') {
+					$s.addEvent('backToPlayCard');
+				} else {
+					$s.addEvent('openRecruit');
+				}
+			} else {
+				openModal('ViewRecruit');
 			}
 		};
 
@@ -300,15 +445,15 @@ mainApp.controller('MainCtrl', [
 				type: type
 			};
 
-			$s.cancelMessage = setTimeout(() => {
+			$s.cancelMessage = setTimeout(_ => {
 				$s.activeGame.message = {};
-			}, 10000);
+			}, 4000);
 		};
 
 		// grab all the games and make sure Firebase is working!
 		window.allGames = FF.getFBObject('allGames');
 		allGames.$bindTo($s, 'allGames');
-		allGames.$loaded(() => {
+		allGames.$loaded(_ => {
 			$s.notify('Firebase is working!');
 			$('body').addClass('facebook-available');
 			init();

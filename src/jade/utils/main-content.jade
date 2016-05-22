@@ -1,0 +1,72 @@
+mixin welcome()
+	.jumbotron(ng-show='state == "welcome"')
+		h2.text-center Welcome to Explorers!
+		div(ng-hide='currentUser')
+			button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
+		h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
+
+mixin joinGame()
+	.pre-game.row(ng-show='state == "joinGame"')
+		+col(6)
+			h3 Choose a game:
+			ul
+				li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+			h3 Or create a new one:
+			.btn.btn-success(ng-click='createNewGame()') Create new game
+		+col(6)
+			h3 Message List:
+			ul.well
+				li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
+			form(name='chatWindow' ng-submit='submitChat()')
+				input(ng-model='ff.chat' placeholder='respond to chat')
+				button(ng-hide='true' type='submit')
+
+mixin startGame()
+	.pre-game.row(ng-show='state == "startGame"')
+		+col(6)
+			h3 Players:
+			ul
+				li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
+			button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
+
+mixin playCard()
+	div(ng-show='state == "playCard"')
+		+show-cards('held', 'callPlayCard')
+
+mixin strength()
+	div(ng-show='state == "strength"')
+		h3.pull-left Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
+		.btn.btn-danger.btn-indian(ng-click='addIndian()') Add Indian&nbsp;
+			span.badge {{currentPlayer.indianCount}}
+		.row
+			+col(8)
+				+show-cards('held', 'addStrength')
+			+col(null, 4, 4, 4, 4, 'active-card')
+				+active-card()
+			
+mixin recruit()
+	.journal(ng-show='state == "recruit"')
+		h3 Recruit for the team:
+		+show-cards('recruit', 'recruitThisCard')
+			
+mixin recruitPayment()
+	div(ng-show='state == "recruitPayment"')
+		h3 Payment for new Recruit?
+		.row
+			+col(8)
+				+show-cards('held', 'recruitPayment')
+				.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment()') Use {{recruitCard.strength}} equipment
+			+col(null, 4, 4, 4, 4, 'active-card')
+				+recruit-card()
+			
+mixin board(override)
+	- show = override ? 'true' : 'state == "board"'
+	div(ng-show=show)
+		h3 Board Spaces:
+		.abilities
+			.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)' title='{{space.description}}' ng-disabled='space.contents.length == space.max')
+				p Event: {{space.event}}
+
+mixin win()
+	div(ng-show='state == "win"')
+		h3 {{currentPlayer.name}} is the winner!

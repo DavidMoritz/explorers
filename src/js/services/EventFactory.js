@@ -1,27 +1,42 @@
 mainApp.factory('EventFactory', [
 	'BoatFactory',
 	'CardFactory',
+	'ItemFactory',
 	'FirebaseFactory',
 	'ClassFactory',
-	function EventFactory(BF, CF, FF, Class) {
+	function EventFactory(BF, CF, IF, FF, Class) {
 		'use strict';
+		
+		function findBoat(ref) {
+			var player = _.find($s.allPlayers, {uid: ref.playerId});
+
+			return _.find(player.corp.supplyBoats, {id: ref.boatId}) || _.find(player.corp.indianBoats, {id: ref.boatId});
+		}
+
 		/**
 		 * Note: $s needs to be defined. This can be done by setting this entire
 		 * factory as a property of $s and calling the methods from that property
 		 */
-
 		var EF = {
 			gameCreated: resolve => {
+				$s.state = 'startGame';
 				resolve();
 			},
 			restartTurn: resolve => {
-				// not currently working
+				// not currently working because we can't have all the users splicing the activeGame.events asynchonously
 				var idx = _.findLastIndex($s.activeGame.events, e => e.name == 'changeCurrentPlayer' || e.name == 'startGame') + 1;
-				setTimeout(() => {
+
+				if (idx == $s.activeGame.events.length - 2) {
 					$s.activeGame.events.splice(idx);
-					$s.restartTurn = true;
 					resolve();
-				}, 1000);
+				} else {
+					setTimeout(_ => {
+						$s.activeGame.events.splice(idx);
+						$s.restartTurn = true;
+						$s.state = 'playCard';
+						resolve();
+					}, 1000);
+				}
 			},
 			startGame: resolve => {
 				var users = FF.getFBObject('users');
@@ -38,19 +53,24 @@ mainApp.factory('EventFactory', [
 					EF.changeCurrentPlayer(resolve);
 				});
 			},
+			backToPlayCard: resolve => {
+				$s.state = 'playCard';
+				resolve();
+			},
 			// if a function uses `this` for the event, it cannot be an arrow function
 			playCard: function(resolve) {
 				var card = $s.currentPlayer.deck.findById(this.cardId);
-				console.log(`Event ${$s.eventTracker}:`, $s);
 
 				if ($s.currentPlayer.playCard(card)) {
-					$s.openModal('Strength', resolve);
+					console.log(`Event ${$s.eventTracker}:`, $s);
+					$s.state = 'strength';
+					resolve();
 				} else {
 					resolve();
 				}
 			},
 			useAbility: function(resolve) {
-				$s.currentPlayer.useAbility(this.idx);
+				$s.currentPlayer.useAbility(this);
 				resolve();
 			},
 			addStrength: function(resolve) {
@@ -59,6 +79,7 @@ mainApp.factory('EventFactory', [
 				if ($s.currentPlayer.playStrength < 3) {
 					$s.currentPlayer.playStrength += card.strength;
 					$s.currentPlayer.deck.play(card);
+					$s.currentPlayer.strengthAdded = true;
 
 					if ($s.currentPlayer.playStrength > 3) {
 						$s.currentPlayer.playStrength = 3;
@@ -83,6 +104,12 @@ mainApp.factory('EventFactory', [
 			},
 			camp: resolve => {
 				$s.currentPlayer.camp();
+
+				if ($s.map[$s.currentPlayer.baseCamp].special == 'finish') {
+					$s.state = 'win';
+				} else {
+					$s.state = 'playCard';
+				}
 				resolve();
 			},
 			recruitCard: function(resolve) {
@@ -96,6 +123,7 @@ mainApp.factory('EventFactory', [
 				card.plays = 0;
 
 				$s.currentPlayer.deck.cards.push(card);
+				$s.state = 'playCard';
 				resolve();
 			},
 			closeModal: resolve => {
@@ -103,13 +131,15 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			openRecruit: resolve => {
-				$s.openModal('Recruit', resolve);
+				$s.state = 'recruit';
+				resolve();
 			},
 			openRecruitPayment: function(resolve) {
 				if ($s.currentPlayer.checkEquipmentForRecruit(this.strength)) {
 					if ($s.currentPlayer.payCost({fur: this.fur})) {
 						$s.recruitCard = _.find($s.journal, {id: this.cardId});
-						$s.openModal('RecruitPayment', resolve);
+						$s.state = 'recruitPayment';
+						resolve();
 					} else {
 						$s.notify('you do not have enough fur.', 'danger');
 						resolve();
@@ -120,7 +150,8 @@ mainApp.factory('EventFactory', [
 				}
 			},
 			openBoard: resolve => {
-				$s.openModal('Board', resolve);
+				$s.state = 'board';
+				resolve();
 			},
 			recruitPayment: function(resolve) {
 				var payment = {
@@ -133,11 +164,13 @@ mainApp.factory('EventFactory', [
 					$s.currentPlayer.deck.remove(card);
 				}
 
+				$s.recruitCard.plays = 0;
 				$s.currentPlayer.payCost(payment);
 				$s.currentPlayer.deck.add($s.recruitCard);
 				$s.currentPlayer.notRecruited = false;
 				_.remove($s.journal, $s.recruitCard);
 				$s.recruitCard = null;
+				$s.state = 'playCard';
 				resolve();
 			},
 			addIndianFromSupply: resolve => {
@@ -156,6 +189,7 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.currentPlayer = $s.allPlayers[0];
 				}
+				$s.state = 'playCard';
 				$s.activeGame.message = {};
 				EF.closeModal(resolve);
 			},
@@ -241,6 +275,23 @@ mainApp.factory('EventFactory', [
 				} else {
 					$s.notify('You cannot afford a this space');
 				}
+				resolve();
+			},
+			removeItem: function(resolve) {
+				var boat = findBoat(this);
+
+				boat.content.splice(this.idx, 1);
+				resolve();
+			},
+			collectItem: function(resolve) {
+				$s.currentPlayer.collectables.splice(this.idx, 1);
+				resolve();
+			},
+			addItem: function(resolve) {
+				var boat = findBoat(this),
+					item = _.find(IF.allItems, {name: this.item}) || IF.indian();
+
+				boat.content.push(_.clone(item));
 				resolve();
 			}
 		};

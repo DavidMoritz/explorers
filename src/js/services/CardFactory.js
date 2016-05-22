@@ -35,7 +35,7 @@ mainApp.factory('CardFactory', [
 					description: 'For 1 food, use any ability of a played card in front of any player. The action may only be executed once.'
 				}
 			],
-			startingCards: () => new Array(
+			startingCards: _ => new Array(
 				{
 					id: 'SP11',
 					name: 'Meriweather Lewis',
@@ -48,6 +48,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							canoe: 1
 						},
+						short: 'travel 4 water for 1 canoe',
 						benefit: {
 							water: 4
 						}
@@ -55,6 +56,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							meat: 1
 						},
+						short: 'travel 2 water for 1 food',
 						benefit: {
 							water: 2
 						}
@@ -62,6 +64,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							horse: 1
 						},
+						short: 'travel 2 mountain for 1 horse',
 						benefit: {
 							mountain: 2
 						}
@@ -75,6 +78,7 @@ mainApp.factory('CardFactory', [
 					played: false,
 					plays: 0,
 					abilities: [{
+						short: 'gather indians from the board and trash first card in journal.',
 						benefit: {
 							indian: 2
 						}
@@ -88,9 +92,9 @@ mainApp.factory('CardFactory', [
 					played: false,
 					plays: 0,
 					abilities: [{
-						benefit: {
-							meat: 2
-						}
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
 					}]
 				}, {
 					id: 'SP14',
@@ -101,9 +105,9 @@ mainApp.factory('CardFactory', [
 					played: false,
 					plays: 0,
 					abilities: [{
-						benefit: {
-							wood: 2
-						}
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
 					}]
 				}, {
 					id: 'SP15',
@@ -114,9 +118,9 @@ mainApp.factory('CardFactory', [
 					played: false,
 					plays: 0,
 					abilities: [{
-						benefit: {
-							equipment: 2
-						}
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
 					}]
 				}, {
 					id: 'SP16',
@@ -127,9 +131,9 @@ mainApp.factory('CardFactory', [
 					played: false,
 					plays: 0,
 					abilities: [{
-						benefit: {
-							fur: 2
-						}
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
 					}]
 				}
 			),
@@ -144,6 +148,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							canoe: 1
 						},
+						short: 'travel 5 water for 1 canoe.',
 						benefit: {
 							water: 5
 						}
@@ -158,6 +163,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							wood: 1
 						},
+						short: 'receive 1 canoe for 1 wood',
 						benefit: {
 							canoe: 1
 						}
@@ -165,6 +171,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							canoe: 1
 						},
+						short: 'receive 1 wood for 1 canoe',
 						benefit: {
 							wood: 1
 						}
@@ -179,6 +186,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							fur: 3
 						},
+						short: 'receive 1 horse for 3 fur.',
 						benefit: {
 							horse: 1
 						}
@@ -193,6 +201,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							wood: 2
 						},
+						short: 'travel 2 water for 2 wood.',
 						benefit: {
 							water: 2
 						}
@@ -208,6 +217,7 @@ mainApp.factory('CardFactory', [
 							wood: 1,
 							meat: 1
 						},
+						short: 'receive 2 canoes for 1 food and 1 wood.',
 						benefit: {
 							canoe: 2
 						}
@@ -222,6 +232,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							meat: 1
 						},
+						short: 'travel 3 water for 1 food.',
 						benefit: {
 							water: 3
 						}
@@ -239,6 +250,7 @@ mainApp.factory('CardFactory', [
 							meat: 1,
 							wood: 1
 						},
+						short: 'travel 4 mountain for 1 equipment, 1 fur, 1 food, and 1 wood.',
 						benefit: {
 							mountain: 4
 						}
@@ -254,6 +266,7 @@ mainApp.factory('CardFactory', [
 							canoe: 1,
 							meat: 1
 						},
+						short: 'travel 6 water for 1 canoe and 1 food.',
 						benefit: {
 							water: 6
 						}
@@ -268,6 +281,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							equipment: 1
 						},
+						short: 'receive 1 horse for 1 equipment.',
 						benefit: {
 							horse: 1
 						}
@@ -282,6 +296,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							meat: 1
 						},
+						short: 'receive 1 canoe for 1 food.',
 						benefit: {
 							canoe: 1
 						}
@@ -296,6 +311,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							wood: 2
 						},
+						short: 'travel 4 mountain for 1 equipment, 1 fur, 1 food, and 1 wood.',
 						benefit: {
 							mountain: 1
 						}
@@ -311,6 +327,7 @@ mainApp.factory('CardFactory', [
 							horse: 1,
 							fur: 1
 						},
+						short: 'travel 6 water for 1 canoe and 1 food.',
 						benefit: {
 							mountain: 3
 						}
@@ -325,6 +342,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							fur: 3
 						},
+						short: 'receive 1 horse for 1 equipment.',
 						benefit: {
 							mountain: 2
 						}
@@ -342,6 +360,7 @@ mainApp.factory('CardFactory', [
 							wood: 1,
 							meat: 1
 						},
+						short: 'receive 1 canoe for 1 food.',
 						benefit: {
 							water: 7
 						}
@@ -357,6 +376,7 @@ mainApp.factory('CardFactory', [
 							equipment: 2,
 							fur: 2
 						},
+						short: 'travel 3 mountain for 2 equipment and 2 fur.',
 						benefit: {
 							mountain: 3
 						}
@@ -371,6 +391,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							equipment: 2
 						},
+						short: 'travel 3 water for 2 equipment.',
 						benefit: {
 							water: 3
 						}
@@ -385,6 +406,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							equipment: 2
 						},
+						short: 'receive 1 horse for 2 equipment.',
 						benefit: {
 							horse: 1
 						}
@@ -399,6 +421,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							wood: 3
 						},
+						short: 'travel 4 water for 3 wood.',
 						benefit: {
 							water: 4
 						}
@@ -413,6 +436,7 @@ mainApp.factory('CardFactory', [
 						cost: {
 							canoe: 1
 						},
+						short: 'receive 2 canoes for 1 canoe.',
 						benefit: {
 							canoe: 2
 						}

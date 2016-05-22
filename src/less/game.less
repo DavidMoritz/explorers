@@ -25,23 +25,89 @@ body {
 	min-height: 500px;
 	justify-content: space-between;
 }
+.left-side {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 400px;
+}
+.player-holder {
+	padding: 5px;
+	margin-bottom: 5px;
+	.player {
+		font-size: 18px;
+		margin-bottom: 5px;
+		font-weight: bold;
+		text-overflow: ellipsis;
+		overflow-x: hidden;
+		white-space: nowrap;
+	}
+}
 .space-arrow {
 	position: absolute;
 	display: none;
 	right: -5px;
-    border: solid 12px white;
-    border-left-color: transparent !important;
-    border-right-color: transparent !important;
-    &.camp&:not(.scout) {
-    	border-top-color: transparent !important;
-    	top: 4px;
-    	display: block;
-    }
-    &.scout {
-    	border-bottom-color: transparent !important;
+	border: solid 12px white;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	&.camp {
+		border-top-color: transparent !important;
+		top: 4px;
+		display: block;
+	}
+	&.scout&:not(.camp) {
+		border-bottom-color: transparent !important;
 		bottom: 4px;
 		display: block;
-    }
+	}
+}
+.current-user-corp {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: space-around;
+	margin: 10px 0 -10px 0;
+	background-image: url(../img/corp-light.jpg);
+	background-repeat: no-repeat;
+	min-height: 192px;
+	background-position: 10px -22px;
+}
+.corp-boats {
+	display: flex;
+	flex-direction: column;
+	.current-user-corp & {
+		flex-direction: row;
+		justify-content: space-around;
+		width: 90%;
+		margin-top: 80px;
+	}
+	.boat {
+		padding: 5px;
+		border: solid 1px green;
+		margin: 2px;
+		border-radius: 5px;
+		min-height: 60px;
+		.current-user-corp & {
+			border: none;
+		}
+	}
+	.content {
+		display: flex;
+		flex-wrap: wrap;
+		.current-user-corp & {
+			justify-content: space-around;
+			width: 90px;
+			&.big {
+				width: 120px;
+			}
+		}
+		.item {
+			border: dashed 1px;
+			padding: 0 3px;
+			margin: 3px;
+			background-color: rgba(255,255,255,0.5);
+		}
+	}
 }
 #cursor {
 	transition: all ease 0.33s;
@@ -54,12 +120,12 @@ body {
 	display: none;
 }
 .bgsprite(@ex) {
-	background-position: @ex 0;
+	background-position: @ex*1-1 0;
 	&.small {
 		background-position: @ex/3*2 0;
 	}
 	&.symbol {
-		background-position: @ex -30px;
+		background-position: @ex*1-1 -31px;
 		&.small {
 			background-position: @ex/3*2 -22px;
 		}
@@ -68,8 +134,8 @@ body {
 .sprite {
 	background-image: url(../img/sprite_alpha.png);
 	display: inline-block;
-	height: 27px;
-	width: 27px;
+	height: 26px;
+	width: 26px;
 	&.small {
 		background-image: url(../img/sprite_alpha-sm.png);
 		height: 16px;
@@ -82,7 +148,7 @@ body {
 		}
 	}
 	&.wood {
-		.bgsprite(0);
+		.bgsprite(0px);
 	}
 	&.fur {
 		.bgsprite(-30px);
@@ -99,6 +165,35 @@ body {
 	&.horse {
 		.bgsprite(-150px);
 	}
+	&.indian {
+		.bgsprite(-123px);
+	}
+	&.indian.used {
+		.bgsprite(-152px);
+	}
+}
+.journal {
+	background-image: url(../img/journal.jpg);
+	background-size: cover;
+	background-position: 0 -33px;
+	background-repeat: no-repeat;
+	.modal-content &{
+		background-position: 0 -8px;
+	}
+	h3 {
+		position: relative;
+		bottom: 22px;
+		left: 20px;
+	}
+	.cards {
+		flex-direction: row-reverse;
+	}
+}
+.btn-indian {
+	float: left;
+	position: relative;
+	top: 10px;
+	left: 20px;
 }
 .ability {
 	border-color: blue;
@@ -137,14 +232,10 @@ input {
 	cursor: url(../img/hand.png), auto !important;
 }
 .container {
-	&.game-started {
-		.pre-game {
-			display: none;
-		}
-	}
-	&.pre-game {
-		.game-started {
-			display: none;
+	.pre-game {
+		.well {
+			height: 250px;
+			overflow: scroll;
 		}
 	}
 }

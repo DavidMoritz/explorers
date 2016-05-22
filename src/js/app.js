@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ['firebase', 'angular.filter', 'ngAnimate', 'ui.bootstrap']);
+var mainApp = angular.module('mainApp', ['firebase', 'angular.filter', 'ngAnimate', 'ui.bootstrap', 'ngDraggable']);
 
 mainApp.run(function runWithDependencies($rootScope) {
 	$rootScope._ = _;

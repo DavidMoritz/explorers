@@ -1,5 +1,6 @@
 include utils/mixins
 include utils/cards
+include utils/main-content
 
 doctype html
 html(ng-app='mainApp')
@@ -21,54 +22,53 @@ html(ng-app='mainApp')
 				h1 Explorers
 			.map
 				.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
-					span.space-arrow(ng-repeat='player in allPlayers' class='{{$parent.$index == player.scout ? "scout" : ""}} {{$parent.$index == player.camp ? "camp" : ""}}' style='border-color: {{player.color}}')
+					span.space-arrow(ng-repeat='player in allPlayers' class='{{$parent.$index == player.scout ? "scout" : ""}} {{$parent.$index == player.baseCamp ? "camp" : ""}}' style='border-color: {{player.color}}')
 			.row
 				+col(2)
-					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!currentPlayer.takenMainAction') End Turn
+					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='userTurn() && !currentPlayer.takenMainAction') End Turn
 					//- Restart turn is not currently working
-					button.btn.btn-danger(ng-click='' ng-disabled='true') Redo Turn
-					h4 All Players
-					ul.players
-						li(ng-repeat='player in allPlayers')
-							h5(style='background-color:{{player.color}}' ng-click='viewPlayer(player)')
+					button.btn.btn-danger(ng-click='addEvent("restartTurn")' ng-disabled='!userTurn() || true') Redo Turn
+					h3 All Players
+					.left-side
+						.player-holder(ng-repeat='player in allPlayers' style='background-color:{{player.color}}' ng-click='viewPlayer(player)')
+							.player
 								span.badge {{player.idx}}
-								| {{player.name}}
-								i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
+								|  {{player.name}}
+							i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
+						.collectables(ng-show='currentPlayer.collectables.length')
+							h4 Collect Items
+							.corp-boats
+								.boat.alert.alert-danger
+									.content
+										.item(ng-repeat='item in currentPlayer.collectables track by $index' ng-drag='userTurn()' ng-drag-data='item' ng-drag-success='dragCollectSuccess($index)' class='text-{{item.btnClass}}' title='{{item.display}}')
+											i.sprite(class='{{item.name}} {{item.name == "indian" ? "symbol" : ""}}')
 				+col(8)
+					+notify()
 					.main-content
-						.jumbotron
-							h2.text-center Welcome to Explorers!
-							div(ng-hide='currentUser')
-								button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
-							h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
-							+notify()
-						.pre-game.row(ng-show='currentUser.uid && !activeGame.id')
-							+col(6)
-								h3 Choose a game:
-								ul
-									li.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
-								h3 Or create a new one:
-								.btn.btn-success(ng-click='createNewGame()') Create new game
-							+col(6)
-								h3 Message List:
-								ul
-									li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
-								form(name='chatWindow' ng-submit='submitChat()')
-									input(ng-model='ff.chat' placeholder='respond to chat')
-									button(ng-hide='true' type='submit')
-						.pre-game.row(ng-show='activeGame.id && !currentPlayer')
-							+col(6)
-								h3 Players:
-								ul
-									li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
-								button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
+						+welcome()
+						+joinGame()
+						+startGame()
+						+playCard()
+						+strength()
+						+recruit()
+						+recruitPayment()
+						+board()
+						+win()
 						.current-user-corp
-							h1.alert.alert-info This is your corp
+							.corp-boats
+								.boat(ng-repeat='boat in user.corp.supplyBoats' ng-drop='boat.content.length < boat.capacity && validSupplyDrop()', ng-drop-success='dropBoatSuccess(boat, $data)' title='Max: {{boat.capacity}} Days: {{boat.cost()}}')
+									.content(class='{{boat.capacity > 4 ? "big" : "small"}}')
+										.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
+											i.sprite(class='{{item.name}}')
+								.boat(ng-repeat='boat in user.corp.indianBoats' ng-drop='boat.content.length < boat.capacity && validIndianDrop()', ng-drop-success='dropBoatSuccess(boat, $data)' title='Cost: {{boat.cost()}} Size: {{boat.content.length}}')
+									.content(class='{{boat.capacity > 4 ? "big" : "small"}}')
+										.item(ng-repeat='item in boat.content track by $index' ng-drag='!item.inUse' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
+											i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 				+col(2)
 					.btn-list
-						button.btn.btn-sm.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped') Camp
+						button.btn.btn-sm.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped && userTurn()') Camp
 						button.btn.btn-sm.btn-info(ng-click='viewRecruit()' ng-disabled='!currentPlayer.notRecruited') Recruit
-						button.btn.btn-sm.btn-primary(ng-click='addEvent("openBoard")') Board
+						button.btn.btn-sm.btn-primary(ng-click='viewBoard()') Board
 					h3 Cards in Hand
 					+show-small-cards('held', 'user')
 					h3 Cards in Play
@@ -96,17 +96,17 @@ html(ng-app='mainApp')
 				h3 {{player.name}}
 			.modal-body.row
 				+col(8)
-					h5(style='background-color:{{player.color}}')
+					h4(style='background-color:{{player.color}}')
 						span.badge {{player.idx}}
 						| {{player.name}}
 						i.sprite.symbol(ng-repeat='card in player.deck.playedCards track by card.id' class='{{card.symbol}}')
 					.row
 						+col(6)
 							h6 Supplies:
-							ul
-								li(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
-									ul
-										li(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}') {{item.display}}
+							.corp-boats
+								.boat(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+									.content
+										.item(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}')
 											i.sprite(class='{{item.name}}')
 						+col(6)
 							h6 Indians:
@@ -118,50 +118,16 @@ html(ng-app='mainApp')
 					h3 Cards in Play
 					+show-small-cards('played', 'player')
 		script#viewrecruitModal(type='text/ng-template')
+			.journal
+				.modal-header
+					+close()
+					h3 Recruits from Journal:
+				.modal-body
+					+show-cards('recruit', 'viewCard')
+		script#viewboardModal(type='text/ng-template')
 			.modal-header
 				+close()
-				h3 Recruits from Journal:
+				h3 Current state of Board:
 			.modal-body
-				+show-cards('recruit', 'viewCard')
-		script#strengthModal(type='text/ng-template')
-			.modal-header
-				+close()
-				h3 Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
-			.modal-body
-				+notify()
-				.row
-					+col(8)
-						+show-cards('held', 'addStrength')
-						.btn.btn-danger(ng-click='addIndian()') Add Indian
-							span.badge  {{currentPlayer.indianCount}}
-					+col(null, 4, 4, 4, 4, 'active-card')
-						+active-card()
-		script#recruitModal(type='text/ng-template')
-			.modal-header
-				+close()
-				h3 Recruit for the team:
-			.modal-body
-				+notify()
-				+show-cards('recruit', 'recruitCard')
-		script#recruitpaymentModal(type='text/ng-template')
-			.modal-header
-				+close()
-				h3 Payment for new Recruit?
-			.modal-body
-				+notify()
-				.row
-					+col(8)
-						+show-cards('held', 'recruitPayment')
-						.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment()') Use {{recruitCard.strength}} equipment
-					+col(null, 4, 4, 4, 4, 'active-card')
-						+recruit-card()
-		script#boardModal(type='text/ng-template')
-			.modal-header
-				+close()
-				h3 Board Spaces:
-			.modal-body
-				+notify()
-				ul.abilities
-					li.ability.board-space(ng-repeat='space in boardSpaces track by $index' ng-click='clickBoardSpace(space)' title='{{space.description}}' ng-disabled='space.contents.length == space.max')
-						p Event: {{space.event}}
+				+board(true)
 //		| @@javascriptReplaceFiles

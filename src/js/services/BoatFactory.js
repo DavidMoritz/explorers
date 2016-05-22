@@ -3,13 +3,15 @@ mainApp.factory('BoatFactory', [
 		'use strict';
 
 		return {
-			startIndian: () => new Array(
+			startIndian: _ => new Array(
 				{
-					cost: () => 0,
+					id: 'BI11',
+					cost: _ => 0,
 					capacity: 1,
 					priority: 1,
 					content: []
 				},{
+					id: 'BI21',
 					cost: function cost() {
 						return this.content.length;
 					},
@@ -18,13 +20,15 @@ mainApp.factory('BoatFactory', [
 					content: []
 				}
 			),
-			startSupply: () => new Array(
+			startSupply: _ => new Array(
 				{
-					cost: () => 0,
+					id: 'BS11',
+					cost: _ => 0,
 					capacity: 3,
 					priority: 1,
 					content: []
 				},{
+					id: 'BS21',
 					cost: function cost() {
 						return this.content.length ? 1 : 0;
 					},
@@ -32,6 +36,7 @@ mainApp.factory('BoatFactory', [
 					priority: 4,
 					content: []
 				},{
+					id: 'BS31',
 					cost: function cost() {
 						return this.content.length;
 					},
@@ -41,12 +46,14 @@ mainApp.factory('BoatFactory', [
 				}
 			),
 			indiansmall: () => _.clone({
-				cost: () => 0,
+				id: 'BI12',
+				cost: _ => 0,
 				capacity: 1,
 				priority: 2,
 				content: []
 			}),
 			indianbig: () => _.clone({
+				id: 'BI31',
 				cost: function cost() {
 					return this.content.length ? 1 : 0;
 				},
@@ -55,12 +62,14 @@ mainApp.factory('BoatFactory', [
 				content: []
 			}),
 			supplysmall: () => _.clone({
-				cost: () => 0,
+				id: 'BS41',
+				cost: _ => 0,
 				capacity: 2,
 				priority: 2,
 				content: []
 			}),
 			supplybig: () => _.clone({
+				id: 'BS51',
 				cost: function cost() {
 					return this.content.length ? 1 : 0;
 				},

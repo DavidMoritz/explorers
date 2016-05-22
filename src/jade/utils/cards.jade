@@ -29,16 +29,15 @@ mixin show-small-cards(type, person)
 				i.sprite.symbol.small(class='{{card.symbol}}')
 
 mixin active-card()
-	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{currentPlayer.deck.activeCard.name}}: {{currentPlayer.deck.activeCard.description}}')
+	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{currentPlayer.deck.activeCard.name}}: {{currentPlayer.deck.activeCard.description}}' click='viewCard(currentPlayer.deck.activeCard)')
 		.card-info
 			span.strength {{currentPlayer.deck.activeCard.strength}}
 			i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
 		.card-name {{currentPlayer.deck.activeCard.name}}
 	h3 Card-Abilities
-	ul.abilities
-		li.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
-			p Cost: {{ability.cost}}
-			p Benefit: {{ability.benefit}}
+	.abilities
+		.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
+			p {{ability.short}}
 
 mixin recruit-card()
 	h3 New Recruit:
