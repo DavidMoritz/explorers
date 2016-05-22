@@ -203,7 +203,8 @@ mainApp.controller('MainCtrl', [
 				name: 'addItem',
 				boatId: boat.id,
 				playerId: $s.user.uid,
-				item: item.name
+				item: item.name,
+				used: item.inUse || false
 			});
 		};
 

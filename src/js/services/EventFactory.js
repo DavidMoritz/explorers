@@ -291,6 +291,7 @@ mainApp.factory('EventFactory', [
 				var boat = findBoat(this),
 					item = _.find(IF.allItems, {name: this.item}) || IF.indian();
 
+				item.inUse = this.used;
 				boat.content.push(_.clone(item));
 				resolve();
 			}

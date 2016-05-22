@@ -62,7 +62,7 @@ html(ng-app='mainApp')
 											i.sprite(class='{{item.name}}')
 								.boat(ng-repeat='boat in user.corp.indianBoats' ng-drop='boat.content.length < boat.capacity && validIndianDrop()', ng-drop-success='dropBoatSuccess(boat, $data)' title='Cost: {{boat.cost()}} Size: {{boat.content.length}}')
 									.content(class='{{boat.capacity > 4 ? "big" : "small"}}')
-										.item(ng-repeat='item in boat.content track by $index' ng-drag='!item.inUse' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
+										.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
 											i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 				+col(2)
 					.btn-list

@@ -154,10 +154,11 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF12',
+					id: 'JF04',
 					name: 'Ebenezer Tuttle',
 					symbol: 'fur',
-					description: 'receive 1 canoe for 1 wood / receive 1 wood for 1 canoe.',
+					description: 'Pay 1 Wood and take 1 Canoe.',
+					story: 'Private, recruited for the first part of the expedition up to Fort Mandan. He is sent back to Saint Louis with Pierre Chouteau’s party of fur traders.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -167,20 +168,13 @@ mainApp.factory('CardFactory', [
 						benefit: {
 							canoe: 1
 						}
-					},{
-						cost: {
-							canoe: 1
-						},
-						short: 'receive 1 wood for 1 canoe',
-						benefit: {
-							wood: 1
-						}
 					}]
 				}, {
-					id: 'JF13',
+					id: 'JF05',
 					name: 'Rene Jassaume',
 					symbol: 'fur',
-					description: 'receive 1 horse for 3 fur.',
+					description: 'Pay 3 Furs and take 1 Horse.',
+					story: 'He lived with his Indian wife and children in the Mandan chief ’s village. He helps the captains by providing them with information about the various chiefs and tribal politics.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -192,10 +186,11 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF14',
+					id: 'JF07',
 					name: 'Moses B. Reed',
 					symbol: 'fur',
-					description: 'travel 2 water for 2 wood.',
+					description: 'Pay 2 Wood and move your Scout 2 spaces forward on the River.',
+					story: 'Private, discharged from the Corps for having deserted and stolen weapons.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -223,7 +218,39 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
+					id: 'JF19',
+					name: 'John Hay',
+					symbol: 'fur',
+					description: 'For each Strength that activates this card, choose one of the two resources: Fur or Wood, and collect it. (By activating this card three times, you can, for instance, collect Fur twice and Wood once.)',
+					story: 'As a merchant, fur trader, and Cahokia’s post- master, he provides information. Since he speaks French and English, he helps as an interpreter.',
+					strength: 2,
+					abilities: [{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					},{
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
+					}]
+				}, {
 					id: 'JF22',
+					name: 'Black Moccasin',
+					symbol: 'fur',
+					description: 'For each Strength that activates this card, choose one of the two resources: Equipment or Food, and collect it. (By activating this card three times, you can, for instance, collect Equipment twice and Food once.)',
+					story: 'Minitari chief, he captured Sacagawea from the Shoshone a few years earlier.',
+					strength: 2,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					},{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					}]
+				}, {
+					id: 'JF26',
 					name: 'Hawks Feather',
 					symbol: 'fur',
 					description: 'travel 3 water for 1 food.',
@@ -256,10 +283,11 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JH11',
-					name: 'J. Baptiste',
+					id: 'JH10',
+					name: 'J. Baptiste Deschamps',
 					symbol: 'meat',
-					description: 'travel 6 water for 1 canoe and 1 food.',
+					description: 'Pay 1 Food and 1 Canoe and move your Scout 6 spaces forward on the River.',
+					story: 'As a French boatman, he is appointed foreman of the French boatmen in the red pirogue. He is among the men who, in April, 1805, navigate the keelboat downriver to St. Louis.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -269,6 +297,30 @@ mainApp.factory('CardFactory', [
 						short: 'travel 6 water for 1 canoe and 1 food.',
 						benefit: {
 							water: 6
+						}
+					}]
+				}, {
+					id: 'JG11',
+					name: 'John Newman',
+					symbol: 'wood',
+					story: 'Recruited at Fort Massac, he is expelled from the expedition following his court-martial for «having uttered repeated expressions of a highly criminal and mutinous nature.',
+					description: 'Pay 1 Food and move your Scout 1 space forward on the River or in the Mountains.',
+					strength: 1,
+					abilities: [{
+						cost: {
+							meat: 1
+						},
+						short: 'travel 1 water for 1 food.',
+						benefit: {
+							water: 1
+						}
+					},{
+						cost: {
+							meat: 1
+						},
+						short: 'travel 1 mountain for 1 food.',
+						benefit: {
+							mountain: 1
 						}
 					}]
 				}, {
@@ -287,10 +339,27 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE11',
+					id: 'JH21',
+					name: 'Dickson & Hancock',
+					symbol: 'meat',
+					description: 'For each Strength that activates this card, choose one of the two resources: Food or Fur, and collect it. (By activating this card three times, you can, for instance, collect Food twice and Fur once.)',
+					story: 'Fur trappers, they meet the expedition in September,1806, during its return to Washington. They invite John Colter to join them as a trapper.',
+					strength: 2,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					},{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					}]
+				}, {
+					id: 'JE03',
 					name: 'Buffalo Medicine',
 					symbol: 'equipment',
-					description: 'receive 1 canoe for 1 food.',
+					description: 'Pay 1 Food and take 1 Canoe.',
+					story: 'Teton Sioux third chief, involved in a power struggle. He meets the Expedition on the Bad River in September, 1804.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -302,25 +371,27 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE12',
+					id: 'JE13',
 					name: 'John Dame',
 					symbol: 'equipment',
-					description: 'travel 1 mountain for 2 wood.',
+					description: 'Pay 2 Wood and move your Scout 1 space forward in the Mountains.',
+					story: 'Aged 19, fair-haired and blue-eyed, he joins the Corps for the 1rst part of the journey and comes back to Saint Louis in the spring of 1805. He has shot a white pelican.',
 					strength: 1,
 					abilities: [{
 						cost: {
 							wood: 2
 						},
-						short: 'travel 4 mountain for 1 equipment, 1 fur, 1 food, and 1 wood.',
+						short: 'travel 1 mountain for 2 wood.',
 						benefit: {
 							mountain: 1
 						}
 					}]
 				}, {
-					id: 'JE13',
+					id: 'JE12',
 					name: 'Charles Mackenzie',
 					symbol: 'equipment',
-					description: 'travel 3 mountain for 1 horse and 1 fur.',
+					description: 'Pay 1 Fur and 1 Horse and move your Scout 3 spaces forward in the Mountains.',
+					story: 'Fur trader, he works for the North West Company. Along with Larocque, he is a frequent visitor to Fort Mandan during the winter of 1804-1805.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -331,6 +402,22 @@ mainApp.factory('CardFactory', [
 						benefit: {
 							mountain: 3
 						}
+					}]
+				}, {
+					id: 'JF20',
+					name: 'Big White',
+					symbol: 'equipment',
+					description: 'For each Strength that activates this card, choose one of the two resources: Equipment or Wood. Then collect it. (By activating this card three times, you can, for instance, collect Equipment twice and Wood once.)',
+					story: 'He is the principal chief of the lower Mandan village, nicknamed this way because of his size and complexion. He meets President Jefferson in Washington after the expedition',
+					strength: 2,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					},{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
 					}]
 				}, {
 					id: 'JE21',
@@ -382,10 +469,11 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG11',
+					id: 'JG08',
 					name: 'John Robertson',
 					symbol: 'wood',
-					description: 'travel 3 water for 2 equipment.',
+					description: 'Pay 2 Equipment and move your Scout 3 spaces forward on the River.',
+					story: 'Initially a corporal, Clark demotes him for having «no authority» over his men and failing to stop a fight at Camp Dubois. He’s probably the first man to leave the expedition.',
 					strength: 1,
 					abilities: [{
 						cost: {
