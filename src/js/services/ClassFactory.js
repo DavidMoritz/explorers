@@ -12,7 +12,7 @@ mainApp.factory('ClassFactory', [
 			return _.indexOf(MAP.map, start);
 		}
 
-		const allColors = ['lightsalmon', 'orchid', 'lightcoral', 'lightgreen', 'lightblue'];
+		const allColors = ['khaki', 'orchid', 'lightgreen', 'lightsalmon', 'lightblue'];
 		const ClassFactory = {
 			Corp: class Corp {
 				constructor() {
@@ -246,7 +246,7 @@ mainApp.factory('ClassFactory', [
 								this.collect(item);
 							} else if (key === 'indian') {
 								this.collect(IF.indian());
-							} else if (key === 'mountain' || key === 'water') {
+							} else if (key === 'mountain' || key === 'river') {
 								this.travel(key);
 							}
 						}

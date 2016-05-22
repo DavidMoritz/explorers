@@ -5,80 +5,60 @@ mainApp.factory('MapFactory', [
 		return {
 			map: [
 				{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'start'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
-				},{
-					terrain: 'mixed'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
-				},{
-					terrain: 'mountain'
+					terrain: 'river'
 				},{
 					terrain: 'mixed'
 				},{
-					terrain: 'water'
+					terrain: 'mountain'
 				},{
-					terrain: 'water'
+					terrain: 'mountain'
 				},{
-					terrain: 'water'
-				},{
-					terrain: 'water'
-				},{
-					terrain: 'water'
+					terrain: 'mountain'
 				},{
 					terrain: 'mountain'
 				},{
@@ -86,45 +66,65 @@ mainApp.factory('MapFactory', [
 				},{
 					terrain: 'mountain'
 				},{
-					terrain: 'water'
+					terrain: 'mountain'
 				},{
-					terrain: 'water'
+					terrain: 'mixed'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water'
+					terrain: 'river'
 				},{
-					terrain: 'water',
+					terrain: 'river'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'mountain'
+				},{
+					terrain: 'mountain'
+				},{
+					terrain: 'mountain'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'river'
+				},{
+					terrain: 'river',
 					special: 'finish'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'finish'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'finish'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'finish'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'finish'
 				},{
-					terrain: 'water',
+					terrain: 'river',
 					special: 'finish'
 				}
 			],
 			configureMap: [
 				{
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 5
 				},
 				{
 					special: 'start',
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 1
 				},
 				{
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 17
 				},
 				{
@@ -140,7 +140,7 @@ mainApp.factory('MapFactory', [
 					spaces: 1
 				},
 				{
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 5
 				},
 				{
@@ -148,12 +148,12 @@ mainApp.factory('MapFactory', [
 					spaces: 3
 				},
 				{
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 4
 				},
 				{
 					special: 'finish',
-					terrain: 'water',
+					terrain: 'river',
 					spaces: 11
 				}
 			]

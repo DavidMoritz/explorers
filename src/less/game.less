@@ -50,13 +50,43 @@ body {
 	border: solid 12px white;
 	border-left-color: transparent !important;
 	border-right-color: transparent !important;
+	border-bottom-color: transparent !important;
 	&.camp {
-		border-top-color: transparent !important;
-		top: 4px;
 		display: block;
+		&:not(.scout) {
+			border-top-color: transparent !important;
+		}
+		&:after {
+			content: '';
+			width: 21px;
+			height: 29px;
+			background-image: url(../img/camp-markers-sm.png);
+			display: block;
+			position: absolute;
+			top: 2px;
+			left: -10px;
+			transform: rotate(180deg);
+			&.lightblue {
+				background-position: 0 0;
+			}
+			&.lightsalmon {
+				background-position: -21px 0;
+			}
+			&.lightgreen {
+				background-position: -41px 0;
+			}
+			&.orchid {
+				background-position: -61px 0;
+			}
+			&.khaki {
+				background-position: -81px 0;
+			}
+		}
+		&.scout:after {
+			top: 9px;
+		}
 	}
-	&.scout&:not(.camp) {
-		border-bottom-color: transparent !important;
+	&.scout {
 		bottom: 4px;
 		display: block;
 	}
@@ -212,7 +242,7 @@ ul.players {
 	position: relative;
 	height: 1.5em;
 	width: 1em;
-	&.water {
+	&.river {
 		background-color: blue;
 	}
 	&.mountain {
@@ -221,7 +251,6 @@ ul.players {
 	&.mixed {
 		background-color: green;
 	}
-	&.start,
 	&.finish {
 		border: silver dotted 3px;
 	}

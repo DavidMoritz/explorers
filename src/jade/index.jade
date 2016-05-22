@@ -22,7 +22,7 @@ html(ng-app='mainApp')
 				h1 Explorers
 			.map
 				.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
-					span.space-arrow(ng-repeat='player in allPlayers' class='{{$parent.$index == player.scout ? "scout" : ""}} {{$parent.$index == player.baseCamp ? "camp" : ""}}' style='border-color: {{player.color}}')
+					span.space-arrow(ng-repeat='player in allPlayers' class='{{$parent.$index == player.scout ? "scout" : ""}} {{$parent.$index == player.baseCamp ? "camp" : ""}} {{player.color}}' style='border-color: {{player.color}}')
 			.row
 				+col(2)
 					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='userTurn() && !currentPlayer.takenMainAction') End Turn
