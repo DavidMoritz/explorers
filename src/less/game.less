@@ -43,6 +43,35 @@ body {
 		white-space: nowrap;
 	}
 }
+.marker {
+	display: block;
+	&:before {
+		width: 40px;
+		height: 58px;
+		background-image: url(../img/camp-markers-md.png);
+		position: absolute;
+		top: -1px;
+		left: -20px;
+		.scout& {
+			top: 9px;
+		}
+		.lightblue& {
+			background-position: -1px 0;
+		}
+		.lightsalmon& {
+			background-position: -41px 0;
+		}
+		.lightgreen& {
+			background-position: -81px 0;
+		}
+		.orchid& {
+			background-position: -121px 0;
+		}
+		.khaki& {
+			background-position: -161px 0;
+		}
+	}
+}
 .space-arrow {
 	position: absolute;
 	display: none;
@@ -64,26 +93,26 @@ body {
 			display: block;
 			position: absolute;
 			top: 2px;
-			left: -10px;
+			left: -11px;
 			transform: rotate(180deg);
-			&.lightblue {
-				background-position: 0 0;
+			.scout& {
+				top: 9px;
 			}
-			&.lightsalmon {
+			.lightblue& {
+				background-position: -1px 0;
+			}
+			.lightsalmon& {
 				background-position: -21px 0;
 			}
-			&.lightgreen {
+			.lightgreen& {
 				background-position: -41px 0;
 			}
-			&.orchid {
+			.orchid& {
 				background-position: -61px 0;
 			}
-			&.khaki {
+			.khaki& {
 				background-position: -81px 0;
 			}
-		}
-		&.scout:after {
-			top: 9px;
 		}
 	}
 	&.scout {

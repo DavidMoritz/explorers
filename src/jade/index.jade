@@ -93,7 +93,7 @@ html(ng-app='mainApp')
 		script#viewplayerModal(type='text/ng-template')
 			.modal-header
 				+close()
-				h3 {{player.name}}
+				h3.marker(class='{{player.color}}') {{player.name}}
 			.modal-body.row
 				+col(8)
 					h4(style='background-color:{{player.color}}')
