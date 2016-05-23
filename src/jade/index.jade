@@ -38,7 +38,7 @@ html(ng-app='mainApp')
 						.collectables(ng-show='currentPlayer.collectables.length')
 							h4 Collect Items
 							.corp-boats
-								.boat.alert.alert-danger
+								.collect-boat.alert.alert-danger
 									.content
 										.item(ng-repeat='item in currentPlayer.collectables track by $index' ng-drag='userTurn()' ng-drag-data='item' ng-drag-success='dragCollectSuccess($index)' class='text-{{item.btnClass}}' title='{{item.display}}')
 											i.sprite(class='{{item.name}} {{item.name == "indian" ? "symbol" : ""}}')
@@ -53,26 +53,28 @@ html(ng-app='mainApp')
 						+recruit()
 						+recruitPayment()
 						+board()
+						+boats()
+						+trash()
 						+win()
-						.current-user-corp
-							.corp-boats
-								.boat(ng-repeat='boat in user.corp.supplyBoats' ng-drop='boat.content.length < boat.capacity && validSupplyDrop()', ng-drop-success='dropBoatSuccess(boat, $data)' title='Max: {{boat.capacity}} Days: {{boat.cost()}}')
-									.content(class='{{boat.capacity > 4 ? "big" : "small"}}')
-										.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
-											i.sprite(class='{{item.name}}')
-								.boat(ng-repeat='boat in user.corp.indianBoats' ng-drop='boat.content.length < boat.capacity && validIndianDrop()', ng-drop-success='dropBoatSuccess(boat, $data)' title='Cost: {{boat.cost()}} Size: {{boat.content.length}}')
-									.content(class='{{boat.capacity > 4 ? "big" : "small"}}')
-										.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
-											i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 				+col(2)
 					.btn-list
 						button.btn.btn-sm.btn-warning(ng-click='addEvent("camp")' ng-disabled='!currentPlayer.notCamped && userTurn()') Camp
-						button.btn.btn-sm.btn-info(ng-click='viewRecruit()' ng-disabled='!currentPlayer.notRecruited') Recruit
+						button.btn.btn-sm.btn-info(ng-click='viewRecruit()') Recruit
 						button.btn.btn-sm.btn-primary(ng-click='viewBoard()') Board
 					h3 Cards in Hand
 					+show-small-cards('held', 'user')
 					h3 Cards in Play
 					+show-small-cards('played', 'user')
+			.current-user-corp(ng-show='currentPlayer' style='left: {{user.corp.corpSize}}')
+				.corp-boats
+					.boat(ng-repeat='boat in user.corp.supplyBoats' class='{{boat.id}}' title='Max: {{boat.capacity}} Days: {{boat.cost()}}')
+						.content(class='{{boat.capacity > 4 ? "big" : "small"}}' ng-drop='boat.content.length < boat.capacity && validSupplyDrop()', ng-drop-success='dropBoatSuccess(boat, $data)')
+							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
+								i.sprite(class='{{item.name}}')
+					.boat(ng-repeat='boat in user.corp.indianBoats' class='{{boat.id}}' title='Cost: {{boat.cost()}} Size: {{boat.content.length}}')
+						.content(class='{{boat.capacity > 4 ? "big" : "small"}} {{boat.content.length > 12 ? "tight" : ""}}' ng-drop='boat.content.length < boat.capacity && validIndianDrop()', ng-drop-success='dropBoatSuccess(boat, $data)')
+							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
+								i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 		script(src='inc/lib.js')
 		script(src='inc/main.js')
 		//- Modals should be used for reference only!
@@ -85,11 +87,14 @@ html(ng-app='mainApp')
 				+col(4)
 					+view-card()
 				+col(6)
-					h4 Name: {{card.name}}
-					h4 Symbol: {{card.symbol}}
-					h4 Strength: {{card.strength}}
-					h4 Description:
-					p {{card.description}}
+					.card-information
+						h4 Name: {{card.name}}
+						h4 Symbol: {{card.symbol}}
+						h4 Strength: {{card.strength}}
+						h4 Description:
+						p {{card.description}}
+						h4(ng-show='card.story') Story:
+						p {{card.story}}
 		script#viewplayerModal(type='text/ng-template')
 			.modal-header
 				+close()
@@ -104,14 +109,17 @@ html(ng-app='mainApp')
 						+col(6)
 							h6 Supplies:
 							.corp-boats
-								.boat(ng-repeat='boat in player.corp.supplyBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+								.collect-boat(ng-repeat='boat in player.corp.supplyBoats') Days: {{boat.cost()}} Max: {{boat.capacity}}
 									.content
 										.item(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}')
 											i.sprite(class='{{item.name}}')
 						+col(6)
 							h6 Indians:
-							ul
-								li(ng-repeat='boat in player.corp.indianBoats') Cost: {{boat.cost()}} Size: {{boat.content.length}}
+							.corp-boats
+								.collect-boat(ng-repeat='boat in player.corp.indianBoats') Days: {{boat.cost()}} Size: {{boat.content.length}}
+									.content
+										.item(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
+											i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 				+col(4)
 					h3 Cards in Hand
 					+show-small-cards('held', 'player')
@@ -127,7 +135,7 @@ html(ng-app='mainApp')
 		script#viewboardModal(type='text/ng-template')
 			.modal-header
 				+close()
-				h3 Current state of Board:
+				h3 Current state of the Board:
 			.modal-body
 				+board(true)
 //		| @@javascriptReplaceFiles

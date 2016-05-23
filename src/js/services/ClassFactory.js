@@ -24,6 +24,15 @@ mainApp.factory('ClassFactory', [
 
 					return this.indianBoats.reduce((time, boat) => time + boat.cost(), time);
 				}
+				get lastIndianBoat() {
+					return this.indianBoats[this.indianBoats.length - 1];
+				}
+				get corpSize() {
+					var count = this.indianBoats.length + this.supplyBoats.length;
+					var px = 795 - (100 * count);
+
+					return px + 'px';
+				}
 				payIndian(strength) {
 					var result = false,
 						indian;
@@ -155,6 +164,9 @@ mainApp.factory('ClassFactory', [
 					return this.corp.indianBoats.reduce((total, boat) => total + boat.content.filter(indian => !indian.inUse).length, 0);
 				}
 				endTurn() {
+					var powwow = _.find($s.boardSpaces, {event: 'boardPowWow'});
+
+					powwow.content = powwow.content.concat(this.collectables.filter(item => item.name == 'indian'));
 					this.playStrength = 0;
 					this.collectables = [];
 					this.payment = [];
@@ -169,7 +181,7 @@ mainApp.factory('ClassFactory', [
 					this.corp.optimize();
 
 					if (this.scout <= this.cost) {
-						this.scout = 0;
+						this.scout = 1;
 					} else {
 						this.scout -= this.cost;
 						//this.checkForScouts(-1);
@@ -237,15 +249,16 @@ mainApp.factory('ClassFactory', [
 						return false;
 					}
 				}
-				benefit(benefit) {
+				benefit(benefit, override) {
+					var benefitCount = 0;
+
 					_.mapKeys(benefit, (amount, key) => {
 						for (let i = 0; i < amount; i++) {
 							var item = _.find(IF.allItems, {name: key});
 
 							if (item) {
+								$s.benefitCount = override || benefitCount;
 								this.collect(item);
-							} else if (key === 'indian') {
-								this.collect(IF.indian());
 							} else if (key === 'mountain' || key === 'river') {
 								this.travel(key);
 							}

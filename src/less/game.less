@@ -10,14 +10,75 @@ body {
 }
 .container {
 	margin-top: 40px;
+	border-radius: 5px;
 	width: 1300px !important;
 	max-width: 1300px !important;
 	background: @gray-lightest;
 	padding: 20px;
-	.jumbotron {
-		padding-left: 60px;
-		padding-right: 60px;
+	background-image: url(../img/board-bg-light.jpg);
+	background-size: cover;
+	background-position: 0 -272px;
+	background-repeat: no-repeat;
+	position: relative;
+	.welcome {
+		text-align: center;
 	}
+	.notify-box {
+		position: absolute;
+		opacity: .95;
+		top: -47px;
+	}
+}
+.board-spaces-container {
+    background-image: url(../img/board-spaces.jpg);
+    background-size: cover;
+    width: 562px;
+    height: 430px;
+    margin: auto;
+    margin-top: -46px;
+    margin-bottom: -30px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 45px;
+    .modal-body & {
+		margin-top: -25px;
+		margin-bottom: 0;
+		h3 {
+			display: none;
+		}
+    }
+    .board-space {
+    	width: 150px;
+    	height: 107px;
+		margin: 3px;
+		border-radius: 5px;
+		padding: 5px;
+		display: flex;
+		justify-content: space-around;
+		flex-direction: column;
+		&.drag-enter {
+			border: solid 1px green;
+		}
+		.content {
+			display: flex;
+			justify-content: space-around;
+			.item {
+				border: dashed 1px;
+				padding: 0 3px;
+				margin: 3px;
+				background-color: rgba(255,255,255,0.5);
+			}
+		}
+		&.right {
+			align-items: flex-end;
+		}
+		&.left {
+			align-items: flex-start;
+		}
+		&.center {
+			align-items: center;
+		}
+    }
 }
 .main-content {
 	display: flex;
@@ -34,6 +95,8 @@ body {
 .player-holder {
 	padding: 5px;
 	margin-bottom: 5px;
+	box-shadow: 0 0 10px;
+	border-radius: 3px;
 	.player {
 		font-size: 18px;
 		margin-bottom: 5px;
@@ -46,15 +109,13 @@ body {
 .marker {
 	display: block;
 	&:before {
+		content: '';
 		width: 40px;
 		height: 58px;
 		background-image: url(../img/camp-markers-md.png);
 		position: absolute;
 		top: -1px;
 		left: -20px;
-		.scout& {
-			top: 9px;
-		}
 		.lightblue& {
 			background-position: -1px 0;
 		}
@@ -74,105 +135,63 @@ body {
 }
 .space-arrow {
 	position: absolute;
-	display: none;
-	right: -5px;
-	border: solid 12px white;
-	border-left-color: transparent !important;
-	border-right-color: transparent !important;
-	border-bottom-color: transparent !important;
-	&.camp {
+	display: block;
+	right: -8px;
+	&.camp:after {
+		content: '';
+		width: 21px;
+		height: 29px;
+		background-image: url(../img/camp-markers-sm.png);
 		display: block;
-		&:not(.scout) {
-			border-top-color: transparent !important;
+		position: absolute;
+		top: 14px;
+		transform: rotate(180deg);
+		.lightblue& {
+			background-position: -1px 0;
 		}
-		&:after {
-			content: '';
-			width: 21px;
-			height: 29px;
-			background-image: url(../img/camp-markers-sm.png);
-			display: block;
-			position: absolute;
-			top: 2px;
-			left: -11px;
-			transform: rotate(180deg);
-			.scout& {
-				top: 9px;
-			}
-			.lightblue& {
-				background-position: -1px 0;
-			}
-			.lightsalmon& {
-				background-position: -21px 0;
-			}
-			.lightgreen& {
-				background-position: -41px 0;
-			}
-			.orchid& {
-				background-position: -61px 0;
-			}
-			.khaki& {
-				background-position: -81px 0;
-			}
+		.lightsalmon& {
+			background-position: -21px 0;
+		}
+		.lightgreen& {
+			background-position: -41px 0;
+		}
+		.orchid& {
+			background-position: -61px 0;
+		}
+		.khaki& {
+			background-position: -81px 0;
 		}
 	}
-	&.scout {
-		bottom: 4px;
+	&.scout:before {
+		content: '';
+		width: 18px;
+		height: 30px;
+		background-image: url(../img/scouts-sm.png);
 		display: block;
-	}
-}
-.current-user-corp {
-	display: flex;
-	flex-direction: row;
-	align-items: stretch;
-	justify-content: space-around;
-	margin: 10px 0 -10px 0;
-	background-image: url(../img/corp-light.jpg);
-	background-repeat: no-repeat;
-	min-height: 192px;
-	background-position: 10px -22px;
-}
-.corp-boats {
-	display: flex;
-	flex-direction: column;
-	.current-user-corp & {
-		flex-direction: row;
-		justify-content: space-around;
-		width: 90%;
-		margin-top: 80px;
-	}
-	.boat {
-		padding: 5px;
-		border: solid 1px green;
-		margin: 2px;
-		border-radius: 5px;
-		min-height: 60px;
-		.current-user-corp & {
-			border: none;
+		position: absolute;
+		bottom: -10px;
+		.lightsalmon& {
+			background-position: -1px 0;
 		}
-	}
-	.content {
-		display: flex;
-		flex-wrap: wrap;
-		.current-user-corp & {
-			justify-content: space-around;
-			width: 90px;
-			&.big {
-				width: 120px;
-			}
+		.khaki& {
+			background-position: -21px 0;
 		}
-		.item {
-			border: dashed 1px;
-			padding: 0 3px;
-			margin: 3px;
-			background-color: rgba(255,255,255,0.5);
+		.lightblue& {
+			background-position: -40px 0;
+		}
+		.lightgreen& {
+			background-position: -60px 0;
+		}
+		.orchid& {
+			background-position: -79px 0;
 		}
 	}
 }
 #cursor {
 	transition: all ease 0.33s;
 	position: absolute;
-	// on top of everything except modals
-	z-index: 1000;
+	// on top of everything except corp boards
+	z-index: 10;
 }
 .active-player #cursor {
 	// ONLY FOR ACTIVE PLAYER
@@ -231,11 +250,20 @@ body {
 		.bgsprite(-152px);
 	}
 }
+.modal-content {
+	background: url(../img/board-bg-light.jpg);
+	background-size: cover;
+	background-position: 0 660px;
+	.card-information {
+		background-color: rgba(255,255,255,0.5);
+	}
+}
 .journal {
-	background-image: url(../img/journal.jpg);
+	background-image: url(../img/journal-medium.jpg);
 	background-size: cover;
 	background-position: 0 -33px;
 	background-repeat: no-repeat;
+	border-radius: 5px;
 	.modal-content &{
 		background-position: 0 -8px;
 	}
@@ -243,9 +271,11 @@ body {
 		position: relative;
 		bottom: 22px;
 		left: 20px;
+		width: 90%;
 	}
 	.cards {
 		flex-direction: row-reverse;
+		justify-content: space-around;
 	}
 }
 .btn-indian {
@@ -256,6 +286,7 @@ body {
 }
 .ability {
 	border-color: blue;
+	background-color: rgba(255,255,255,0.5);
 }
 .map {
 	display: flex;
@@ -294,6 +325,7 @@ input {
 		.well {
 			height: 250px;
 			overflow: scroll;
+			background-color: rgba(245, 245, 245, 0.5);
 		}
 	}
 }

@@ -13,6 +13,13 @@ mainApp.factory('EventFactory', [
 			return _.find(player.corp.supplyBoats, {id: ref.boatId}) || _.find(player.corp.indianBoats, {id: ref.boatId});
 		}
 
+		function boardStuff(event) {
+			var space = _.find($s.boardSpaces, {event: event});
+
+			$s.currentPlayer.takenMainAction = true;
+			space.content.push(IF.indian());
+		}
+
 		/**
 		 * Note: $s needs to be defined. This can be done by setting this entire
 		 * factory as a property of $s and calling the methods from that property
@@ -48,6 +55,7 @@ mainApp.factory('EventFactory', [
 							uid: user.uid,
 							idx: $s.allPlayers.length + 1
 						}));
+						$s.indianSupply = $s.allPlayers.length * 2 + 2;
 					});
 					$s.user = _.find($s.allPlayers, {uid: $s.currentUser.uid});
 					EF.changeCurrentPlayer(resolve);
@@ -68,6 +76,15 @@ mainApp.factory('EventFactory', [
 				} else {
 					resolve();
 				}
+			},
+			trashCard: function(resolve) {
+				var card = $s.currentPlayer.deck.findById(this.cardId);
+				$s.currentPlayer.deck.remove(card);
+				
+				if (--$s.currentPlayer.trashCount === 0) {
+					$s.state = 'playCard';
+				}
+				resolve();
 			},
 			useAbility: function(resolve) {
 				$s.currentPlayer.useAbility(this);
@@ -173,14 +190,6 @@ mainApp.factory('EventFactory', [
 				$s.state = 'playCard';
 				resolve();
 			},
-			addIndianFromSupply: resolve => {
-				if ($s.indianSupply === 0) {
-					return;
-				}
-				$s.currentPlayer.addIndian();
-				$s.indianSupply--;
-				resolve();
-			},
 			changeCurrentPlayer: resolve => {
 				if ($s.currentPlayer) {
 					$s.currentPlayer.endTurn();
@@ -193,20 +202,8 @@ mainApp.factory('EventFactory', [
 				$s.activeGame.message = {};
 				EF.closeModal(resolve);
 			},
-			addBoat: function(resolve) {
-				if ($s.currentPlayer.payCost({wood: 3})) {
-					var boatsArr = $s.currentPlayer.corp[this.type + 'Boats'];
-
-					boatsArr.push(BF[this.type + this.size]());
-					$s.currentPlayer.corp[this.type + 'Boats'] = _.sortBy(boatsArr, 'capacity');
-
-					if (this.type === 'indian') {
-						$s.addIndianFromSupply();
-					}
-				}
-				resolve();
-			},
 			boardCollectMeatFur: resolve => {
+				boardStuff('boardCollectMeatFur');
 				$s.currentPlayer.benefit({
 					meat: 1,
 					fur: 1
@@ -214,6 +211,7 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			boardCollectEquipmentWood: resolve => {
+				boardStuff('boardCollectEquipmentWood');
 				$s.currentPlayer.benefit({
 					equipment: 1,
 					wood: 1
@@ -221,24 +219,25 @@ mainApp.factory('EventFactory', [
 				resolve();
 			},
 			boardCollectChoice: resolve => {
+				boardStuff('boardCollectChoice');
 				// TODO: determine which benefit they want
-				var benefit = this.benefit || {wood: 2};
+				var benefit = this.benefit || {wood: 2, fur: 2};
 
 				$s.currentPlayer.benefit(benefit);
 				resolve();
 			},
 			boardCollectCanoe: resolve => {
+				boardStuff('boardCollectCanoe');
+
 				if ($s.currentPlayer.payCost({wood: 2})) {
-					$s.currentPlayer.benefit({
-						meat: 1,
-						fur: 1
-					});
+					$s.currentPlayer.benefit({canoe: 1});
 				} else {
 					$s.notify('You cannot afford a canoe');
 				}
 				resolve();
 			},
 			boardCollectHorse: resolve => {
+				boardStuff('boardCollectHorse');
 				// TODO: determine how they will pay
 				var payment = this.payment || {
 					fur: 1,
@@ -253,28 +252,45 @@ mainApp.factory('EventFactory', [
 				}
 				resolve();
 			},
-			boardCollectBoat: function(resolve) {
-				// TODO: determine what boat they want
-				this.type = 'indian';
-				this.size = 'small';
+			boardCollectBoat: resolve => {
+				boardStuff('boardCollectBoat');
 
 				if ($s.currentPlayer.payCost({wood: 3})) {
-					EF.addBoat(resolve);
+					$s.state = 'boats';
 				} else {
 					$s.notify('You cannot afford a boat');
-					resolve();
 				}
+				resolve();
 			},
 			boardResetJournal: resolve => {
+				boardStuff('boardResetJournal');
 				$s.journal.splice(0, 5);
+				$s.currentPlayer.trashCount = 3;
+				$s.state = 'trash';
 				resolve();
 			},
 			boardUseAbility: resolve => {
+				boardStuff('boardUseAbility');
+				
 				if ($s.currentPlayer.payCost({meat: 1})) {
 					$s.notify('You used an ability... Sike!');
 				} else {
 					$s.notify('You cannot afford a this space');
 				}
+				resolve();
+			},
+			interpreter: resolve => {
+				var indians = $s.boardSpaces.reduce((indians, space) => {
+					indians.push(...space.content.splice(0));
+
+					return indians;
+				},[]);
+
+				$s.benefitCount = indians.length;
+				$s.currentPlayer.collectables.push(...indians);
+				$s.currentPlayer.deck.activeCard.plays++;
+				$s.newComer();
+				$s.journal.splice(0, 1);
 				resolve();
 			},
 			removeItem: function(resolve) {
@@ -285,6 +301,11 @@ mainApp.factory('EventFactory', [
 			},
 			collectItem: function(resolve) {
 				$s.currentPlayer.collectables.splice(this.idx, 1);
+				
+				if (--$s.benefitCount === 0) {
+					$s.currentPlayer.collectables = [];
+				}
+
 				resolve();
 			},
 			addItem: function(resolve) {
@@ -293,6 +314,27 @@ mainApp.factory('EventFactory', [
 
 				item.inUse = this.used;
 				boat.content.push(_.clone(item));
+				resolve();
+			},
+			collectBoat: function(resolve) {
+				var boatsArr = $s.currentPlayer.corp[this.type + 'Boats'];
+				var method = this.type == 'indian' ? 'push' : 'unshift';
+				boatsArr[method](BF[this.type + this.size]());
+
+				if (this.type === 'indian') {
+					if ($s.indianSupply) {
+						$s.indianSupply--;
+						$s.currentPlayer.corp.lastIndianBoat.content.push(IF.indian());
+					}
+				} else {
+					$s.currentPlayer.benefit({
+						wood: 2,
+						meat: 2,
+						equipment: 2,
+						fur: 2
+					}, 2);
+				}
+				$s.state = 'playCard';
 				resolve();
 			}
 		};

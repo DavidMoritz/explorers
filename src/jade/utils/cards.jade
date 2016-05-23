@@ -36,7 +36,7 @@ mixin active-card()
 		.card-name {{currentPlayer.deck.activeCard.name}}
 	h3 Card-Abilities
 	.abilities
-		.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index)')
+		.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index, ability)')
 			p {{ability.short}}
 
 mixin recruit-card()

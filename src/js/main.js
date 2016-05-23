@@ -174,13 +174,22 @@ mainApp.controller('MainCtrl', [
 				top: '0px'
 			},
 			boardSpaces: CF.boardSpaces.map(space => {
-				space.contents = [];
-				space.max = space.max || 1;
+				space.content = space.event == 'boardPowWow' ? [IF.indian()] : [];
 				space.allow = space.allow || 1;
 
 				return space;
-			})
+			}),
+			chooseBoats: BF.chooseBoats
 		});
+
+		$s.newComer = () => {
+			if ($s.indianSupply) {
+				var powwow = _.find($s.boardSpaces, {event: 'boardPowWow'});
+
+				powwow.content.push(IF.indian());
+				$s.indianSupply--;
+			}
+		};
 
 		$s.dragBoatSuccess = (boat, idx) => {
 			$s.addEvent({
@@ -212,8 +221,10 @@ mainApp.controller('MainCtrl', [
 			return $('.dragging').find('.indian').length === 0;
 		};
 
-		$s.validIndianDrop = _ => {
-			return $('.dragging').find('.indian').length;
+		$s.validIndianDrop = check => {
+			var indian = $('.dragging').find('.indian');
+
+			return check ? indian.not('.used').length : indian.length;
 		};
 
 		$s.userTurn = _ => {
@@ -327,6 +338,27 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
+		$s.chooseBoat = (type, size) => {
+			if ($s.userTurn()) {
+				$s.addEvent({
+					name: 'collectBoat',
+					type: type,
+					size: size
+				});
+			}
+		};
+
+		$s.trash = card => {
+			if ($s.userTurn() && $s.currentPlayer.trashCount) {
+				$s.addEvent({
+					name: 'trashCard',
+					cardId: card.id
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
 		$s.addStrength = card => {
 			if ($s.userTurn() && !$s.currentPlayer.strengthAdded) {
 				$s.addEvent({
@@ -338,10 +370,10 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.useAbility = idx => {
-			if ($s.userTurn()) {
+		$s.useAbility = (idx, ability) => {
+			if ($s.userTurn() && $s.currentPlayer.strengthAvailable) {
 				$s.addEvent({
-					name: 'useAbility',
+					name: ability.event || 'useAbility',
 					idx: idx,
 					wood: countSymbols('wood'),
 					equipment: countSymbols('equipment'),
@@ -388,8 +420,8 @@ mainApp.controller('MainCtrl', [
 		$s.clickBoardSpace = space => {
 			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				if ($s.currentPlayer.indianCount) {
-					if (space.contents.length < space.max) {
-						space.contents.push($s.currentPlayer.corp.payIndian());
+					if (space.content.length < space.max) {
+						space.content.push($s.currentPlayer.corp.payIndian());
 						$s.currentPlayer.takenMainAction = true;
 						$s.addEvent(space.event);
 					} else {
@@ -455,7 +487,6 @@ mainApp.controller('MainCtrl', [
 		window.allGames = FF.getFBObject('allGames');
 		allGames.$bindTo($s, 'allGames');
 		allGames.$loaded(_ => {
-			$s.notify('Firebase is working!');
 			$('body').addClass('facebook-available');
 			init();
 		});

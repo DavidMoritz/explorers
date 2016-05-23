@@ -6,33 +6,49 @@ mainApp.factory('CardFactory', [
 			boardSpaces: [
 				{
 					event: 'boardCollectMeatFur',
+					class: 'right',
+					max: 1,
 					description: 'Collect 1 food and 1 fur'
 				},{
 					event: 'boardCollectEquipmentWood',
+					max: 1,
 					description: 'Collect 1 equipment and 1 wood'
 				},{
 					event: 'boardCollectChoice',
+					class: 'left',
+					max: 1,
 					description: 'Collect 2 fur or 2 wood'
 				},{
 					event: 'boardCollectCanoe',
+					class: 'left',
 					max: 20,
 					allow: 3,
-					description: 'Collect 1 canoe for 2 wood'
+					description: 'Collect 1 canoe for 2 wood. May be used 3 times.'
 				},{
-					event: 'boardCollectHorse',
-					max: 20,
-					allow: 3,
-					description: 'Collect 1 horse for 3 different items'
-				},{
-					event: 'boardCollectBoat',
-					max: 2,
-					description: 'Collect 1 boat for 3 wood. 4 possible boats. Small Supply: 2 slots free. Big Supply: 5 slots for 1 day. Small Indian: 1 slot free. Big Indian: 3 slots for 1 day.'
+					event: 'boardPowWow',
+					class: 'center',
+					max: 0,
+					description: 'Indians dance the pow-wow here'
 				},{
 					event: 'boardResetJournal',
+					class: 'right',
+					max: 1,
 					description: 'Remove all recruit cards from journal. May trash up to 3 cards from hand.'
 				},{
+					event: 'boardCollectHorse',
+					class: 'center',
+					max: 20,
+					allow: 3,
+					description: 'Collect 1 horse for 3 different items. May be used 3 times.'
+				},{
 					event: 'boardUseAbility',
+					max: 0, // should be 1, but can't get it working yet
 					description: 'For 1 food, use any ability of a played card in front of any player. The action may only be executed once.'
+				},{
+					event: 'boardCollectBoat',
+					class: 'center',
+					max: 2,
+					description: 'Collect 1 boat for 3 wood. 4 possible boats. Small Supply: 2 slots free. Big Supply: 5 slots for 1 day. Small Indian: 1 slot free. Big Indian: 3 slots for 1 day.'
 				}
 			],
 			startingCards: _ => new Array(
@@ -79,9 +95,7 @@ mainApp.factory('CardFactory', [
 					plays: 0,
 					abilities: [{
 						short: 'gather indians from the board and trash first card in journal.',
-						benefit: {
-							indian: 2
-						}
+						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP13',
