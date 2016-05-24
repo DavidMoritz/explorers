@@ -199,6 +199,7 @@ mainApp.factory('EventFactory', [
 					$s.currentPlayer = $s.allPlayers[0];
 				}
 				$s.state = 'playCard';
+				$s.benefitCount = 0;
 				$s.activeGame.message = {};
 				EF.closeModal(resolve);
 			},
@@ -286,7 +287,7 @@ mainApp.factory('EventFactory', [
 					return indians;
 				},[]);
 
-				$s.benefitCount = indians.length;
+				$s.benefitCount += indians.length;
 				$s.currentPlayer.collectables.push(...indians);
 				$s.currentPlayer.deck.activeCard.plays++;
 				$s.newComer();

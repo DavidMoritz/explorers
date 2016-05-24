@@ -250,14 +250,14 @@ mainApp.factory('ClassFactory', [
 					}
 				}
 				benefit(benefit, override) {
-					var benefitCount = 0;
+					$s.benefitCount += override || 0;
 
 					_.mapKeys(benefit, (amount, key) => {
 						for (let i = 0; i < amount; i++) {
 							var item = _.find(IF.allItems, {name: key});
 
 							if (item) {
-								$s.benefitCount = override || benefitCount;
+								$s.benefitCount += override ? 0 : 1;
 								this.collect(item);
 							} else if (key === 'mountain' || key === 'river') {
 								this.travel(key);
