@@ -3,6 +3,7 @@ mixin show-cards(type, click)
 	- items.push(type + '-card')
 	- repeat = 'card in currentPlayer.deck.' + type + 'Cards track by card.id'
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
+	- repeat = click == 'useAbility' ? 'card in getUseAbilityCards()' : repeat
 	- click = click ? click + '(card)' : ''
 	.cards
 		.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
@@ -20,10 +21,12 @@ mixin view-card()
 
 mixin show-small-cards(type, person)
 	- items = ['{{card.symbol}}','{{card.id}}']
+	- items.push(person == 'player' ? '{{card.support ? "support" : ""}}' : 'played')
 	- items.push(type + '-card')
 	- repeat = 'card in ' + person + '.deck.' + type + 'Cards track by card.id'
+	- click = person == 'player' ? 'card.support ? "" : viewCard(card)' : 'viewCard(card)'
 	.cards
-		.card-img.small(ng-repeat=repeat class=items.join(' ') ng-click='viewCard(card)' title='{{card.name}}: {{card.description}}')
+		.card-img.small(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
 			.card-info
 				span.strength.small {{card.strength}}
 				i.sprite.symbol.small(class='{{card.symbol}}')

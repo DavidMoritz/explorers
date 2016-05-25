@@ -86,6 +86,11 @@ mixin boats()
 					h4 Bonus:
 					p {{boat.bonus}}
 
+mixin boardAbility()
+	div(ng-show='state == "boardAbility"')
+		h3 Choose which ability to use:
+		.choose-ability-container
+			+show-cards('held', 'useCardAbility')
 
 mixin trash()
 	div(ng-show='state == "trash"')

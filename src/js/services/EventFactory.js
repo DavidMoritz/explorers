@@ -94,6 +94,7 @@ mainApp.factory('EventFactory', [
 				var card = $s.currentPlayer.deck.findById(this.cardId);
 
 				if ($s.currentPlayer.playStrength < 3) {
+					card.support = true;
 					$s.currentPlayer.playStrength += card.strength;
 					$s.currentPlayer.deck.play(card);
 					$s.currentPlayer.strengthAdded = true;
@@ -274,9 +275,9 @@ mainApp.factory('EventFactory', [
 				boardStuff('boardUseAbility');
 				
 				if ($s.currentPlayer.payCost({meat: 1})) {
-					$s.notify('You used an ability... Sike!');
+					$s.state = 'boardAbility';
 				} else {
-					$s.notify('You cannot afford a this space');
+					$s.notify('You cannot benefit from this space');
 				}
 				resolve();
 			},

@@ -182,6 +182,12 @@ mainApp.controller('MainCtrl', [
 			chooseBoats: BF.chooseBoats
 		});
 
+		$s.getUseAbilityCards = () => {
+			return $s.allPlayers.reduce((cards, player) => {
+				return cards.concat(player.deck.cards.filter(card => card.played && !card.support));
+			},[]);
+		}; 
+
 		$s.newComer = () => {
 			if ($s.indianSupply) {
 				var powwow = _.find($s.boardSpaces, {event: 'boardPowWow'});
@@ -192,6 +198,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.dragBoatSuccess = (boat, idx) => {
+			// hide the item
 			$s.addEvent({
 				name: 'removeItem',
 				idx: idx,
@@ -201,6 +208,7 @@ mainApp.controller('MainCtrl', [
 		};
 
 		$s.dragCollectSuccess = idx => {
+			// hide the item
 			$s.addEvent({
 				name: 'collectItem',
 				idx: idx
@@ -296,41 +304,43 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.submitChat = _ => {
-			if (!$s.ff.chat.length) {
-				return;
-			}
-			latestChat.user = $s.currentUser.firstName;
-			latestChat.text = $s.ff.chat;
-			latestChat.$save();
-			$s.ff.chat = '';
-		};
-
-		$s.fbLogin = _ => {
-			FF.facebookLogin(err => {
-				console.log('There was an error', err);
-				// ** TEMPORARY FOR DEV ***
-				console.log('Dev login: David Moritz');
-				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
-				$s.state = 'joinGame';
-				$s.chatList = [];
-			}, authData => {
-				console.log('Authenticated successfully with payload:', authData);
-				$s.currentUser = FF.getFBObject('users/' + authData.uid);
-				$s.currentUser.$loaded(user => {
-					if (!user.uid) {
-						createNewUser(authData);
-					}
-					$s.state = 'joinGame';
-				});
-				$s.chatList = [];
-			});
-		};
-
 		$s.callPlayCard = card => {
 			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				$s.addEvent({
 					name: 'playCard',
+					cardId: card.id
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.addStrength = card => {
+			if ($s.userTurn() && !$s.currentPlayer.strengthAdded) {
+				$s.addEvent({
+					name: 'addStrength',
+					cardId: card.id
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.trash = card => {
+			if ($s.userTurn() && $s.currentPlayer.trashCount) {
+				$s.addEvent({
+					name: 'trashCard',
+					cardId: card.id
+				});
+			} else {
+				$s.viewCard(card);
+			}
+		};
+
+		$s.useCardAbility = card => {
+			if ($s.userTurn()) {
+				$s.addEvent({
+					name: 'useCardAbility',
 					cardId: card.id
 				});
 			} else {
@@ -348,23 +358,16 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.trash = card => {
-			if ($s.userTurn() && $s.currentPlayer.trashCount) {
-				$s.addEvent({
-					name: 'trashCard',
-					cardId: card.id
-				});
-			} else {
-				$s.viewCard(card);
-			}
-		};
-
-		$s.addStrength = card => {
-			if ($s.userTurn() && !$s.currentPlayer.strengthAdded) {
-				$s.addEvent({
-					name: 'addStrength',
-					cardId: card.id
-				});
+		$s.recruitPayment = card => {
+			if ($s.userTurn()) {
+				if (card) {
+					$s.addEvent({
+						name: 'recruitPayment',
+						cardId: card.id
+					});
+				} else {
+					$s.addEvent('recruitPayment');
+				}
 			} else {
 				$s.viewCard(card);
 			}
@@ -397,21 +400,6 @@ mainApp.controller('MainCtrl', [
 					strength: card.strength,
 					fur: $s.journal.indexOf(card) + 1
 				});
-			} else {
-				$s.viewCard(card);
-			}
-		};
-
-		$s.recruitPayment = card => {
-			if ($s.userTurn()) {
-				if (card) {
-					$s.addEvent({
-						name: 'recruitPayment',
-						cardId: card.id
-					});
-				} else {
-					$s.addEvent('recruitPayment');
-				}
 			} else {
 				$s.viewCard(card);
 			}
@@ -481,6 +469,37 @@ mainApp.controller('MainCtrl', [
 			$s.cancelMessage = setTimeout(_ => {
 				$s.activeGame.message = {};
 			}, 4000);
+		};
+
+		$s.submitChat = _ => {
+			if (!$s.ff.chat.length) {
+				return;
+			}
+			latestChat.user = $s.currentUser.firstName;
+			latestChat.text = $s.ff.chat;
+			latestChat.$save();
+			$s.ff.chat = '';
+		};
+
+		$s.fbLogin = _ => {
+			FF.facebookLogin(err => {
+				console.log('There was an error', err);
+				// ** TEMPORARY FOR DEV ***
+				console.log('Dev login: David Moritz');
+				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
+				$s.state = 'joinGame';
+				$s.chatList = [];
+			}, authData => {
+				console.log('Authenticated successfully with payload:', authData);
+				$s.currentUser = FF.getFBObject('users/' + authData.uid);
+				$s.currentUser.$loaded(user => {
+					if (!user.uid) {
+						createNewUser(authData);
+					}
+					$s.state = 'joinGame';
+				});
+				$s.chatList = [];
+			});
 		};
 
 		// grab all the games and make sure Firebase is working!

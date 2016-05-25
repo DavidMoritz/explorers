@@ -42,7 +42,7 @@ mainApp.factory('CardFactory', [
 					description: 'Collect 1 horse for 3 different items. May be used 3 times.'
 				},{
 					event: 'boardUseAbility',
-					max: 0, // should be 1, but can't get it working yet
+					max: 1,
 					description: 'For 1 food, use any ability of a played card in front of any player. The action may only be executed once.'
 				},{
 					event: 'boardCollectBoat',

@@ -115,6 +115,7 @@ mainApp.factory('ClassFactory', [
 				reset() {
 					this.cards.map(card => {
 						card.played = false;
+						card.support = false;
 						card.plays = 0;
 					});
 				}
