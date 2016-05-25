@@ -39,10 +39,10 @@ mixin strength()
 		h3.pull-left Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 		.btn.btn-danger.btn-indian(ng-click='addIndian()') Add Indian&nbsp;
 			span.badge {{currentPlayer.indianCount}}
-		.row
-			+col(8)
+		.play-card-display-holder
+			.play-card-display
 				+show-cards('held', 'addStrength')
-			+col(null, 4, 4, 4, 4, 'active-card')
+			.active-card
 				+active-card()
 			
 mixin recruit()

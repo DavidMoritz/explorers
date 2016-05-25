@@ -3,8 +3,21 @@
 	flex-wrap: wrap;
 	justify-content: center;
 }
+.play-card-display-holder {
+	clear: both;
+	display: flex;
+	justify-content: space-around;
+	.play-card-display {
+		border-right: solid 1px gray;
+		width: 65%;
+	}
+}
 .active-card {
-	border-left: solid 1px gray;
+	width: 30%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
 }
 .played-card {
 	border: red dashed 4px !important;
