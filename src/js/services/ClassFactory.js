@@ -84,8 +84,8 @@ mainApp.factory('ClassFactory', [
 			},
 
 			Deck: class Deck {
-				constructor() {
-					this.cards = CF.startingCards();
+				constructor(color) {
+					this.cards = CF[color];
 					this.activeCardId = '';
 				}
 				get activeCard() {
@@ -143,7 +143,7 @@ mainApp.factory('ClassFactory', [
 					this.uid = options.uid;
 					this.color = options.color || allColors.splice(-1)[0];
 					this.corp = new ClassFactory.Corp();
-					this.deck = new ClassFactory.Deck();
+					this.deck = new ClassFactory.Deck(this.color);
 					this.scout = findStartSpace();
 					this.baseCamp = findStartSpace();
 					this.idx = options.idx;

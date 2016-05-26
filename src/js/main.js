@@ -186,7 +186,7 @@ mainApp.controller('MainCtrl', [
 			return $s.allPlayers.reduce((cards, player) => {
 				return cards.concat(player.deck.cards.filter(card => card.played && !card.support));
 			},[]);
-		}; 
+		};
 
 		$s.newComer = () => {
 			if ($s.indianSupply) {

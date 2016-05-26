@@ -51,7 +51,7 @@ mainApp.factory('CardFactory', [
 					description: 'Collect 1 boat for 3 wood. 4 possible boats. Small Supply: 2 slots free. Big Supply: 5 slots for 1 day. Small Indian: 1 slot free. Big Indian: 3 slots for 1 day.'
 				}
 			],
-			startingCards: _ => new Array(
+			lightblue: [
 				{
 					id: 'SP11',
 					name: 'Meriweather Lewis',
@@ -150,7 +150,407 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}
-			),
+			],
+			lightsalmon: [
+				{
+					id: 'SP21',
+					name: 'William Clark',
+					symbol: 'fur',
+					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						cost: {
+							canoe: 1
+						},
+						short: 'travel 4 river for 1 canoe',
+						benefit: {
+							river: 4
+						}
+					}, {
+						cost: {
+							meat: 1
+						},
+						short: 'travel 2 river for 1 food',
+						benefit: {
+							river: 2
+						}
+					}, {
+						cost: {
+							horse: 1
+						},
+						short: 'travel 2 mountain for 1 horse',
+						benefit: {
+							mountain: 2
+						}
+					}]
+				}, {
+					id: 'SP22',
+					name: 'François Labiche',
+					symbol: 'wood',
+					description: 'gather indians from the board and trash first card in journal.',
+					strength: 2,
+					played: false,
+					plays: 0,
+					abilities: [{
+						short: 'gather indians from the board and trash first card in journal.',
+						event: 'interpreter'
+					}]
+				}, {
+					id: 'SP23',
+					name: 'York',
+					symbol: 'meat',
+					description: 'collect action on food.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP24',
+					name: 'John B. Thompson',
+					symbol: 'wood',
+					description: 'collect action on wood.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP25',
+					name: 'Joseph Whitehouse',
+					symbol: 'equipment',
+					description: 'collect action on equipment.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP26',
+					name: 'Joseph & Ruben Field',
+					symbol: 'fur',
+					description: 'collect action on fur.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					}]
+				}
+			],
+			lightgreen: [
+				{
+					id: 'SP31',
+					name: 'Nathaniel Pryor',
+					symbol: 'fur',
+					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						cost: {
+							canoe: 1
+						},
+						short: 'travel 4 river for 1 canoe',
+						benefit: {
+							river: 4
+						}
+					}, {
+						cost: {
+							meat: 1
+						},
+						short: 'travel 2 river for 1 food',
+						benefit: {
+							river: 2
+						}
+					}, {
+						cost: {
+							horse: 1
+						},
+						short: 'travel 2 mountain for 1 horse',
+						benefit: {
+							mountain: 2
+						}
+					}]
+				}, {
+					id: 'SP32',
+					name: 'George Gibson',
+					symbol: 'wood',
+					description: 'gather indians from the board and trash first card in journal.',
+					strength: 2,
+					played: false,
+					plays: 0,
+					abilities: [{
+						short: 'gather indians from the board and trash first card in journal.',
+						event: 'interpreter'
+					}]
+				}, {
+					id: 'SP34',
+					name: 'Patrick Gass',
+					symbol: 'wood',
+					description: 'collect action on wood.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP33',
+					name: 'John Colter',
+					symbol: 'meat',
+					description: 'collect action on food.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP35',
+					name: 'William Bratton',
+					symbol: 'equipment',
+					description: 'collect action on equipment.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP36',
+					name: 'Peter Weiser',
+					symbol: 'fur',
+					description: 'collect action on fur.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					}]
+				}
+			],
+			orchid: [
+				{
+					id: 'SP41',
+					name: 'Charles Floyd',
+					symbol: 'fur',
+					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						cost: {
+							canoe: 1
+						},
+						short: 'travel 4 river for 1 canoe',
+						benefit: {
+							river: 4
+						}
+					}, {
+						cost: {
+							meat: 1
+						},
+						short: 'travel 2 river for 1 food',
+						benefit: {
+							river: 2
+						}
+					}, {
+						cost: {
+							horse: 1
+						},
+						short: 'travel 2 mountain for 1 horse',
+						benefit: {
+							mountain: 2
+						}
+					}]
+				}, {
+					id: 'SP42',
+					name: 'J. Baptiste Lepage',
+					symbol: 'wood',
+					description: 'gather indians from the board and trash first card in journal.',
+					strength: 2,
+					played: false,
+					plays: 0,
+					abilities: [{
+						short: 'gather indians from the board and trash first card in journal.',
+						event: 'interpreter'
+					}]
+				}, {
+					id: 'SP43',
+					name: 'William Werner',
+					symbol: 'meat',
+					description: 'collect action on food.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP44',
+					name: 'Hugh Hall',
+					symbol: 'wood',
+					description: 'collect action on wood.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP45',
+					name: 'John Potts',
+					symbol: 'equipment',
+					description: 'collect action on equipment.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP46',
+					name: 'John Collins',
+					symbol: 'fur',
+					description: 'collect action on fur.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					}]
+				}
+			],
+			khaki: [
+				{
+					id: 'SP51',
+					name: 'John Ordway',
+					symbol: 'fur',
+					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						cost: {
+							canoe: 1
+						},
+						short: 'travel 4 river for 1 canoe',
+						benefit: {
+							river: 4
+						}
+					}, {
+						cost: {
+							meat: 1
+						},
+						short: 'travel 2 river for 1 food',
+						benefit: {
+							river: 2
+						}
+					}, {
+						cost: {
+							horse: 1
+						},
+						short: 'travel 2 mountain for 1 horse',
+						benefit: {
+							mountain: 2
+						}
+					}]
+				}, {
+					id: 'SP52',
+					name: 'Robert Frazer',
+					symbol: 'wood',
+					description: 'gather indians from the board and trash first card in journal.',
+					strength: 2,
+					played: false,
+					plays: 0,
+					abilities: [{
+						short: 'gather indians from the board and trash first card in journal.',
+						event: 'interpreter'
+					}]
+				}, {
+					id: 'SP53',
+					name: 'Silas Goodrich',
+					symbol: 'meat',
+					description: 'collect action on food.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect action on food.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP54',
+					name: 'Thomas P. Howard',
+					symbol: 'wood',
+					description: 'collect action on wood.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'wood',
+						short: 'collect action on wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP55',
+					name: 'John Shields',
+					symbol: 'equipment',
+					description: 'collect action on equipment.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'equipment',
+						short: 'collect action on equipment.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP56',
+					name: 'George Shannon',
+					symbol: 'fur',
+					description: 'collect action on fur.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'fur',
+						short: 'collect action on fur.',
+						benefit: {}
+					}]
+				}
+			],
 			journalCards: [
 				{
 					id: 'JF09',

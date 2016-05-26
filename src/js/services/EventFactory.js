@@ -281,6 +281,9 @@ mainApp.factory('EventFactory', [
 				}
 				resolve();
 			},
+			useCardAbility: function(resolve) {
+				//var card = CF.
+			},
 			interpreter: resolve => {
 				var indians = $s.boardSpaces.reduce((indians, space) => {
 					indians.push(...space.content.splice(0));
