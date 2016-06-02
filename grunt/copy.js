@@ -51,9 +51,9 @@ module.exports = function exportCopy(grunt) {
 				// copy favicon & apple-icon
 				{
 					expand: true,
-					cwd: 'src/',
-					src: ['favicon.ico', 'apple-touch-icon.png'],
-					dest: '<%= distRoot %>/'
+					cwd: 'src/external/icon',
+					src: ['**'],
+					dest: '<%= distRoot %>/icon'
 				}
 			]
 		}

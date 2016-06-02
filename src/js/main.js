@@ -25,7 +25,20 @@ mainApp.controller('MainCtrl', [
 				}
 			}, false);
 			*/
-			listenToChat();
+			$s.joinableGames = _.mapKeys($s.allGames, (game, key) => {
+				if (typeof game === 'object' && game && game.name) {
+					switch (true) {
+						case (game.playerIds.indexOf($s.currentUser.uid) !== -1):
+						case (game.public && !game.active):
+							return key;
+					}
+				}
+
+				return 'skip';
+			});
+			delete $s.joinableGames.skip;
+			$s.state = 'joinGame';
+			$s.chatList = [];
 		}
 
 		function restartTurn() {
@@ -43,9 +56,9 @@ mainApp.controller('MainCtrl', [
 				restartTurn();
 			} else if ($s.eventTracker < $s.activeGame.events.length) {
 				$s.activeGame.events.reduce(prevEvent => {
-					return prevEvent.then(_ => {
+					return prevEvent.then(() => {
 						return runEvent(++$s.eventTracker);
-					}, _ => $s);
+					}, () => $s);
 				}, runEvent($s.eventTracker));
 			}
 		}
@@ -54,7 +67,7 @@ mainApp.controller('MainCtrl', [
 			if (idx >= $s.activeGame.events.length) {
 				$s.eventTracker = $s.activeGame.events.length;
 				// return meaningless function to avoid error
-				return {then: _ => 0};
+				return {then: () => 0};
 			}
 			var event = $s.activeGame.events[idx];
 			var eventFunction = EF[event.name];
@@ -95,7 +108,7 @@ mainApp.controller('MainCtrl', [
 		function createNewUser(authData) {
 			var allUsers = FF.getFBObject('users');
 
-			allUsers.$loaded(_ => {
+			allUsers.$loaded(() => {
 				allUsers[authData.uid] = {
 					createdDate: moment().format('YYYY-MM-DD HH:mm:ss'),
 					name: authData.facebook.displayName,
@@ -109,6 +122,7 @@ mainApp.controller('MainCtrl', [
 				};
 				allUsers.$save();
 				$s.currentUser = allUsers[authData.uid];
+				init();
 			});
 		}
 
@@ -166,8 +180,9 @@ mainApp.controller('MainCtrl', [
 			chatList: [],
 			recruitCard: {},
 			activeGame: {},
+			special: {},
 			modalInstance: {
-				close: _ => 0
+				close: () => 0
 			},
 			cursor: {
 				left: '0px',
@@ -182,7 +197,7 @@ mainApp.controller('MainCtrl', [
 			chooseBoats: BF.chooseBoats
 		});
 
-		$s.getUseAbilityCards = () => {
+		$s.getFaceUpPlayedCards = () => {
 			return $s.allPlayers.reduce((cards, player) => {
 				return cards.concat(player.deck.cards.filter(card => card.played && !card.support));
 			},[]);
@@ -199,6 +214,11 @@ mainApp.controller('MainCtrl', [
 
 		$s.dragBoatSuccess = (boat, idx) => {
 			// hide the item
+			$(`.${boat.id}`).find('.item').eq(idx).addClass('hidden');
+			setTimeout(() => {
+				$('.item.hidden').removeClass('hidden');
+			}, 1000);
+
 			$s.addEvent({
 				name: 'removeItem',
 				idx: idx,
@@ -209,8 +229,39 @@ mainApp.controller('MainCtrl', [
 
 		$s.dragCollectSuccess = idx => {
 			// hide the item
+			$('.collect-boat').find('.item').eq(idx).addClass('hidden');
+			setTimeout(() => {
+				$('.item.hidden').removeClass('hidden');
+			}, 1000);
+
 			$s.addEvent({
 				name: 'collectItem',
+				idx: idx
+			});
+		};
+
+		$s.dragHorseSuccess = idx => {
+			// hide the item
+			$('.horse-payment-space').find('.item').eq(idx).addClass('hidden');
+			setTimeout(() => {
+				$('.item.hidden').removeClass('hidden');
+			}, 1000);
+
+			$s.addEvent({
+				name: 'removeHorseItem',
+				idx: idx
+			});
+		};
+
+		$s.dragCanoeSuccess = idx => {
+			// hide the item
+			$('.canoe-payment-space').find('.item').eq(idx).addClass('hidden');
+			setTimeout(() => {
+				$('.item.hidden').removeClass('hidden');
+			}, 1000);
+
+			$s.addEvent({
+				name: 'removeCanoeItem',
 				idx: idx
 			});
 		};
@@ -225,7 +276,84 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
-		$s.validSupplyDrop = _ => {
+		$s.dropHorsePayment = item => {
+			$s.addEvent({
+				name: 'horsePayment',
+				item: item.name
+			});
+		};
+
+		$s.horseCollectionText = () => {
+			var count = $s.horseCollectionCount();
+
+			switch (count) {
+				case -1:
+					return 'Cannot Collect Yet';
+				case 1:
+					return 'Collect 1 Horse';
+				default:
+					return `Collect ${count} Horses`;
+			}
+		};
+
+		$s.horseCollectionCount = () => {
+			var indians = $s.horsePayment.content.filter(item => item.name == 'indian').length;
+			var notIndians = $s.horsePayment.content.length - indians;
+
+			if (notIndians % 3 === 0 && indians <= 2) {
+				var max = notIndians / 3;
+				var total = $s.horsePayment.content.reduce((total, item) => {
+					if (item.name != 'indian') {
+						total[item.name] = ++total[item.name] || 1;
+					}
+
+					return total;
+				}, {});
+
+				if (indians < max - 1) {
+					return -1;
+				}
+
+				return _.values(total).filter(val => val > max).length ? -1 : max;
+			}
+
+			return -1;
+		};
+
+		$s.dropCanoePayment = item => {
+			$s.addEvent({
+				name: 'canoePayment',
+				item: item.name
+			});
+		};
+
+		$s.canoeCollectionText = () => {
+			var count = $s.canoeCollectionCount();
+
+			switch (count) {
+				case -1:
+					return 'Cannot Collect Yet';
+				case 1:
+					return 'Collect 1 Canoe';
+				default:
+					return `Collect ${count} Canoes`;
+			}
+		};
+
+		$s.canoeCollectionCount = () => {
+			var indians = $s.canoePayment.content.filter(item => item.name == 'indian').length;
+			var wood = $s.canoePayment.content.filter(item => item.name == 'wood').length;
+
+			if (wood % 2 === 0 && indians <= 2 && $s.canoePayment.content.length == indians + wood) {
+				var max = wood / 2;
+
+				return indians < max - 1 ? -1 : max;
+			}
+
+			return -1;
+		};
+
+		$s.validSupplyDrop = () => {
 			return $('.dragging').find('.indian').length === 0;
 		};
 
@@ -235,7 +363,7 @@ mainApp.controller('MainCtrl', [
 			return check ? indian.not('.used').length : indian.length;
 		};
 
-		$s.userTurn = _ => {
+		$s.userTurn = () => {
 			if ($s.currentUser && $s.currentPlayer) {
 				return $s.currentUser.uid == $s.currentPlayer.uid;
 			}
@@ -251,23 +379,24 @@ mainApp.controller('MainCtrl', [
 			$s.activeGame.events.push(event);
 		};
 
-		$s.createNewGame = _ => {
+		$s.createNewGame = () => {
 			var rand = Math.random().toString(36).substring(2, 10);
 			allGames.$ref().update({[rand]: {
 				id: rand,
-				name: $s.ff.gameName,
+				//name: $s.ff.gameName,
+				name: `${$s.currentUser.firstName}'s Game`,
 				timestamp: new Date().getTime(),
 				events: [{
 					name: 'gameCreated'
 				}],
 				hostId: $s.currentUser.uid,
-				active: true,
+				active: false,
 				public: true,
 				cursor: {
 					left: 0,
 					top: 0
 				}
-			}}, _ => {
+			}}, () => {
 				$s.joinActiveGame({id: rand});
 			});
 		};
@@ -280,13 +409,15 @@ mainApp.controller('MainCtrl', [
 			var activeGame = FF.getFBObject(`allGames/${game.id}`);
 			activeGame.$bindTo($s, 'activeGame');
 
-			activeGame.$loaded(_ => {
+			activeGame.$loaded(() => {
 				if (!$s.activeGame.playerIds) {
 					$s.activeGame.playerIds = [];
+					$s.activeGame.playerNames = [];
 				}
 
 				if ($s.activeGame.playerIds.indexOf($s.currentUser.uid) === -1) {
 					$s.activeGame.playerIds.push($s.currentUser.uid);
+					$s.activeGame.playerNames.push($s.currentUser.name);
 				}
 				shuffleJournal();
 				$s.eventTracker = 0;
@@ -337,10 +468,10 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.useCardAbility = card => {
+		$s.useFaceUpAbility = card => {
 			if ($s.userTurn()) {
 				$s.addEvent({
-					name: 'useCardAbility',
+					name: 'useFaceUpAbility',
 					cardId: card.id
 				});
 			} else {
@@ -386,7 +517,20 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.addIndian = _ => {
+		$s.useFaceUpCardAbility = (idx, ability) => {
+			if ($s.userTurn()) {
+				$s.addEvent({
+					name: ability.event || 'useFaceUpCardAbility',
+					idx: idx,
+					wood: countSymbols('wood'),
+					equipment: countSymbols('equipment'),
+					fur: countSymbols('fur'),
+					meat: countSymbols('meat')
+				});
+			}
+		}; 
+
+		$s.addIndian = () => {
 			if ($s.userTurn()) {
 				$s.addEvent('addIndianToStrength');
 			}
@@ -409,9 +553,10 @@ mainApp.controller('MainCtrl', [
 			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				if ($s.currentPlayer.indianCount) {
 					if (space.content.length < space.max) {
-						space.content.push($s.currentPlayer.corp.payIndian());
-						$s.currentPlayer.takenMainAction = true;
-						$s.addEvent(space.event);
+						$s.addEvent({
+							name: 'clickBoardSpace',
+							space: space.event
+						});
 					} else {
 						$s.notify('That space is full');
 					}			
@@ -433,7 +578,7 @@ mainApp.controller('MainCtrl', [
 			});
 		};
 
-		$s.viewBoard = _ => {
+		$s.viewBoard = () => {
 			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				if ($s.state == 'board') {
 					$s.addEvent('backToPlayCard');
@@ -445,7 +590,7 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.viewRecruit = _ => {
+		$s.viewRecruit = () => {
 			if ($s.userTurn() && $s.currentPlayer.notRecruited) {
 				if ($s.state == 'recruit') {
 					$s.addEvent('backToPlayCard');
@@ -466,12 +611,12 @@ mainApp.controller('MainCtrl', [
 				type: type
 			};
 
-			$s.cancelMessage = setTimeout(_ => {
+			$s.cancelMessage = setTimeout(() => {
 				$s.activeGame.message = {};
 			}, 4000);
 		};
 
-		$s.submitChat = _ => {
+		$s.submitChat = () => {
 			if (!$s.ff.chat.length) {
 				return;
 			}
@@ -481,33 +626,34 @@ mainApp.controller('MainCtrl', [
 			$s.ff.chat = '';
 		};
 
-		$s.fbLogin = _ => {
+		$s.fbLogin = () => {
 			FF.facebookLogin(err => {
 				console.log('There was an error', err);
 				// ** TEMPORARY FOR DEV ***
 				console.log('Dev login: David Moritz');
 				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
-				$s.state = 'joinGame';
-				$s.chatList = [];
+				$s.currentUser.$loaded(user => {
+					init();
+				});
 			}, authData => {
 				console.log('Authenticated successfully with payload:', authData);
 				$s.currentUser = FF.getFBObject('users/' + authData.uid);
 				$s.currentUser.$loaded(user => {
 					if (!user.uid) {
 						createNewUser(authData);
+					} else {
+						init();
 					}
-					$s.state = 'joinGame';
 				});
-				$s.chatList = [];
 			});
 		};
 
 		// grab all the games and make sure Firebase is working!
 		window.allGames = FF.getFBObject('allGames');
 		allGames.$bindTo($s, 'allGames');
-		allGames.$loaded(_ => {
+		allGames.$loaded(() => {
 			$('body').addClass('facebook-available');
-			init();
+			listenToChat();
 		});
 	}
 ]);

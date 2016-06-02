@@ -182,10 +182,10 @@ mainApp.factory('ClassFactory', [
 					this.corp.optimize();
 
 					if (this.scout <= this.cost) {
-						this.scout = 1;
+						this.scout = 0;
 					} else {
 						this.scout -= this.cost;
-						//this.checkForScouts(-1);
+						this.checkForScouts(-1);
 					}
 
 					if (this.baseCamp < this.scout) {
@@ -252,6 +252,7 @@ mainApp.factory('ClassFactory', [
 				}
 				benefit(benefit, override) {
 					$s.benefitCount += override || 0;
+					var travel = false;
 
 					_.mapKeys(benefit, (amount, key) => {
 						for (let i = 0; i < amount; i++) {
@@ -262,10 +263,14 @@ mainApp.factory('ClassFactory', [
 								this.collect(item);
 							} else if (key === 'mountain' || key === 'river') {
 								this.travel(key);
+								travel = true;
 							}
 						}
 					});
-					//this.checkForScouts(1);
+
+					if (travel) {
+						this.checkForScouts(1);
+					}
 				}
 				travel(terrain) {
 					var space = this.scout;
@@ -286,16 +291,17 @@ mainApp.factory('ClassFactory', [
 
 					return equipmentNeed <= (supplyEquipment + this.deck.highestHeldCardStrength);
 				}
-				// checkForScouts(direction) {
-				// 	var dupes = $s.allPlayers.filter(
-				// 		player => (player.name != this.name) && (player.scout == this.scout)
-				// 	);
+				checkForScouts(direction) {
+					var dupes = $s.allPlayers.filter(
+						player => (player.name != this.name) && (player.scout == this.scout)
+					);
 
-				// 	if (dupes.length) {
-				// 		this.scout += direction;
-				// 		this.checkForScouts(direction);
-				// 	}
-				// }
+					if (dupes.length) {
+						this.scout += direction;
+						console.log('No two scouts may be on the same space');
+						this.checkForScouts(direction);
+					}
+				}
 			},
 
 			User: class User {

@@ -1,7 +1,7 @@
 mainApp.controller('ViewCardModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, card) {
 	$scope.card = card;
 
-	$scope.cancel = _ => $uibModalInstance.dismiss('cancel');
+	$scope.cancel = () => $uibModalInstance.dismiss('cancel');
 });
 
 mainApp.controller('ViewPlayerModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance, player) {
@@ -12,13 +12,13 @@ mainApp.controller('ViewPlayerModalInstanceCtrl', function ModalCtrl($scope, $ui
 		$scope.cancel();
 	};
 
-	$scope.cancel = _ => $uibModalInstance.dismiss('cancel');
+	$scope.cancel = () => $uibModalInstance.dismiss('cancel');
 });
 
 mainApp.controller('ViewBoardModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
 	$scope.boardSpaces = $s.boardSpaces;
 
-	$scope.cancel = _ => $uibModalInstance.dismiss('cancel');
+	$scope.cancel = () => $uibModalInstance.dismiss('cancel');
 });
 
 mainApp.controller('ViewRecruitModalInstanceCtrl', function ModalCtrl($scope, $uibModalInstance) {
@@ -29,5 +29,5 @@ mainApp.controller('ViewRecruitModalInstanceCtrl', function ModalCtrl($scope, $u
 		$scope.cancel();
 	};
 
-	$scope.cancel = _ => $uibModalInstance.dismiss('cancel');
+	$scope.cancel = () => $uibModalInstance.dismiss('cancel');
 });

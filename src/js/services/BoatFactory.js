@@ -3,10 +3,10 @@ mainApp.factory('BoatFactory', [
 		'use strict';
 
 		return {
-			startIndian: _ => new Array(
+			startIndian: () => new Array(
 				{
 					id: 'BI11',
-					cost: _ => 0,
+					cost: () => 0,
 					capacity: 1,
 					priority: 1,
 					content: []
@@ -20,10 +20,10 @@ mainApp.factory('BoatFactory', [
 					content: []
 				}
 			),
-			startSupply: _ => new Array(
+			startSupply: () => new Array(
 				{
 					id: 'BS11',
-					cost: _ => 0,
+					cost: () => 0,
 					capacity: 3,
 					priority: 1,
 					content: []
@@ -47,7 +47,7 @@ mainApp.factory('BoatFactory', [
 			),
 			indiansmall: () => _.clone({
 				id: 'BI31',
-				cost: _ => 0,
+				cost: () => 0,
 				capacity: 1,
 				priority: 2,
 				content: []
@@ -63,7 +63,7 @@ mainApp.factory('BoatFactory', [
 			}),
 			supplysmall: () => _.clone({
 				id: 'BS41',
-				cost: _ => 0,
+				cost: () => 0,
 				capacity: 2,
 				priority: 2,
 				content: []

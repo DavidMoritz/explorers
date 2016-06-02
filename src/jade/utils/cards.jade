@@ -3,6 +3,7 @@ mixin show-cards(type, click)
 	- items.push(type + '-card')
 	- repeat = 'card in currentPlayer.deck.' + type + 'Cards track by card.id'
 	- repeat = type == 'recruit' ? 'card in journal | limitTo: 5' : repeat
+	- repeat = click == 'useFaceUpAbility' ? 'card in getFaceUpPlayedCards()' : repeat
 	- click = click ? click + '(card)' : ''
 	.cards
 		.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
@@ -39,6 +40,17 @@ mixin active-card()
 	h3 Card-Abilities
 	.abilities
 		.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index, ability)')
+			p {{ability.short}}
+
+mixin ability-card()
+	.held-card.card-img(class='{{special.abilityCard.symbol}} {{special.abilityCard.id}}' title='{{special.abilityCard.name}}: {{special.abilityCard.description}}' click='viewCard(special.abilityCard)')
+		.card-info
+			span.strength {{special.abilityCard.strength}}
+			i.sprite.symbol(class='{{special.abilityCard.symbol}}')
+		.card-name {{special.abilityCard.name}}
+	h3 Card-Abilities
+	.abilities
+		.ability(ng-repeat='ability in special.abilityCard.abilities track by $index' ng-click='useFaceUpCardAbility($index, ability)')
 			p {{ability.short}}
 
 mixin recruit-card()

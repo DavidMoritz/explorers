@@ -8,13 +8,29 @@ body {
 	padding: 0;
 	justify-content: space-between;
 }
+.main-stage {
+	display: flex;
+	.stage-left,
+	.stage-right {
+		flex: 1;
+		body.welcome &,
+		body.joinGame &,
+		body.startGame &,
+		body.win & {
+			visibility: hidden;
+		}
+	}
+	.center-stage {
+		flex: 4
+	}
+}
 .container {
 	margin-top: 40px;
 	border-radius: 5px;
 	width: 1300px !important;
 	max-width: 1300px !important;
 	background: @gray-lightest;
-	padding: 20px;
+	padding: 15px 20px 20px;
 	background-image: url(../img/board-bg-light.jpg);
 	background-size: cover;
 	background-position: 0 -272px;
@@ -64,6 +80,7 @@ body {
 			justify-content: space-around;
 			.item {
 				border: dashed 1px;
+				border-radius: 5px;
 				padding: 0 3px;
 				margin: 3px;
 				background-color: rgba(255,255,255,0.5);
@@ -152,7 +169,8 @@ body {
 		background-image: url(../img/camp-markers-sm.png);
 		display: block;
 		position: absolute;
-		top: 14px;
+		top: 20px;
+		right: 10px;
 		transform: rotate(180deg);
 		.lightblue& {
 			background-position: -1px 0;
@@ -178,6 +196,7 @@ body {
 		display: block;
 		position: absolute;
 		bottom: -10px;
+		right: 11px;
 		.lightsalmon& {
 			background-position: -1px 0;
 		}
@@ -200,15 +219,18 @@ body {
 	position: absolute;
 	// on top of everything except corp boards
 	z-index: 10;
+
+	.active-player &,
+	body.welcome &,
+	body.joinGame &,
+	body.startGame & {
+		display: none;
+	}
 }
-.active-player #cursor {
-	// ONLY FOR ACTIVE PLAYER
-	display: none;
-}
-.bgsprite(@ex) {
-	background-position: @ex*1-1 0;
+.bgsprite(@ex; @other:0; @small:0) {
+	background-position: @ex*1-1 @other;
 	&.small {
-		background-position: @ex/3*2 0;
+		background-position: @ex/3*2 @small;
 	}
 	&.symbol {
 		background-position: @ex*1-1 -31px;
@@ -252,10 +274,10 @@ body {
 		.bgsprite(-150px);
 	}
 	&.indian {
-		.bgsprite(-123px);
+		.bgsprite(-123px, -31px, -22px);
 	}
 	&.indian.used {
-		.bgsprite(-152px);
+		.bgsprite(-152px, -31px, -22px);
 	}
 }
 .modal-content {
@@ -315,19 +337,23 @@ ul.players {
 }
 .space {
 	position: relative;
-	height: 1.5em;
-	width: 1em;
+	background-image: url(../img/terrain-sm.png);
+	height: 29px;
+	width: 2em;
 	&.river {
-		background-color: blue;
+		background-position: -5px 0;
 	}
 	&.mountain {
-		background-color: brown;
+		background-position: -124px 0;
 	}
 	&.mixed {
-		background-color: green;
+		background-position: -244px 0;
+	}
+	&.start {
+		border-bottom: dashed 1px gray;
 	}
 	&.finish {
-		border: silver dotted 3px;
+		border-right: black dotted 1px;
 	}
 }
 .container,

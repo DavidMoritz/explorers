@@ -105,12 +105,6 @@ mainApp.factory('MapFactory', [
 				},{
 					terrain: 'river',
 					special: 'finish'
-				},{
-					terrain: 'river',
-					special: 'finish'
-				},{
-					terrain: 'river',
-					special: 'finish'
 				}
 			],
 			configureMap: [

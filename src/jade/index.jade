@@ -5,26 +5,20 @@ include utils/main-content
 doctype html
 html(ng-app='mainApp')
 	head
-		meta(charset='UTF-8')
-		meta(name='description', content='Some have suggested that this game is similar to the card game "Splendor" by Space Cowboys.')
-		meta(name='author', content='Moritz Company')
-		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-		meta(name='apple-mobile-web-app-capable' content='yes')
-		meta(name='apple-touch-fullscreen' content='yes')
-		title Explorers
-		link(rel='shortcut icon', href='favicon.ico')
+		+meta()
+		title Lewis &amp; Clark
 		link(rel='stylesheet', href='inc/main.css')
 		script(src='inc/angular.js')
-	body(ng-cloak, ng-controller='MainCtrl')
+	body(ng-cloak, ng-controller='MainCtrl' ng-class='state')
 		+cursor()
-		.container(ng-class='gameStatus' ng-mousemove='moveCursor($event)')
+		.container(ng-mousemove='moveCursor($event)')
 			header.hide
-				h1 Explorers
+				h1 Lewis &amp; Clark
 			.map
 				.space(ng-repeat='space in map track by $index' class='{{space.terrain}} {{space.special}}')
 					span.space-arrow(ng-repeat='player in allPlayers' class='{{$parent.$index == player.scout ? "scout" : ""}} {{$parent.$index == player.baseCamp ? "camp" : ""}} {{player.color}}' style='border-color: {{player.color}}')
-			.row
-				+col(2)
+			.main-stage
+				.stage-left
 					button.btn.btn-success(ng-click='addEvent("changeCurrentPlayer")' ng-disabled='!userTurn() || !currentPlayer.takenMainAction') End Turn
 					//- Restart turn is not currently working
 					button.btn.btn-danger(ng-click='addEvent("restartTurn")' ng-disabled='!userTurn() || true') Redo Turn
@@ -38,11 +32,11 @@ html(ng-app='mainApp')
 						.collectables(ng-show='currentPlayer.collectables.length')
 							h4 Collect Items
 							.corp-boats
-								.collect-boat.alert.alert-danger
+								.collect-boat
 									.content
 										.item(ng-repeat='item in currentPlayer.collectables track by $index' ng-drag='userTurn()' ng-drag-data='item' ng-drag-success='dragCollectSuccess($index)' class='text-{{item.btnClass}}' title='{{item.display}}')
 											i.sprite(class='{{item.name}} {{item.name == "indian" ? "symbol" : ""}}')
-				+col(8)
+				.center-stage
 					+notify()
 					.main-content
 						+welcome()
@@ -54,10 +48,13 @@ html(ng-app='mainApp')
 						+recruitPayment()
 						+board()
 						+boardAbility()
+						+collectHorse()
+						+collectCanoe()
+						+faceUpAbility()
 						+boats()
 						+trash()
 						+win()
-				+col(2)
+				.stage-right
 					.btn-list
 						button.btn.btn-sm.btn-warning(ng-click='addEvent("camp")' ng-disabled='!userTurn() || !currentPlayer.notCamped') Camp
 						button.btn.btn-sm.btn-info(ng-click='viewRecruit()') Recruit
@@ -119,8 +116,8 @@ html(ng-app='mainApp')
 										.item(ng-repeat='item in boat.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
 											i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 				+col(4)
-					h3 Cards in Hand
-					+show-small-cards('held', 'player')
+					//- h3 Cards in Hand
+					//- +show-small-cards('held', 'player')
 					h3 Cards in Play
 					+show-small-cards('played', 'player')
 		script#viewrecruitModal(type='text/ng-template')
@@ -136,4 +133,10 @@ html(ng-app='mainApp')
 				h3 Current state of the Board:
 			.modal-body
 				+board(true)
+		.picture-box.hidden
+			img(src='./img/all-cards.jpg')
+			img(src='./img/corp-medium.jpg')
+			img(src='./img/corp-medium-full.jpg')
+			img(src='./img/journal-medium.jpg')
+			img(src='./img/board-spaces.jpg')
 //		| @@javascriptReplaceFiles

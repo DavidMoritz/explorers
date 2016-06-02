@@ -56,7 +56,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP11',
 					name: 'Meriweather Lewis',
 					symbol: 'fur',
-					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					description: 'Travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
 					story: 'Captain of the U.S. Army and personal secretary to the President, he is chosen by President Jefferson to command the Expedition.',
 					strength: 1,
 					played: false,
@@ -90,69 +90,69 @@ mainApp.factory('CardFactory', [
 					id: 'SP12',
 					name: 'Pierre Cruzatte',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash first card in journal.',
+					description: 'Take Indians from the Village and add them to your Expedition. Also trash first journal card.',
 					story: 'Thanks to his French father and his Omaha mother he speaks 3 languages and is skilled in sign language. He is an expert riverman. He entertains the explorers with his fiddle-playing.',
 					strength: 2,
 					played: false,
 					plays: 0,
 					abilities: [{
-						short: 'gather indians from the board and trash first card in journal.',
+						short: 'gather indians and trash journal card.',
 						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP13',
 					name: 'Seamor',
 					symbol: 'meat',
-					description: 'collect action on food.',
+					description: 'Collect Food.',
 					story: 'Lewis’ black Newfoundland dog, he is the only animal to complete the entire trip. He hunts for food and provides warnings.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP14',
 					name: 'Hugh McNeal',
 					symbol: 'wood',
-					description: 'collect action on wood.',
+					description: 'Collect Wood.',
 					story: 'Almost killed by a Tillamook Indian during a romantic assignation. On the return trip, he surprises a grizzly and has to scurry up a willow tree and wait for the bear to leave.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP15',
 					name: 'Alexander H. Willard',
 					symbol: 'equipment',
-					description: 'collect action on equipment.',
+					description: 'Collect Equipment.',
 					story: 'He has a powerful physique and serves the expedition as blacksmith and gunsmith. He is able to repair equipment and make tools for trading with the Indians.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP16',
 					name: 'Richard Windsor',
 					symbol: 'fur',
-					description: 'collect action on fur.',
+					description: 'Collect Fur.',
 					story: 'He is a great hunter and woodsman. Crossing a bluff, he slips and starts to fall down its edge. Lewis runs and tells him to dig his knife in and climb up. He does so, and escapes death.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}
@@ -162,7 +162,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP21',
 					name: 'William Clark',
 					symbol: 'fur',
-					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					description: 'Travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
 					story: 'Lieutenant during the Northwest Indian War, he is recruited by his friend Lewis when he is 33 to share command of the newly formed Corps of Discovery.',
 					strength: 1,
 					played: false,
@@ -196,69 +196,69 @@ mainApp.factory('CardFactory', [
 					id: 'SP22',
 					name: 'François Labiche',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash first card in journal.',
+					description: 'Take Indians from the Village and add them to your Expedition. Also trash first journal card.',
 					story: 'Recruited as an enlisted member of the Corps, he is an experienced boatman and Indian trader. He speaks English, French and several Indian languages.',
 					strength: 2,
 					played: false,
 					plays: 0,
 					abilities: [{
-						short: 'gather indians from the board and trash first card in journal.',
+						short: 'gather indians and trash journal card.',
 						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP23',
 					name: 'York',
 					symbol: 'meat',
-					description: 'collect action on food.',
+					description: 'Collect Food.',
 					story: 'Clark’s manservant, he plays a key role in diplomatic relations. Because of his appearance, the Indians suspect he has magical powers. He saves Lewis from a grizzly bear.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP24',
 					name: 'John B. Thompson',
 					symbol: 'wood',
-					description: 'collect action on wood.',
+					description: 'Collect Wood.',
 					story: 'He serves as a cook and creates maps. He goes out with several elk-hunting parties to “cure” meat in the field--a nearly essential skill in a damp climate.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP25',
 					name: 'Joseph Whitehouse',
 					symbol: 'equipment',
-					description: 'collect action on equipment.',
+					description: 'Collect Equipment.',
 					story: 'He serves as a tailor and keeps a journal. He is almost killed on the Jefferson River.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP26',
 					name: 'Joseph & Ruben Field',
 					symbol: 'fur',
-					description: 'collect action on fur.',
+					description: 'Collect Fur.',
 					story: 'They are brothers, two of the «Nine Young Men from Kentucky». Healthy and lucky, they are two of the top hunters of the expedition.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}
@@ -268,7 +268,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP31',
 					name: 'Nathaniel Pryor',
 					symbol: 'fur',
-					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					description: 'Travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
 					story: 'Described by the captains as «a man of character and ability», he is one of the «Nine Young Men from Kentucky». He supervises the carpentry at Camp Dubois.',
 					strength: 1,
 					played: false,
@@ -302,69 +302,69 @@ mainApp.factory('CardFactory', [
 					id: 'SP32',
 					name: 'George Gibson',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash first card in journal.',
+					description: 'Take Indians from the Village and add them to your Expedition. Also trash first journal card.',
 					story: 'He enlists as one of the “Nine Young Men from Kentucky” in 1803 and is a fine hunter and horseman and also plays the fiddle. He has some skills in sign language.',
 					strength: 2,
 					played: false,
 					plays: 0,
 					abilities: [{
-						short: 'gather indians from the board and trash first card in journal.',
+						short: 'gather indians and trash journal card.',
 						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP34',
 					name: 'Patrick Gass',
 					symbol: 'wood',
-					description: 'collect action on wood.',
+					description: 'Collect Wood.',
 					story: 'He is one of the best hunters in the group, and is routinely sent out alone to scout the surrounding countryside for game. He is considered to be one of the first mountain men.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP33',
 					name: 'John Colter',
 					symbol: 'meat',
-					description: 'collect action on food.',
+					description: 'Collect Food.',
 					story: 'He is elected Sergeant after Floyd’s death. As a carpenter, he heads the construction of the Corps’ winter quarters, hews dugout canoes, and builds wagons to portage the canoes.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP35',
 					name: 'William Bratton',
 					symbol: 'equipment',
-					description: 'collect action on equipment.',
+					description: 'Collect Equipment.',
 					story: 'Skilled blacksmith from Kentucky, he is over six feet tall and square-built. He has been suffering an extreme pain in his lower back for months and is cured in an Indian sweat lodge.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP36',
 					name: 'Peter Weiser',
 					symbol: 'fur',
-					description: 'collect action on fur.',
+					description: 'Collect Fur.',
 					story: 'He serves as quartermaster, cook, and hunter. He is one of the Corps’ best shots .While the expedition is at Fort Clatsop, he is part of the salt-making detail on the Oregon coast.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}
@@ -374,7 +374,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP41',
 					name: 'Charles Floyd',
 					symbol: 'fur',
-					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					description: 'Travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
 					story: 'Quartermaster, he dies in August 1804 because of a fatal appendicitis. He is buried on a bluff overlooking the Missouri River in Iowa. He is he only person to die on the expedition.',
 					strength: 1,
 					played: false,
@@ -408,69 +408,69 @@ mainApp.factory('CardFactory', [
 					id: 'SP42',
 					name: 'J. Baptiste Lepage',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash first card in journal.',
+					description: 'Take Indians from the Village and add them to your Expedition. Also trash first journal card.',
 					story: 'He is a French-Canadian fur trader who is living among Minitari and Mandan Indians when the expedition arrives here in 1804. He replaces discharged Private John Newman.',
 					strength: 2,
 					played: false,
 					plays: 0,
 					abilities: [{
-						short: 'gather indians from the board and trash first card in journal.',
+						short: 'gather indians and trash journal card.',
 						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP43',
 					name: 'William Werner',
 					symbol: 'meat',
-					description: 'collect action on food.',
+					description: 'Collect Food.',
 					story: 'He serves as a cook and was probably born in Kentucky. Before the expedition, he was disciplined for fighting with John Potts and is court-martialed in 1804 for mutiny.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP44',
 					name: 'Hugh Hall',
 					symbol: 'wood',
-					description: 'collect action on wood.',
+					description: 'Collect Wood.',
 					story: 'He has a penchant for whiskey, which together with other army infractions result in court martial penalties that are not of sufficient severity to dismiss him from the party.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP45',
 					name: 'John Potts',
 					symbol: 'equipment',
-					description: 'collect action on equipment.',
+					description: 'Collect Equipment.',
 					story: 'German immigrant and miller by trade, he is a trusted member of the party. He nearly drowns, almost bleeds to death when he cuts his leg, and is attacked by a grizzly bear.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP46',
 					name: 'John Collins',
 					symbol: 'fur',
-					description: 'collect action on fur.',
+					description: 'Collect Fur.',
 					story: 'Appointed cook for Sgt. Pryor’s mess, his main contribution is as one of the expedition’s best hunters. He captures specimens to scientifically document the Western wildlife.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}
@@ -480,7 +480,7 @@ mainApp.factory('CardFactory', [
 					id: 'SP51',
 					name: 'John Ordway',
 					symbol: 'fur',
-					description: 'travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
+					description: 'Travel 2 river for 1 food / travel 4 river for 1 canoe / travel 2 mountain for 1 horse.',
 					story: 'Sergeant of the U.S. Army, he is the right-hand man of the captains. In charge of guard duties and issuing provisions, he keeps the most detailed journal of the Expedition.',
 					strength: 1,
 					played: false,
@@ -514,69 +514,69 @@ mainApp.factory('CardFactory', [
 					id: 'SP52',
 					name: 'Robert Frazer',
 					symbol: 'wood',
-					description: 'gather indians from the board and trash first card in journal.',
+					description: 'Take Indians from the Village and add them to your Expedition. Also trash first journal card.',
 					story: 'He joins the Corps of Discovery belatedly, after Moses Reed’s desertion. He keeps a diary and a valuable map.',
 					strength: 2,
 					played: false,
 					plays: 0,
 					abilities: [{
-						short: 'gather indians from the board and trash first card in journal.',
+						short: 'gather indians and trash journal card.',
 						event: 'interpreter'
 					}]
 				}, {
 					id: 'SP53',
 					name: 'Silas Goodrich',
 					symbol: 'meat',
-					description: 'collect action on food.',
+					description: 'Collect Food.',
 					story: 'He is transferred from his army unit to Lewis and Clark’s command in 1804. He is the principal fisherman for the corps, and provides other food when necessary.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP54',
 					name: 'Thomas P. Howard',
 					symbol: 'wood',
-					description: 'collect action on wood.',
+					description: 'Collect Wood.',
 					story: 'He is a steady member of the expedition, despite having been court-martialed for scaling the Fort Mandan stockade wall when returning from a visit to the Mandan Indian village.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP55',
 					name: 'John Shields',
 					symbol: 'equipment',
-					description: 'collect action on equipment.',
+					description: 'Collect Equipment.',
 					story: 'He is from Virginia and the oldest man of the party, enlisting in 1803 at the age of 34. A talented man, he is head blacksmith, gunsmith, boat builder and general repairman.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					}]
 				}, {
 					id: 'SP56',
 					name: 'George Shannon',
 					symbol: 'fur',
-					description: 'collect action on fur.',
+					description: 'Collect Fur.',
 					story: '18 years old, one of the “Nine Young Men from Kentucky”. He is a good singer, hunter and horseman. He gets lost occasionally, but always manages to find his way back.',
 					strength: 1,
 					played: false,
 					plays: 0,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}
@@ -586,7 +586,8 @@ mainApp.factory('CardFactory', [
 					id: 'JF09',
 					name: 'Joseph Barter',
 					symbol: 'fur',
-					description: 'travel 5 river for 1 canoe.',
+					description: 'Pay 1 Canoe and move your Scout 5 spaces forward on the River.',
+					story: 'Also known as La Liberté, a private in the U.S. Army before being assigned duties as a boatman. However, he deserts soon afterwards.',
 					strength: 1,
 					abilities: [{
 						cost: {
@@ -671,11 +672,11 @@ mainApp.factory('CardFactory', [
 					strength: 2,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					},{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
@@ -687,11 +688,11 @@ mainApp.factory('CardFactory', [
 					strength: 2,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					},{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
@@ -869,11 +870,11 @@ mainApp.factory('CardFactory', [
 					strength: 2,
 					abilities: [{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					},{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}, {
@@ -885,15 +886,15 @@ mainApp.factory('CardFactory', [
 					strength: 3,
 					abilities: [{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					},{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					},{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
@@ -954,11 +955,11 @@ mainApp.factory('CardFactory', [
 					strength: 2,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					},{
 						collect: 'fur',
-						short: 'collect action on fur.',
+						short: 'collect fur.',
 						benefit: {}
 					}]
 				}, {
@@ -1005,15 +1006,15 @@ mainApp.factory('CardFactory', [
 					strength: 3,
 					abilities: [{
 						collect: 'equipment',
-						short: 'collect action on equipment.',
+						short: 'collect equipment.',
 						benefit: {}
 					},{
 						collect: 'meat',
-						short: 'collect action on food.',
+						short: 'collect food.',
 						benefit: {}
 					},{
 						collect: 'wood',
-						short: 'collect action on wood.',
+						short: 'collect wood.',
 						benefit: {}
 					}]
 				}, {
@@ -1098,7 +1099,10 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}
-			]
+			],
+			get allCards() {
+				return [].concat(this.lightblue, this.lightsalmon, this.lightgreen, this.orchid, this.khaki, this.journalCards);
+			}
 		};
 	}
 ]);

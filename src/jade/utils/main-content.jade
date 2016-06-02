@@ -1,15 +1,15 @@
 mixin welcome()
-	.welcome(ng-show='state == "welcome"')
+	.welcome(ng-if='state == "welcome"')
 		img(src='img/logo-alpha.png')
 		div(ng-hide='currentUser')
 			button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
 		h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
 
 mixin joinGame()
-	.pre-game.row(ng-show='state == "joinGame"')
+	.pre-game.row(ng-if='state == "joinGame"')
 		+col(6)
 			h3 Choose a game:
-			.btn.btn-info(ng-show='currentUser' ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.id}}: {{game.name}}
+			.btn.btn-info(ng-show='currentUser' ng-repeat='game in joinableGames track by $index' ng-click='joinActiveGame(game)') {{game.name}}
 			h3 Or create a new one:
 			.btn.btn-success(ng-click='createNewGame()') Create new game
 		+col(6)
@@ -17,25 +17,25 @@ mixin joinGame()
 			ul.well
 				li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
 			form(name='chatWindow' ng-submit='submitChat()')
-				input(ng-model='ff.chat' placeholder='respond to chat')
+				input.form-control(ng-model='ff.chat' placeholder='respond to chat')
 				button(ng-hide='true' type='submit')
 
 mixin startGame()
-	.pre-game.row(ng-show='state == "startGame"')
+	.pre-game.row(ng-if='state == "startGame"')
 		+col(6)
 			h3 Players:
 			ul
-				li(ng-repeat='player in activeGame.playerIds track by $index') {{player}}
+				li(ng-repeat='player in activeGame.playerNames track by $index') {{player}}
 			button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
 
 mixin playCard()
-	div(ng-show='state == "playCard"')
+	div(ng-if='state == "playCard"')
 		h4(ng-hide='currentPlayer.takenMainAction') You may play a card from you hand:
 		h4(ng-show='currentPlayer.takenMainAction') Main action taken
 		+show-cards('held', 'callPlayCard')
 
 mixin strength()
-	div(ng-show='state == "strength"')
+	div(ng-if='state == "strength"')
 		h3.pull-left Total Strength: {{currentPlayer.playStrength}}; Used: {{currentPlayer.deck.activeCard.plays}}
 		.btn.btn-danger.btn-indian(ng-click='addIndian()') Add Indian&nbsp;
 			span.badge {{currentPlayer.indianCount}}
@@ -46,12 +46,12 @@ mixin strength()
 				+active-card()
 			
 mixin recruit()
-	.journal(ng-show='state == "recruit"')
+	.journal(ng-if='state == "recruit"')
 		h3 Recruit for the team:
 		+show-cards('recruit', 'recruitThisCard')
 			
 mixin recruitPayment()
-	div(ng-show='state == "recruitPayment"')
+	div(ng-if='state == "recruitPayment"')
 		h3 Payment for new Recruit?
 		.row
 			+col(8)
@@ -63,7 +63,7 @@ mixin recruitPayment()
 mixin board(override)
 	- show = override ? 'true' : 'state == "board"'
 	- drop = override ? 'false' : 'space.content.length < space.max && validIndianDrop(true) && userTurn() && !currentPlayer.takenMainAction'
-	div(ng-show=show)
+	div(ng-if=show)
 		h3 Board Spaces:
 		.board-spaces-container
 			.board-space(ng-repeat='space in boardSpaces track by $index' class='{{space.class}}' ng-click='clickBoardSpace(space)' title='{{space.description}}' ng-drop=drop ng-drop-success='addEvent(space.event)')
@@ -75,8 +75,34 @@ mixin board(override)
 						i.sprite.symbol.indian
 						| &times; {{space.content.length}}
 
+mixin collectHorse()
+	div(ng-if='state == "collectHorse"')
+		h3 Pay for Horse(s)
+		.btn.btn-info(ng-disabled='horseCollectionCount() < 0' ng-click='addEvent("collectHorses")') {{horseCollectionText()}}
+		.horse-payment-space
+		.corp-boats
+			.horse-collect-boat(ng-drop="userTurn() && (validIndianDrop(true) || validSupplyDrop())" ng-drop-success="dropHorsePayment($data)")
+				.content
+					.item(title='indian')
+						i.sprite.indian
+					.item(ng-repeat='item in horsePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragHorseSuccess($index)')
+						i.sprite(class="{{item.name}}")
+
+mixin collectCanoe()
+	div(ng-if='state == "collectCanoe"')
+		h3 Pay for Canoe(s)
+		.btn.btn-info(ng-disabled='canoeCollectionCount() < 0' ng-click='addEvent("collectCanoes")') {{canoeCollectionText()}}
+		.canoe-payment-space
+		.corp-boats
+			.canoe-collect-boat(ng-drop="userTurn() && (validIndianDrop(true) || validSupplyDrop())" ng-drop-success="dropCanoePayment($data)")
+				.content
+					.item(title='indian')
+						i.sprite.indian
+					.item(ng-repeat='item in canoePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragCanoeSuccess($index)')
+						i.sprite(class="{{item.name}}")
+
 mixin boats()
-	div(ng-show='state == "boats"')
+	div(ng-if='state == "boats"')
 		h3 Choose a boat:
 		.choose-boats-container
 			.holder(ng-repeat='boat in chooseBoats track by $index')
@@ -87,16 +113,21 @@ mixin boats()
 					p {{boat.bonus}}
 
 mixin boardAbility()
-	div(ng-show='state == "boardAbility"')
+	div(ng-if='state == "boardAbility"')
 		h3 Choose which ability to use:
 		.choose-ability-container
-			+show-cards('held', 'useCardAbility')
+			+show-cards('held', 'useFaceUpAbility')
+
+mixin faceUpAbility()
+	div(ng-if='state == "faceUpAbility"')
+		h3 Choose an action from the card
+		+ability-card()
 
 mixin trash()
-	div(ng-show='state == "trash"')
+	div(ng-if='state == "trash"')
 		h3 Trash up to 3 cards:
 		+show-cards('held', 'trash')
 
 mixin win()
-	div(ng-show='state == "win"')
+	div(ng-if='state == "win"')
 		h3 {{currentPlayer.name}} is the winner!

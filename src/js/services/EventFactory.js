@@ -37,7 +37,7 @@ mainApp.factory('EventFactory', [
 					$s.activeGame.events.splice(idx);
 					resolve();
 				} else {
-					setTimeout(_ => {
+					setTimeout(() => {
 						$s.activeGame.events.splice(idx);
 						$s.restartTurn = true;
 						$s.state = 'playCard';
@@ -57,6 +57,7 @@ mainApp.factory('EventFactory', [
 						}));
 						$s.indianSupply = $s.allPlayers.length * 2 + 2;
 					});
+					$s.activeGame.active = true;
 					$s.user = _.find($s.allPlayers, {uid: $s.currentUser.uid});
 					EF.changeCurrentPlayer(resolve);
 				});
@@ -202,7 +203,12 @@ mainApp.factory('EventFactory', [
 				$s.state = 'playCard';
 				$s.benefitCount = 0;
 				$s.activeGame.message = {};
+				$s.special = {};
 				EF.closeModal(resolve);
+			},
+			clickBoardSpace: function(resolve) {
+				$s.currentPlayer.corp.payIndian();
+				EF[this.space](resolve);
 			},
 			boardCollectMeatFur: resolve => {
 				boardStuff('boardCollectMeatFur');
@@ -225,33 +231,25 @@ mainApp.factory('EventFactory', [
 				// TODO: determine which benefit they want
 				var benefit = this.benefit || {wood: 2, fur: 2};
 
-				$s.currentPlayer.benefit(benefit);
+				$s.currentPlayer.benefit(benefit, 2);
 				resolve();
 			},
 			boardCollectCanoe: resolve => {
 				boardStuff('boardCollectCanoe');
 
-				if ($s.currentPlayer.payCost({wood: 2})) {
-					$s.currentPlayer.benefit({canoe: 1});
-				} else {
-					$s.notify('You cannot afford a canoe');
-				}
+				$s.state = 'collectCanoe';
+				$s.canoePayment = {
+					content: []
+				};
 				resolve();
 			},
 			boardCollectHorse: resolve => {
 				boardStuff('boardCollectHorse');
-				// TODO: determine how they will pay
-				var payment = this.payment || {
-					fur: 1,
-					meat: 1,
-					equipment: 1
-				};
 
-				if ($s.currentPlayer.payCost(payment)) {
-					$s.currentPlayer.benefit({horse: 1});
-				} else {
-					$s.notify('You cannot afford a horse');
-				}
+				$s.state = 'collectHorse';
+				$s.horsePayment = {
+					content: []
+				};
 				resolve();
 			},
 			boardCollectBoat: resolve => {
@@ -275,14 +273,24 @@ mainApp.factory('EventFactory', [
 				boardStuff('boardUseAbility');
 				
 				if ($s.currentPlayer.payCost({meat: 1})) {
+					$s.special.abilityStrength = 1;
 					$s.state = 'boardAbility';
 				} else {
 					$s.notify('You cannot benefit from this space');
 				}
 				resolve();
 			},
-			useCardAbility: function(resolve) {
-				//var card = CF.
+			useFaceUpAbility: function(resolve) {
+				var card = _.find(CF.allCards, {id: this.cardId});
+
+				$s.special.abilityCard = card;
+				$s.state = 'faceUpAbility';
+
+				resolve();
+			},
+			useFaceUpCardAbility: function(resolve) {
+				//use the cards ability somehow
+				resolve();
 			},
 			interpreter: resolve => {
 				var indians = $s.boardSpaces.reduce((indians, space) => {
@@ -298,13 +306,59 @@ mainApp.factory('EventFactory', [
 				$s.journal.splice(0, 1);
 				resolve();
 			},
+			collectHorses: resolve => {
+				$s.currentPlayer.benefit({horse: $s.horseCollectionCount()});
+				$s.horsePayment.content.filter(item => item.name == 'indian').forEach(() => {
+					boardStuff('boardCollectHorse');
+				});
+				$s.horsePayment.content = [];
+				$s.state = 'playCard';
+
+				resolve();
+			},
+			horsePayment: function(resolve) {
+				var item = _.find(IF.allItems, {name: this.item}) || IF.indian();
+
+				$s.horsePayment.content.push(_.clone(item));
+				resolve();
+			},
+			removeHorseItem: function(resolve) {
+				$('.item.hidden').removeClass('hidden');
+				$s.horsePayment.content.splice(this.idx, 1);
+
+				resolve();
+			},
+			collectCanoes: resolve => {
+				$s.currentPlayer.benefit({canoe: $s.canoeCollectionCount()});
+				$s.canoePayment.content.filter(item => item.name == 'indian').forEach(() => {
+					boardStuff('boardCollectCanoe');
+				});
+				$s.canoePayment.content = [];
+				$s.state = 'playCard';
+
+				resolve();
+			},
+			canoePayment: function(resolve) {
+				var item = _.find(IF.allItems, {name: this.item}) || IF.indian();
+
+				$s.canoePayment.content.push(_.clone(item));
+				resolve();
+			},
+			removeCanoeItem: function(resolve) {
+				$('.item.hidden').removeClass('hidden');
+				$s.canoePayment.content.splice(this.idx, 1);
+
+				resolve();
+			},
 			removeItem: function(resolve) {
 				var boat = findBoat(this);
 
+				$('.item.hidden').removeClass('hidden');
 				boat.content.splice(this.idx, 1);
 				resolve();
 			},
 			collectItem: function(resolve) {
+				$('.item.hidden').removeClass('hidden');
 				$s.currentPlayer.collectables.splice(this.idx, 1);
 				
 				if (--$s.benefitCount === 0) {
