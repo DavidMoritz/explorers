@@ -7,36 +7,18 @@ mixin show-cards(type, click)
 	- click = click ? click + '(card)' : ''
 	.cards
 		.card-img(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
-			.card-info
-				span.strength {{card.strength}}
-				i.sprite.symbol(class='{{card.symbol}}')
-			.card-name {{card.name}}
-
-mixin view-card()
-	.card-img(class='{{card.symbol}} {{card.id}} held-card' title='{{card.name}}: {{card.description}}')
-		.card-info
-			span.strength {{card.strength}}
-			i.sprite.symbol(class='{{card.symbol}}')
-		.card-name {{card.name}}
 
 mixin show-small-cards(type, person)
-	- items = ['{{card.symbol}}','{{card.id}}']
+	- items = ['{{card.symbol}}','{{card.id}}','strength-{{card.strength}}']
 	- items.push(person == 'player' ? '{{card.support ? "support" : ""}}' : 'played')
 	- items.push(type + '-card')
 	- repeat = 'card in ' + person + '.deck.' + type + 'Cards track by card.id'
 	- click = person == 'player' ? 'card.support ? "" : viewCard(card)' : 'viewCard(card)'
 	.cards
 		.card-img.small(ng-repeat=repeat class=items.join(' ') ng-click=click title='{{card.name}}: {{card.description}}')
-			.card-info
-				span.strength.small {{card.strength}}
-				i.sprite.symbol.small(class='{{card.symbol}}')
 
 mixin active-card()
 	.held-card.card-img(class='{{currentPlayer.deck.activeCard.symbol}} {{currentPlayer.deck.activeCard.id}}' title='{{currentPlayer.deck.activeCard.name}}: {{currentPlayer.deck.activeCard.description}}' click='viewCard(currentPlayer.deck.activeCard)')
-		.card-info
-			span.strength {{currentPlayer.deck.activeCard.strength}}
-			i.sprite.symbol(class='{{currentPlayer.deck.activeCard.symbol}}')
-		.card-name {{currentPlayer.deck.activeCard.name}}
 	h3 Card-Abilities
 	.abilities
 		.ability(ng-repeat='ability in currentPlayer.deck.activeCard.abilities track by $index' ng-click='useAbility($index, ability)')
@@ -44,10 +26,6 @@ mixin active-card()
 
 mixin ability-card()
 	.held-card.card-img(class='{{special.abilityCard.symbol}} {{special.abilityCard.id}}' title='{{special.abilityCard.name}}: {{special.abilityCard.description}}' click='viewCard(special.abilityCard)')
-		.card-info
-			span.strength {{special.abilityCard.strength}}
-			i.sprite.symbol(class='{{special.abilityCard.symbol}}')
-		.card-name {{special.abilityCard.name}}
 	h3 Card-Abilities
 	.abilities
 		.ability(ng-repeat='ability in special.abilityCard.abilities track by $index' ng-click='useFaceUpCardAbility($index, ability)')
@@ -56,7 +34,3 @@ mixin ability-card()
 mixin recruit-card()
 	h3 New Recruit:
 	.held-card.card-img(class='{{recruitCard.symbol}} {{recruitCard.id}}' title='{{recruitCard.name}}: {{recruitCard.description}}')
-		.card-info
-			span.strength {{recruitCard.strength}}
-			i.sprite.symbol(class='{{recruitCard.symbol}}')
-		.card-name {{recruitCard.name}}

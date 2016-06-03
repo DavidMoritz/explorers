@@ -81,7 +81,7 @@ html(ng-app='mainApp')
 				+close()
 				h3 {{card.name}}
 			.modal-body.row.card-modal-body
-				+view-card()
+				.card-img.large(class='{{card.symbol}} {{card.id}} held-card' title='{{card.name}}: {{card.description}}')
 				.card-information
 					h4 Name: {{card.name}}
 					h4 Symbol: {{card.symbol}}
@@ -135,6 +135,8 @@ html(ng-app='mainApp')
 				+board(true)
 		.picture-box.hidden
 			img(src='./img/all-cards.jpg')
+			img(src='./img/all-cards-sm.jpg')
+			img(src='./img/all-cards-md.jpg')
 			img(src='./img/corp-medium.jpg')
 			img(src='./img/corp-medium-full.jpg')
 			img(src='./img/journal-medium.jpg')

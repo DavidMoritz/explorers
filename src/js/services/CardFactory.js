@@ -583,7 +583,7 @@ mainApp.factory('CardFactory', [
 			],
 			journalCards: [
 				{
-					id: 'JF09',
+					id: 'JC09',
 					name: 'Joseph Barter',
 					symbol: 'fur',
 					description: 'Pay 1 Canoe and move your Scout 5 spaces forward on the River.',
@@ -599,7 +599,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF04',
+					id: 'JC04',
 					name: 'Ebenezer Tuttle',
 					symbol: 'fur',
 					description: 'Pay 1 Wood and take 1 Canoe.',
@@ -615,7 +615,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF05',
+					id: 'JC05',
 					name: 'René Jessaume',
 					symbol: 'fur',
 					description: 'Pay 3 Furs and take 1 Horse.',
@@ -631,7 +631,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF07',
+					id: 'JC07',
 					name: 'Moses B. Reed',
 					symbol: 'fur',
 					description: 'Pay 2 Wood and move your Scout 2 spaces forward on the River.',
@@ -647,7 +647,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF24',
+					id: 'JC24',
 					name: 'P. Antoine Tabeau',
 					symbol: 'fur',
 					description: 'Pay 1 Wood and 1 Food and take 2 Canoes.',
@@ -664,7 +664,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF19',
+					id: 'JC19',
 					name: 'John Hay',
 					symbol: 'fur',
 					description: 'For each Strength that activates this card, choose one of the two resources: Fur or Wood, and collect it. (By activating this card three times, you can, for instance, collect Fur twice and Wood once.)',
@@ -680,7 +680,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JF22',
+					id: 'JC22',
 					name: 'Black Moccasin',
 					symbol: 'fur',
 					description: 'For each Strength that activates this card, choose one of the two resources: Equipment or Food, and collect it. (By activating this card three times, you can, for instance, collect Equipment twice and Food once.)',
@@ -696,7 +696,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JF26',
+					id: 'JC26',
 					name: 'Hawk\'s Feather',
 					symbol: 'fur',
 					description: 'Pay 1 Food and move your Scout 3 spaces forward on the River.',
@@ -712,7 +712,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF48',
+					id: 'JC48',
 					name: 'Coboway',
 					symbol: 'fur',
 					description: 'Pay 1 Equipment, 1 Food, 1 Fur and 1 Wood and move your Scout 4 spaces forward in the Mountains.',
@@ -731,7 +731,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF47',
+					id: 'JC47',
 					name: 'Old Toby',
 					symbol: 'fur',
 					description: 'Pay 1 Canoe and 1 Horse and move your Scout 6 spaces forward, either on the River or in the Mountains; not both! If activated more than once, each multiple of 6 can be either River or Mountains.',
@@ -757,7 +757,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF41',
+					id: 'JC41',
 					name: 'Cameahwait',
 					symbol: 'fur',
 					description: 'Pay 1 Canoe and take 1 Horse or pay 1 Horse and take 1 Canoe.',
@@ -781,7 +781,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JH10',
+					id: 'JC10',
 					name: 'J. Baptiste Deschamps',
 					symbol: 'meat',
 					description: 'Pay 1 Food and 1 Canoe and move your Scout 6 spaces forward on the River.',
@@ -798,7 +798,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG11',
+					id: 'JC11',
 					name: 'John Newman',
 					symbol: 'wood',
 					story: 'Recruited at Fort Massac, he is expelled from the expedition following his court-martial for (having uttered repeated expressions of a highly criminal and mutinous nature.',
@@ -822,7 +822,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JH42',
+					id: 'JC42',
 					name: 'Broken Arm',
 					symbol: 'meat',
 					description: 'Pay 1 Equipment and take 1 Horse.',
@@ -838,7 +838,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JH32',
+					id: 'JC32',
 					name: 'James Mackay',
 					symbol: 'meat',
 					description: 'Pay 1 Horse and move your Scout forward 3 spaces, either on the River or in the Mountains; not both! If activated more than once, each multiple of 3 can be either River or Mountains.',
@@ -862,7 +862,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JH21',
+					id: 'JC21',
 					name: 'Dickson & Hancock',
 					symbol: 'meat',
 					description: 'For each Strength that activates this card, choose one of the two resources: Food or Fur, and collect it. (By activating this card three times, you can, for instance, collect Food twice and Fur once.)',
@@ -878,7 +878,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JH38',
+					id: 'JC38',
 					name: 'Hugh Heney',
 					symbol: 'meat',
 					description: 'For each Strength that activates this card, choose one of the three resources: Fur, Food or Wood. Then collect it. (By activating this card three times, you can, for instance, collect Fur once, Food once and Wood once.)',
@@ -898,7 +898,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JE03',
+					id: 'JC03',
 					name: 'Buffalo Medicine',
 					symbol: 'equipment',
 					description: 'Pay 1 Food and take 1 Canoe.',
@@ -914,7 +914,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE13',
+					id: 'JC13',
 					name: 'John Dame',
 					symbol: 'equipment',
 					description: 'Pay 2 Wood and move your Scout 1 space forward in the Mountains.',
@@ -930,7 +930,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE12',
+					id: 'JC12',
 					name: 'Charles Mackenzie',
 					symbol: 'equipment',
 					description: 'Pay 1 Fur and 1 Horse and move your Scout 3 spaces forward in the Mountains.',
@@ -947,7 +947,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JF20',
+					id: 'JC20',
 					name: 'Big White',
 					symbol: 'equipment',
 					description: 'For each Strength that activates this card, choose one of the two resources: Equipment or Wood. Then collect it. (By activating this card three times, you can, for instance, collect Equipment twice and Wood once.)',
@@ -963,7 +963,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JE34',
+					id: 'JC34',
 					name: 'Pierre Dorion',
 					symbol: 'equipment',
 					description: 'Pay 3 Furs and move your Scout forward 2 spaces in the Mountains.',
@@ -979,7 +979,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE43',
+					id: 'JC43',
 					name: 'Comcomly',
 					symbol: 'equipment',
 					description: 'Pay 1 Equipment, 1 Food, 1 Fur and 1 Wood and move your Scout 7 spaces forward on the River.',
@@ -998,7 +998,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JE37',
+					id: 'JC37',
 					name: 'Régis Loisel',
 					symbol: 'equipment',
 					description: 'For each Strength that activates this card, choose one of the three resources: Equipment, Food or Wood. Then collect it. (By activating this card three times, you can, for instance, collect Equipment once, Food once and Wood once.)',
@@ -1018,7 +1018,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'JE49',
+					id: 'JC49',
 					name: 'Crow At Rest',
 					symbol: 'equipment',
 					description: 'Pay 2 Furs and 2 Equipment and move your Scout 3 spaces forward in the Mountains.',
@@ -1035,7 +1035,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG08',
+					id: 'JC08',
 					name: 'John Robertson',
 					symbol: 'wood',
 					description: 'Pay 2 Equipment and move your Scout 3 spaces forward on the River.',
@@ -1051,7 +1051,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG25',
+					id: 'JC25',
 					name: 'Three Eagles',
 					symbol: 'wood',
 					description: 'Pay 2 Equipment and take 1 Horse.',
@@ -1067,7 +1067,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG27',
+					id: 'JC27',
 					name: 'Man Crow',
 					symbol: 'wood',
 					description: 'Pay 3 Wood and move your Scout 4 spaces forward on the River.',
@@ -1083,7 +1083,7 @@ mainApp.factory('CardFactory', [
 						}
 					}]
 				}, {
-					id: 'JG40',
+					id: 'JC40',
 					name: 'Twisted Hair',
 					symbol: 'wood',
 					description: 'Pay 1 Canoe and take 2 Canoes. If you activate this Character several times, you are not allowed to use the resources you get as a result of the first (or second) activation to trigger the next Action. You must use Canoes that had been previously held.',
