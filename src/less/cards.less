@@ -19,12 +19,6 @@
 	align-items: center;
 	justify-content: space-between;
 }
-.played-card {
-	border: red dashed 4px !important;
-	&.small {
-		border-width: 2px !important;
-	}
-}
 .held-card {
 	cursor: pointer;
 }
@@ -35,12 +29,29 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	border: solid 2px green;
 	margin: 3px;
 	border-radius: 5px;
 	padding: 5px;
 	&.small {
 		padding: 2px;
+	}
+	&.support-section {
+		position: absolute;
+		margin: -6px 25px;
+		display: flex;
+		justify-content: flex-end;
+		.item {
+			border: dashed 1px;
+			border-radius: 5px;
+			height: 32px;
+			padding: 0 3px;
+			margin: 3px;
+			width: 35px;
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+	}
+	&.relative {
+		position: relative;
 	}
 	.card-name {
 		font-size: 16px;
@@ -71,34 +82,10 @@
 			}
 		}
 	}
-	&.fur {
-		border-color: yellow;
-		.strength {
-			background-color: yellow;
-		}
-	}
-	&.meat {
-		border-color: lightcoral;
-		.strength {
-			background-color: lightcoral;
-		}
-	}
-	&.equipment {
-		border-color: #ddd;
-		.strength {
-			background-color: #ddd
-		}
-	}
-	&.wood {
-		border-color: #c86;
-		.strength {
-			background-color: #c86;
-		}
-	}
 }
 .bgpos(@ex; @why) {
 	// -21px -266px
-	background-position: (@ex + 2) @why;
+	background-position: (@ex + 2) (@why + 3);
 	&.small {
 		background-position: @ex/ 2 @why/2;
 	}
@@ -109,16 +96,16 @@
 .card-img {
 	width: 140px;
 	height: 185px;
-	background-image: url(../img/all-cards.jpg);
+	background-image: url(../img/all-cards.png);
 	&.small {
 		width: 70px;
 		height: 92.5px;
-		background-image: url(../img/all-cards-sm.jpg);
+		background-image: url(../img/all-cards-sm.png);
 	}
 	&.large {
 		width: 173px; // 1.23
 		height: 237px; // 1.28
-		background-image: url(../img/all-cards-md.jpg);
+		background-image: url(../img/all-cards-md.png);
 	}
 	&.SP11{
 		.bgpos(-18px, -212px);
@@ -145,7 +132,7 @@
 		.bgpos(-161px, -406px);
 	}
 	&.SP23{
-		.bgpos(-301px, -406px);
+		.bgpos(-296px, -406px);
 	}
 	&.SP24{
 		.bgpos(-437px, -404px);
@@ -154,7 +141,7 @@
 		.bgpos(-589px, -403px);
 	}
 	&.SP26{
-		.bgpos(-731px, -401px);
+		.bgpos(-724px, -401px);
 	}
 	&.SP31{
 		.bgpos(-18px, -604px);
@@ -163,7 +150,7 @@
 		.bgpos(-158px, -604px);
 	}
 	&.SP33{
-		.bgpos(-302px, -604px);
+		.bgpos(-299px, -604px);
 	}
 	&.SP34{
 		.bgpos(-439px, -604px);
@@ -217,7 +204,7 @@
 		.bgpos(-164px, -1206px);
 	}
 	&.JC03 {
-		.bgpos(-306px, -1208px);
+		.bgpos(-300px, -1208px);
 	}
 	&.JC04 {
 		.bgpos(-444px, -1208px);
@@ -232,7 +219,7 @@
 		.bgpos(-875px, -1206px);
 	}
 	&.JC08 {
-		.bgpos(-1014px, -1206px);
+		.bgpos(-1011px, -1204px);
 	}
 	&.JC09 {
 		.bgpos(-25px, -1404px);
@@ -241,7 +228,7 @@
 		.bgpos(-164px, -1403px);
 	}
 	&.JC11 {
-		.bgpos(-307px, -1403px);
+		.bgpos(-301px, -1403px);
 	}
 	&.JC12 {
 		.bgpos(-443px, -1403px);
@@ -304,7 +291,7 @@
 		.bgpos(-875px, -1808px);
 	}
 	&.JC32 {
-		.bgpos(-1012px, -1808px);
+		.bgpos(-1009px, -1806px);
 	}
 	&.JC33 {
 		.bgpos(-595px, -2003px);
@@ -337,10 +324,10 @@
 		.bgpos(-737px, -2198px);
 	}
 	&.JC43 {
-		.bgpos(-879px, -2198px);
+		.bgpos(-1020px, -2198px);
 	}
 	&.JC44 {
-		.bgpos(-1020px, -2198px);
+		.bgpos(-879px, -2198px);
 	}
 	&.JC45 {
 		.bgpos(-22px, -2201px);
@@ -349,7 +336,7 @@
 		.bgpos(-163px, -2201px);
 	}
 	&.JC47 {
-		.bgpos(-305px, -2203px);
+		.bgpos(-300px, -2203px);
 	}
 	&.JC48 {
 		.bgpos(-444px, -2204px);
@@ -411,7 +398,7 @@
 				.bgpos(-868px, -210px);
 			}
 			&.equipment {
-				.bgpos(-869px, -404px);
+				.bgpos(-864px, -404px);
 			}
 			&.fur {
 				.bgpos(-1009px, -211px);
@@ -425,7 +412,7 @@
 				.bgpos(-1018px, -606px);
 			}
 			&.equipment {
-				.bgpos(-880px, -607px);
+				.bgpos(-875px, -607px);
 			}
 			&.fur {
 				.bgpos(-1020px, -803px);
@@ -436,7 +423,7 @@
 				.bgpos(-733px, -5px);
 			}
 			&.meat {
-				.bgpos(-872px, -8px);
+				.bgpos(-869px, -8px);
 			}
 			&.equipment {
 				.bgpos(-1010px, -11px);

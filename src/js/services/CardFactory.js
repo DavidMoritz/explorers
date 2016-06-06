@@ -101,20 +101,6 @@ mainApp.factory('CardFactory', [
 					}]
 				}, {
 					id: 'SP13',
-					name: 'Seamor',
-					symbol: 'meat',
-					description: 'Collect Food.',
-					story: 'Lewis’ black Newfoundland dog, he is the only animal to complete the entire trip. He hunts for food and provides warnings.',
-					strength: 1,
-					played: false,
-					plays: 0,
-					abilities: [{
-						collect: 'meat',
-						short: 'collect food.',
-						benefit: {}
-					}]
-				}, {
-					id: 'SP14',
 					name: 'Hugh McNeal',
 					symbol: 'wood',
 					description: 'Collect Wood.',
@@ -125,6 +111,20 @@ mainApp.factory('CardFactory', [
 					abilities: [{
 						collect: 'wood',
 						short: 'collect wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP14',
+					name: 'Seamor',
+					symbol: 'meat',
+					description: 'Collect Food.',
+					story: 'Lewis’ black Newfoundland dog, he is the only animal to complete the entire trip. He hunts for food and provides warnings.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
@@ -207,20 +207,6 @@ mainApp.factory('CardFactory', [
 					}]
 				}, {
 					id: 'SP23',
-					name: 'York',
-					symbol: 'meat',
-					description: 'Collect Food.',
-					story: 'Clark’s manservant, he plays a key role in diplomatic relations. Because of his appearance, the Indians suspect he has magical powers. He saves Lewis from a grizzly bear.',
-					strength: 1,
-					played: false,
-					plays: 0,
-					abilities: [{
-						collect: 'meat',
-						short: 'collect food.',
-						benefit: {}
-					}]
-				}, {
-					id: 'SP24',
 					name: 'John B. Thompson',
 					symbol: 'wood',
 					description: 'Collect Wood.',
@@ -231,6 +217,20 @@ mainApp.factory('CardFactory', [
 					abilities: [{
 						collect: 'wood',
 						short: 'collect wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP24',
+					name: 'York',
+					symbol: 'meat',
+					description: 'Collect Food.',
+					story: 'Clark’s manservant, he plays a key role in diplomatic relations. Because of his appearance, the Indians suspect he has magical powers. He saves Lewis from a grizzly bear.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
@@ -312,7 +312,7 @@ mainApp.factory('CardFactory', [
 						event: 'interpreter'
 					}]
 				}, {
-					id: 'SP34',
+					id: 'SP33',
 					name: 'Patrick Gass',
 					symbol: 'wood',
 					description: 'Collect Wood.',
@@ -326,7 +326,7 @@ mainApp.factory('CardFactory', [
 						benefit: {}
 					}]
 				}, {
-					id: 'SP33',
+					id: 'SP34',
 					name: 'John Colter',
 					symbol: 'meat',
 					description: 'Collect Food.',
@@ -419,20 +419,6 @@ mainApp.factory('CardFactory', [
 					}]
 				}, {
 					id: 'SP43',
-					name: 'William Werner',
-					symbol: 'meat',
-					description: 'Collect Food.',
-					story: 'He serves as a cook and was probably born in Kentucky. Before the expedition, he was disciplined for fighting with John Potts and is court-martialed in 1804 for mutiny.',
-					strength: 1,
-					played: false,
-					plays: 0,
-					abilities: [{
-						collect: 'meat',
-						short: 'collect food.',
-						benefit: {}
-					}]
-				}, {
-					id: 'SP44',
 					name: 'Hugh Hall',
 					symbol: 'wood',
 					description: 'Collect Wood.',
@@ -443,6 +429,20 @@ mainApp.factory('CardFactory', [
 					abilities: [{
 						collect: 'wood',
 						short: 'collect wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP44',
+					name: 'William Werner',
+					symbol: 'meat',
+					description: 'Collect Food.',
+					story: 'He serves as a cook and was probably born in Kentucky. Before the expedition, he was disciplined for fighting with John Potts and is court-martialed in 1804 for mutiny.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {
@@ -525,20 +525,6 @@ mainApp.factory('CardFactory', [
 					}]
 				}, {
 					id: 'SP53',
-					name: 'Silas Goodrich',
-					symbol: 'meat',
-					description: 'Collect Food.',
-					story: 'He is transferred from his army unit to Lewis and Clark’s command in 1804. He is the principal fisherman for the corps, and provides other food when necessary.',
-					strength: 1,
-					played: false,
-					plays: 0,
-					abilities: [{
-						collect: 'meat',
-						short: 'collect food.',
-						benefit: {}
-					}]
-				}, {
-					id: 'SP54',
 					name: 'Thomas P. Howard',
 					symbol: 'wood',
 					description: 'Collect Wood.',
@@ -549,6 +535,20 @@ mainApp.factory('CardFactory', [
 					abilities: [{
 						collect: 'wood',
 						short: 'collect wood.',
+						benefit: {}
+					}]
+				}, {
+					id: 'SP54',
+					name: 'Silas Goodrich',
+					symbol: 'meat',
+					description: 'Collect Food.',
+					story: 'He is transferred from his army unit to Lewis and Clark’s command in 1804. He is the principal fisherman for the corps, and provides other food when necessary.',
+					strength: 1,
+					played: false,
+					plays: 0,
+					abilities: [{
+						collect: 'meat',
+						short: 'collect food.',
 						benefit: {}
 					}]
 				}, {

@@ -2,17 +2,19 @@ mixin welcome()
 	.welcome(ng-if='state == "welcome"')
 		img(src='img/logo-alpha.png')
 		div(ng-hide='currentUser')
+			button.btn.btn-danger.btn-lg.facebook-login(ng-click='googleLogin()') Login with Google
+			br
 			button.btn.btn-primary.btn-lg.facebook-login(ng-click='fbLogin()') Login with Facebook
-		h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
+		//- h4(ng-show='currentPlayer') Active Player: {{currentPlayer.name}}
 
 mixin joinGame()
-	.pre-game.row(ng-if='state == "joinGame"')
-		+col(6)
+	.pre-game(ng-if='state == "joinGame"')
+		.half(ng-show='currentUser')
 			h3 Choose a game:
-			.btn.btn-info(ng-show='currentUser' ng-repeat='game in joinableGames track by $index' ng-click='joinActiveGame(game)') {{game.name}}
+			.btn.btn-info(ng-repeat='game in allGames track by $index' ng-click='joinActiveGame(game)') {{game.name}}
 			h3 Or create a new one:
 			.btn.btn-success(ng-click='createNewGame()') Create new game
-		+col(6)
+		.half
 			h3 Message List:
 			ul.well
 				li(ng-repeat='message in chatList track by $index') {{message.user}}: {{message.text}}
@@ -21,16 +23,17 @@ mixin joinGame()
 				button(ng-hide='true' type='submit')
 
 mixin startGame()
-	.pre-game.row(ng-if='state == "startGame"')
-		+col(6)
-			h3 Players:
+	.pre-game(ng-if='state == "startGame"')
+		.half
+			h3 Waiting for Host to start game
+			h5 Current Players:
 			ul
 				li(ng-repeat='player in activeGame.playerNames track by $index') {{player}}
-			button.btn.btn-success(ng-click='addEvent("startGame")') Start the game
+			button.btn.btn-success(ng-disabled='activeGame.hostId != currentUser.uid' ng-click='addEvent("startGame")') Start the game
 
 mixin playCard()
 	div(ng-if='state == "playCard"')
-		h4(ng-hide='currentPlayer.takenMainAction') You may play a card from you hand:
+		h4(ng-hide='currentPlayer.takenMainAction') {{currentPlayer.name}} may play a card from {{userTurn() ? "your" : "their"}} hand:
 		h4(ng-show='currentPlayer.takenMainAction') Main action taken
 		+show-cards('held', 'callPlayCard')
 
@@ -42,7 +45,7 @@ mixin strength()
 		.play-card-display-holder
 			.play-card-display
 				+show-cards('held', 'addStrength')
-			.active-card
+			.active-card(ng-drop='validIndianDrop(true) && userTurn()' ng-drop-success='addEvent("addIndianToStrength")' ng-drag-cancel='true')
 				+active-card()
 			
 mixin recruit()
@@ -53,11 +56,11 @@ mixin recruit()
 mixin recruitPayment()
 	div(ng-if='state == "recruitPayment"')
 		h3 Payment for new Recruit?
-		.row
-			+col(8)
+		.flex-holder
+			.double
 				+show-cards('held', 'recruitPayment')
 				.btn.btn-info(ng-show='currentPlayer.corp.count("equipment") >= recruitCard.strength' ng-click='recruitPayment()') Use {{recruitCard.strength}} equipment
-			+col(null, 4, 4, 4, 4, 'active-card')
+			.half.active-card
 				+recruit-card()
 			
 mixin board(override)

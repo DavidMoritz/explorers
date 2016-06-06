@@ -105,23 +105,13 @@ mainApp.controller('MainCtrl', [
 			$s.journal = startJournal.concat(shuffledDeck);
 		}
 
-		function createNewUser(authData) {
+		function createNewUser(id, data) {
 			var allUsers = FF.getFBObject('users');
 
 			allUsers.$loaded(() => {
-				allUsers[authData.uid] = {
-					createdDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-					name: authData.facebook.displayName,
-					rating: 1200,
-					uid: authData.uid,
-					gender: authData.facebook.cachedUserProfile.gender,
-					firstName: authData.facebook.cachedUserProfile.first_name,
-					lastName: authData.facebook.cachedUserProfile.last_name,
-					picture: authData.facebook.cachedUserProfile.picture.data.url,
-					timezone: authData.facebook.cachedUserProfile.timezone
-				};
+				allUsers[id] = data;
 				allUsers.$save();
-				$s.currentUser = allUsers[authData.uid];
+				$s.currentUser = allUsers[id];
 				init();
 			});
 		}
@@ -175,7 +165,6 @@ mainApp.controller('MainCtrl', [
 				gameName: 'newGame'
 			},
 			map: MF.map,
-			state: 'welcome',
 			eventTracker: 0,
 			chatList: [],
 			recruitCard: {},
@@ -196,6 +185,20 @@ mainApp.controller('MainCtrl', [
 			}),
 			chooseBoats: BF.chooseBoats
 		});
+
+		Object.defineProperty($s, 'state', {
+			set: val => {
+				if (typeof val == 'string') {
+					if ($s._state != 'recruit' && $s._state != 'board') {
+						$s.previousState = $s._state;
+					}
+					$s._state = val;
+				}
+			},
+			get: () => $s._state
+		});
+			
+		$s.state = 'welcome';
 
 		$s.getFaceUpPlayedCards = () => {
 			return $s.allPlayers.reduce((cards, player) => {
@@ -441,8 +444,6 @@ mainApp.controller('MainCtrl', [
 					name: 'playCard',
 					cardId: card.id
 				});
-			} else {
-				$s.viewCard(card);
 			}
 		};
 
@@ -452,8 +453,6 @@ mainApp.controller('MainCtrl', [
 					name: 'addStrength',
 					cardId: card.id
 				});
-			} else {
-				$s.viewCard(card);
 			}
 		};
 
@@ -463,8 +462,6 @@ mainApp.controller('MainCtrl', [
 					name: 'trashCard',
 					cardId: card.id
 				});
-			} else {
-				$s.viewCard(card);
 			}
 		};
 
@@ -499,8 +496,6 @@ mainApp.controller('MainCtrl', [
 				} else {
 					$s.addEvent('recruitPayment');
 				}
-			} else {
-				$s.viewCard(card);
 			}
 		};
 
@@ -581,7 +576,7 @@ mainApp.controller('MainCtrl', [
 		$s.viewBoard = () => {
 			if ($s.userTurn() && !$s.currentPlayer.takenMainAction) {
 				if ($s.state == 'board') {
-					$s.addEvent('backToPlayCard');
+					$s.addEvent('backToPrevious');
 				} else {
 					$s.addEvent('openBoard');
 				}
@@ -593,7 +588,7 @@ mainApp.controller('MainCtrl', [
 		$s.viewRecruit = () => {
 			if ($s.userTurn() && $s.currentPlayer.notRecruited) {
 				if ($s.state == 'recruit') {
-					$s.addEvent('backToPlayCard');
+					$s.addEvent('backToPrevious');
 				} else {
 					$s.addEvent('openRecruit');
 				}
@@ -628,19 +623,44 @@ mainApp.controller('MainCtrl', [
 
 		$s.fbLogin = () => {
 			FF.facebookLogin(err => {
-				console.log('There was an error', err);
+				console.log('There was a Facebook Login error', err);
 				// ** TEMPORARY FOR DEV ***
-				console.log('Dev login: David Moritz');
-				$s.currentUser = FF.getFBObject('users/facebook:10156817857345403');
-				$s.currentUser.$loaded(user => {
-					init();
-				});
+				$s.notify('Facebook Login Error', 'danger');
 			}, authData => {
 				console.log('Authenticated successfully with payload:', authData);
 				$s.currentUser = FF.getFBObject('users/' + authData.uid);
 				$s.currentUser.$loaded(user => {
 					if (!user.uid) {
-						createNewUser(authData);
+						var name = authData.providerData[0].displayName;
+						createNewUser(authData.uid, {
+							name: name,
+							rating: 1200,
+							uid: authData.uid,
+							firstName: authData.providerData[0].first_name || name.substring(0, name.indexOf(' ')) || name
+						});
+					} else {
+						init();
+					}
+				});
+			});
+		};
+
+		$s.googleLogin = () => {
+			FF.googleLogin(err => {
+				console.log('There was a Google Login error', err);
+				$s.notify('Google Login Error', 'danger');
+			}, authData => {
+				console.log('Authenticated successfully with payload:', authData);
+				$s.currentUser = FF.getFBObject('users/' + authData.uid);
+				$s.currentUser.$loaded(user => {
+					if (!user.uid) {
+						var name = authData.providerData[0].displayName;
+						createNewUser(authData.uid, {
+							name: name,
+							rating: 1200,
+							uid: authData.uid,
+							firstName: authData.providerData[0].first_name || name.substring(0, name.indexOf(' ')) || name
+						});
 					} else {
 						init();
 					}

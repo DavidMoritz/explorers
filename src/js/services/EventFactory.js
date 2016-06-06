@@ -62,8 +62,8 @@ mainApp.factory('EventFactory', [
 					EF.changeCurrentPlayer(resolve);
 				});
 			},
-			backToPlayCard: resolve => {
-				$s.state = 'playCard';
+			backToPrevious: resolve => {
+				$s.state = $s.previousState;
 				resolve();
 			},
 			// if a function uses `this` for the event, it cannot be an arrow function
@@ -96,6 +96,7 @@ mainApp.factory('EventFactory', [
 
 				if ($s.currentPlayer.playStrength < 3) {
 					card.support = true;
+					$s.currentPlayer.deck.activeStrengthCardId = card.id;
 					$s.currentPlayer.playStrength += card.strength;
 					$s.currentPlayer.deck.play(card);
 					$s.currentPlayer.strengthAdded = true;
@@ -378,7 +379,7 @@ mainApp.factory('EventFactory', [
 			collectBoat: function(resolve) {
 				var boatsArr = $s.currentPlayer.corp[this.type + 'Boats'];
 				var method = this.type == 'indian' ? 'push' : 'unshift';
-				boatsArr[method](BF[this.type + this.size]());
+				boatsArr[method](BF[this.type + this.size](boatsArr.length));
 
 				if (this.type === 'indian') {
 					if ($s.indianSupply) {

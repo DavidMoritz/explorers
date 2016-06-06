@@ -8,7 +8,7 @@ mainApp.factory('FirebaseFactory', [
 			// Firebase methods
 			getFB: childPath => {
 				if (!FB) {
-					FB = new Firebase('https://explorers-game.firebaseio.com/');
+					FB = firebase.database().ref();
 				}
 
 				return childPath ? FB.child(childPath) : FB;
@@ -26,16 +26,34 @@ mainApp.factory('FirebaseFactory', [
 
 				return false;
 			},
-
+			googleLogin: (err, success) => {
+				var provider = new firebase.auth.GoogleAuthProvider();
+				firebase.auth().signInWithPopup(provider).then(result => {
+					success(result.user);
+				}).catch(error => {
+					err(error);
+				});
+			},
 			facebookLogin: (err, success) => {
-				var ref = FF.getFB();
-				ref.authWithOAuthPopup('facebook', (error, authData) => {
-					if (error) {
-						err(error);
-					} else {
-						success(authData);
-					}
-				}, {scope: 'user_friends'});
+				var provider = new firebase.auth.FacebookAuthProvider();
+				provider.addScope('public_profile');
+				firebase.auth().signInWithPopup(provider).then(function(result) {
+					// This gives you a Facebook Access Token. You can use it to access the Facebook API.
+					//var token = result.credential.accessToken;
+					// The signed-in user info.
+					//var user = result.user;
+					success(result.user);
+				}).catch(function(error) {
+					// Handle Errors here.
+					//var errorCode = error.code;
+					//var errorMessage = error.message;
+					// The email of the user's account used.
+					//var email = error.email;
+					// The firebase.auth.AuthCredential type that was used.
+					//var credential = error.credential;
+					// ...
+					err(error);
+				});
 			}
 		};
 

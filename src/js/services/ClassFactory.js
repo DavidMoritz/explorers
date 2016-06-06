@@ -87,9 +87,13 @@ mainApp.factory('ClassFactory', [
 				constructor(color) {
 					this.cards = CF[color];
 					this.activeCardId = '';
+					this.activeStrengthCardId = '';
 				}
 				get activeCard() {
-					return _.find(this.cards, {id: this.activeCardId});
+					return _.find(this.cards, {id: this.activeCardId}) || {};
+				}
+				get activeStrengthCard() {
+					return _.find(this.cards, {id: this.activeStrengthCardId}) || {};
 				}
 				get cost() {
 					return this.heldCards.length;
@@ -172,6 +176,7 @@ mainApp.factory('ClassFactory', [
 					this.collectables = [];
 					this.payment = [];
 					this.deck.activeCardId = '';
+					this.deck.activeStrengthCardId = '';
 					this.notCamped = true;
 					this.notRecruited = true;
 					this.takenMainAction = false;

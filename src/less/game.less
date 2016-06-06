@@ -8,6 +8,12 @@ body {
 	padding: 0;
 	justify-content: space-between;
 }
+.blink-me {
+  animation: blinker 1.5s linear infinite;
+}
+@keyframes blinker {  
+  50% { color: black; }
+}
 .main-stage {
 	display: flex;
 	.stage-left,
@@ -83,7 +89,7 @@ body {
 				border-radius: 5px;
 				padding: 0 3px;
 				margin: 3px;
-				background-color: rgba(255,255,255,0.5);
+				background-color: rgba(255,255,255,0.75);
 			}
 		}
 		&.right {
@@ -112,8 +118,19 @@ body {
 .player-holder {
 	padding: 5px;
 	margin-bottom: 5px;
-	box-shadow: 0 0 10px;
 	border-radius: 3px;
+	box-shadow: 0 0 10px;
+	&.active {
+		box-shadow: 0 0 10px yellow;
+		&:before {
+			content: ' ';
+			border: solid 14px;
+			position: absolute;
+			left: 10px;
+			border-color: transparent;
+			border-left-color: black;
+		}
+	}
 	.player {
 		font-size: 18px;
 		margin-bottom: 5px;
@@ -215,10 +232,29 @@ body {
 	}
 }
 #cursor {
+	width: 30px;
+	height: 27px;
 	transition: all ease 0.33s;
 	position: absolute;
 	// on top of everything except corp boards
 	z-index: 10;
+	background-image: url(../img/hand-colors.png);
+	background-position: 0 0;
+	&.lightblue {
+		background-position: -30px 0;
+	}
+	&.lightsalmon {
+		background-position: -60px 0;
+	}
+	&.lightgreen {
+		background-position: -90px 0;
+	}
+	&.orchid {
+		background-position: -120px 0;
+	}
+	&.khaki {
+		background-position: -150px 0;
+	}
 
 	.active-player &,
 	body.welcome &,
@@ -288,10 +324,13 @@ body {
 		background-color: rgba(255,255,255,0.5);
 		padding: 1px 10px;
 		width: 50%;
+		h4 {
+			text-transform: capitalize;
+		}
 	}
 	.card-modal-body {
 		display: flex;
-		justify-content: space-between;
+		justify-content: space-around;
 		align-items: center;
 	}
 }
@@ -322,7 +361,7 @@ body {
 	left: 20px;
 }
 .ability {
-	border-color: blue;
+	border: solid 1px green;
 	background-color: rgba(255,255,255,0.5);
 }
 .map {
@@ -361,8 +400,25 @@ ul.players {
 input {
 	cursor: url(../img/hand.png), auto !important;
 }
+.flex-holder {
+	display: flex;
+}
+.half {
+	flex: 1;
+}
+.double {
+	flex: 2;
+}
+.modal-body .flex-holder {
+	margin: 0 -15px;
+	.half,
+	.double {
+		margin: 0 15px;
+	}
+}
 .container {
 	.pre-game {
+		display: flex;
 		.well {
 			height: 250px;
 			overflow: scroll;
