@@ -20,7 +20,7 @@ module.exports = function exportConcat(grunt) {
 					'lib/angular-bootstrap/ui-bootstrap.min.js',
 					'lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
 					'lib/angular-animate/angular-animate.min.js',
-					'lib/ngDraggable/ngDraggable.js',
+					'src/html/ngDraggable.js',
 					'lib/moment/min/moment.min.js',
 					'lib/touch-punch/jquery.ui.touch-punch.min.js',
 					'src/external/**/*.js'

@@ -34,7 +34,7 @@ html(ng-app='mainApp')
 							.corp-boats
 								.collect-boat
 									.content
-										.item(ng-repeat='item in currentPlayer.collectables track by $index' ng-drag='userTurn()' ng-drag-data='item' ng-drag-success='dragCollectSuccess($index)' class='text-{{item.btnClass}}' title='{{item.display}}')
+										.item(ng-repeat='item in currentPlayer.collectables track by $index' ng-drag='userTurn()' ng-drag-data='item' ng-drag-success='dragCollectSuccess($resolve, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
 											i.sprite(class='{{item.name}} {{item.name == "indian" ? "symbol" : ""}}')
 				.center-stage
 					+notify()
@@ -67,11 +67,11 @@ html(ng-app='mainApp')
 				.corp-boats
 					.boat(ng-repeat='boat in user.corp.supplyBoats' class='{{boat.style}}' title='Max: {{boat.capacity}} Days: {{boat.cost()}}')
 						.content(class='{{boat.capacity > 4 ? "big" : "small"}}' ng-drop='boat.content.length < boat.capacity && validSupplyDrop()', ng-drop-success='dropBoatSuccess(boat, $data)')
-							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
+							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess($resolve, boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}')
 								i.sprite(class='{{item.name}}')
 					.boat(ng-repeat='boat in user.corp.indianBoats' class='{{boat.style}}' title='Cost: {{boat.cost()}} Size: {{boat.content.length}}')
 						.content(class='{{boat.capacity > 4 ? "big" : "small"}} {{boat.content.length > 12 ? "tight" : ""}}' ng-drop='boat.content.length < boat.capacity && validIndianDrop()', ng-drop-success='dropBoatSuccess(boat, $data)')
-							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess(boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
+							.item(ng-repeat='item in boat.content track by $index' ng-drag='true' ng-drag-data='item' ng-drag-success='dragBoatSuccess($resolve, boat, $index)' class='text-{{item.btnClass}}' title='{{item.display}}{{item.inUse ? ": currently in use" : ""}}')
 								i.sprite.symbol.indian(class='{{item.inUse ? "used" : ""}}')
 		script(src='inc/lib.js')
 		script(src='inc/main.js')

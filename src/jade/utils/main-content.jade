@@ -88,7 +88,7 @@ mixin collectHorse()
 				.content
 					.item(title='indian')
 						i.sprite.indian
-					.item(ng-repeat='item in horsePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragHorseSuccess($index)')
+					.item(ng-repeat='item in horsePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragHorseSuccess($resolve, $index)')
 						i.sprite(class="{{item.name}}")
 
 mixin collectCanoe()
@@ -101,7 +101,7 @@ mixin collectCanoe()
 				.content
 					.item(title='indian')
 						i.sprite.indian
-					.item(ng-repeat='item in canoePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragCanoeSuccess($index)')
+					.item(ng-repeat='item in canoePayment.content track by $index' class='text-{{item.btnClass}}' title='{{item.display}}' ng-drag="userTurn()" ng-drag-data='item' ng-drag-success='dragCanoeSuccess($resolve, $index)')
 						i.sprite(class="{{item.name}}")
 
 mixin boats()

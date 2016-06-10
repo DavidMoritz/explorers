@@ -215,7 +215,7 @@ mainApp.controller('MainCtrl', [
 			}
 		};
 
-		$s.dragBoatSuccess = (boat, idx) => {
+		$s.dragBoatSuccess = (resolve, boat, idx) => {
 			// hide the item
 			$(`.${boat.id}`).find('.item').eq(idx).addClass('hidden');
 			setTimeout(() => {
@@ -227,10 +227,10 @@ mainApp.controller('MainCtrl', [
 				idx: idx,
 				boatId: boat.id,
 				playerId: $s.user.uid
-			});
+			}, resolve);
 		};
 
-		$s.dragCollectSuccess = idx => {
+		$s.dragCollectSuccess = (resolve, idx) => {
 			// hide the item
 			$('.collect-boat').find('.item').eq(idx).addClass('hidden');
 			setTimeout(() => {
@@ -240,10 +240,10 @@ mainApp.controller('MainCtrl', [
 			$s.addEvent({
 				name: 'collectItem',
 				idx: idx
-			});
+			}, resolve);
 		};
 
-		$s.dragHorseSuccess = idx => {
+		$s.dragHorseSuccess = (resolve, idx) => {
 			// hide the item
 			$('.horse-payment-space').find('.item').eq(idx).addClass('hidden');
 			setTimeout(() => {
@@ -253,10 +253,10 @@ mainApp.controller('MainCtrl', [
 			$s.addEvent({
 				name: 'removeHorseItem',
 				idx: idx
-			});
+			}, resolve);
 		};
 
-		$s.dragCanoeSuccess = idx => {
+		$s.dragCanoeSuccess = (resolve, idx) => {
 			// hide the item
 			$('.canoe-payment-space').find('.item').eq(idx).addClass('hidden');
 			setTimeout(() => {
@@ -266,7 +266,7 @@ mainApp.controller('MainCtrl', [
 			$s.addEvent({
 				name: 'removeCanoeItem',
 				idx: idx
-			});
+			}, resolve);
 		};
 
 		$s.dropBoatSuccess = (boat, item) => {
@@ -374,12 +374,17 @@ mainApp.controller('MainCtrl', [
 			return false;
 		};
 
-		$s.addEvent = event => {
+		$s.addEvent = (event, resolve) => {
 			if (typeof event == 'string') {
 				event = {name: event};
 			}
 			event.timestamp = new Date().getTime();
-			$s.activeGame.events.push(event);
+
+			// $s.activeGame.events.push(event);
+			// when push event is confirmed in database
+			activeGame.events.push(event);
+			activeGame.$save().then(resolve);
+
 		};
 
 		$s.createNewGame = () => {
@@ -409,7 +414,8 @@ mainApp.controller('MainCtrl', [
 				return;
 			}
 
-			var activeGame = FF.getFBObject(`allGames/${game.id}`);
+			window.activeGame = FF.getFBObject(`allGames/${game.id}`);
+
 			activeGame.$bindTo($s, 'activeGame');
 
 			activeGame.$loaded(() => {
@@ -670,6 +676,7 @@ mainApp.controller('MainCtrl', [
 
 		// grab all the games and make sure Firebase is working!
 		window.allGames = FF.getFBObject('allGames');
+		window.activeGame = {};
 		allGames.$bindTo($s, 'allGames');
 		allGames.$loaded(() => {
 			$('body').addClass('facebook-available');
